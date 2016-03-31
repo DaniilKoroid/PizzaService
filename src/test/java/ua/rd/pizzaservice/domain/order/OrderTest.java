@@ -431,6 +431,28 @@ public class OrderTest {
 		OrderStatus expectedOrderStatus = OrderStatus.DONE;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
+	
+	@Test
+	public void testSetDoneStatusAndCheckAccumulativeCardAmount() {
+		System.out.println("test setDone status and check accumulative card amount");
+		AccumulationCard card = new AccumulationCard();
+		double cardAmount = 100d;
+		card.setAmount(cardAmount);
+		Customer customer = new Customer();
+		customer.setAccumulationCard(card);
+		List<Pizza> discountablePizzaList = getFourPizzaDiscountablePizzaList();
+		OrderStatus status = OrderStatus.IN_PROGRESS;
+		order.setCustomer(customer);
+		order.setPizzas(discountablePizzaList);
+		order.setStatus(status);
+		double priceToAccumulate = order.calculateTotalPrice() - order.calculateDiscount();
+		double expectedCardAmount = cardAmount + priceToAccumulate;
+		boolean setDone = order.setDone();
+		assertTrue(setDone);
+		double actualCardAmount = card.getAmount();
+		double eps = 1E-5;
+		assertEquals(expectedCardAmount, actualCardAmount, eps);
+	}
 
 	private List<Pizza> getDefaultPizzaList() {
 		List<Pizza> pizzaList = new ArrayList<>();
