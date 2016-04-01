@@ -14,5 +14,7 @@ public class PizzaApp {
         order = orderService.placeNewOrder(customer, 1, 2, 3);
 
         System.out.println(order);
+        
+        // TODO: второй проект, на котором экспериментировать - сделать Branch
 	}
 }

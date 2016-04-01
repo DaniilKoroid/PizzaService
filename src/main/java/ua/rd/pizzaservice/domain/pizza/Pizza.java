@@ -2,7 +2,7 @@ package ua.rd.pizzaservice.domain.pizza;
 
 public class Pizza {
 
-	public enum PizzaType {
+	public static enum PizzaType {
 		MEAT,
 		VEGETERIAN,
 		SEA,
