@@ -2,7 +2,6 @@ package ua.rd.pizzaservice.domain.order;
 
 import java.util.List;
 
-import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
