@@ -18,7 +18,7 @@ public class DiscountServiceImpl implements DiscountService {
 	@Override
 	public Double calculateFinalDiscountAmount(Order order) {
 		Double discountsAmount = calculateDiscountsAmount(order);
-		Double orderPriceWithDiscounts = order.calculateTotalPrice() - discountsAmount;
+		Double orderPriceWithDiscounts = order.calculateFullPrice() - discountsAmount;
 		Double cardDiscountAmount = calculateAccumulationCardDiscountAmount(order.getCustomer(), orderPriceWithDiscounts);
 		Double totalDiscountAmount = discountsAmount + cardDiscountAmount;
 		return totalDiscountAmount;
@@ -50,7 +50,7 @@ public class DiscountServiceImpl implements DiscountService {
 
 	@Override
 	public Double calculatePriceWithDiscounts(Order order) {
-		Double orderPrice = order.calculateTotalPrice();
+		Double orderPrice = order.calculateFullPrice();
 		Double discountsAmount = calculateDiscountsAmount(order);
 		Double priceWithDiscounts = orderPrice - discountsAmount;
 		return priceWithDiscounts;

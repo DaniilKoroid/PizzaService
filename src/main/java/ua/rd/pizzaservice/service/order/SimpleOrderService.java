@@ -66,13 +66,18 @@ public class SimpleOrderService implements OrderService {
 
 	@Override
 	public Boolean changeOrder(Order order, Integer... pizzasID) {
-		List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
-		return order.changeOrder(pizzas);
+		Boolean canChange = order.canChange();
+		if(canChange) {
+			List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
+			canChange = order.changeOrder(pizzas);
+		}
+		return canChange;
 	}
 
 	@Override
 	public Boolean processOrder(Order order) {
-		return order.setInProgress();
+		Boolean nextStateDone = order.nextState();
+		return nextStateDone;
 	}
 
 	@Override
@@ -82,12 +87,9 @@ public class SimpleOrderService implements OrderService {
 
 	@Override
 	public Boolean doneOrder(Order order) {
-		Boolean setDone = order.setDone();
-		if(!setDone) {
-			return setDone;
-		}
+		Boolean nextStateDone = order.nextState();
 		processPayment(order);
-		return order.setDone();
+		return nextStateDone;
 	}
 
 	private Boolean processPayment(Order order) {
@@ -102,7 +104,7 @@ public class SimpleOrderService implements OrderService {
 	
 	@Override
 	public Double getFullPrice(Order order) {
-		return order.calculateTotalPrice();
+		return order.calculateFullPrice();
 	}
 
 	@Override

@@ -31,7 +31,7 @@ public class OrderTest {
 	@Test
 	public void testChangeOrderFromNewStatusReturnsTrue() {
 		System.out.println("test change order from NEW status returns true");
-		order.setStatus(OrderStatus.NEW);
+		order.setState(OrderStatus.NEW);
 		List<Pizza> atStartPizzas = order.getPizzas();
 		@SuppressWarnings("serial")
 		List<Pizza> newPizzas = new ArrayList<Pizza>() {
@@ -49,7 +49,7 @@ public class OrderTest {
 	@Test
 	public void testChangeOrderFromInProgressStatusReturnsFalse() {
 		System.out.println("test change order from IN_PROGRESS status returns false");
-		order.setStatus(OrderStatus.IN_PROGRESS);
+		order.setState(OrderStatus.IN_PROGRESS);
 		List<Pizza> atStartPizzas = order.getPizzas();
 		@SuppressWarnings("serial")
 		List<Pizza> newPizzas = new ArrayList<Pizza>() {
@@ -67,7 +67,7 @@ public class OrderTest {
 	@Test
 	public void testChangeOrderFromCancelledStatusReturnsFalse() {
 		System.out.println("test change order from CANCELLED status returns false");
-		order.setStatus(OrderStatus.CANCELLED);
+		order.setState(OrderStatus.CANCELLED);
 		List<Pizza> atStartPizzas = order.getPizzas();
 		@SuppressWarnings("serial")
 		List<Pizza> newPizzas = new ArrayList<Pizza>() {
@@ -85,7 +85,7 @@ public class OrderTest {
 	@Test
 	public void testChangeOrderFromDoneStatusReturnsFalse() {
 		System.out.println("test change order from DONE status returns false");
-		order.setStatus(OrderStatus.DONE);
+		order.setState(OrderStatus.DONE);
 		List<Pizza> atStartPizzas = order.getPizzas();
 		@SuppressWarnings("serial")
 		List<Pizza> newPizzas = new ArrayList<Pizza>() {
@@ -109,8 +109,8 @@ public class OrderTest {
 		double eps = 1E-5;
 		OrderStatus[] orderStatusValues = OrderStatus.values();
 		for (OrderStatus orderStatus : orderStatusValues) {
-			order.setStatus(orderStatus);
-			assertEquals(totalPrice, order.calculateTotalPrice(), eps);
+			order.setState(orderStatus);
+			assertEquals(totalPrice, order.calculateFullPrice(), eps);
 		}
 	}
 	
@@ -120,7 +120,7 @@ public class OrderTest {
 		List<Pizza> pizzaList = getDefaultPizzaList();
 		order.setPizzas(pizzaList);
 		double expectedTotalPrice = calculateTotalPrice(pizzaList);
-		double actualTotalPrice = order.calculateTotalPrice();
+		double actualTotalPrice = order.calculateFullPrice();
 		double eps = 1E-5;
 		assertEquals(expectedTotalPrice, actualTotalPrice, eps);
 	}
@@ -130,10 +130,10 @@ public class OrderTest {
 		System.out.println("test calculate total price dont depends on discount");
 		List<Pizza> discountablePizzaList = getFourPizzaDiscountablePizzaList();
 		order.setPizzas(discountablePizzaList);
-		double expectedTotalPrice = order.calculateTotalPrice();
+		double expectedTotalPrice = order.calculateFullPrice();
 		Discount discount = new FourPizzaDiscount();
 		order.setDiscount(discount);
-		double actualTotalPrice = order.calculateTotalPrice();
+		double actualTotalPrice = order.calculateFullPrice();
 		double eps = 1E-5;
 		assertEquals(expectedTotalPrice, actualTotalPrice, eps);
 		
@@ -150,7 +150,7 @@ public class OrderTest {
 		AccumulationCard card = new AccumulationCard();
 		customer.setAccumulationCard(card);
 		order.setCustomer(customer);
-		double actualTotalPrice = order.calculateTotalPrice();
+		double actualTotalPrice = order.calculateFullPrice();
 		assertEquals(expectedTotalPrice, actualTotalPrice, eps);
 	}
 
@@ -204,7 +204,7 @@ public class OrderTest {
 		order.setCustomer(customer);
 		List<Pizza> pizzaList = getDefaultPizzaList();
 		order.setPizzas(pizzaList);
-		double totalPrice = order.calculateTotalPrice();
+		double totalPrice = order.calculateFullPrice();
 		double pricePercentage = 0.3d;
 		double cardDiscount = order.calculateAccumulativeCardDiscount();
 		double eps = 1E-5;
@@ -222,7 +222,7 @@ public class OrderTest {
 		order.setCustomer(customer);
 		order.setDiscount(discount);
 		order.setPizzas(pizzas);
-		double totalPrice = order.calculateTotalPrice();
+		double totalPrice = order.calculateFullPrice();
 		double totalPriceWithDiscounts = order.calculateTotalPriceWithDiscounts();
 		double eps = 1E-5;
 		assertEquals(totalPrice, totalPriceWithDiscounts, eps);
@@ -238,7 +238,7 @@ public class OrderTest {
 		order.setCustomer(customer);
 		order.setDiscount(discount);
 		order.setPizzas(pizzas);
-		double expectedPrice = order.calculateTotalPrice() - order.calculateDiscount();
+		double expectedPrice = order.calculateFullPrice() - order.calculateDiscount();
 		double totalPriceWithDiscounts = order.calculateTotalPriceWithDiscounts();
 		double eps = 1E-5;
 		assertEquals(expectedPrice, totalPriceWithDiscounts, eps);
@@ -257,8 +257,8 @@ public class OrderTest {
 		order.setCustomer(customer);
 		order.setDiscount(discount);
 		order.setPizzas(pizzas);
-		order.calculateTotalPrice();
-		double expectedPrice = order.calculateTotalPrice() - order.calculateAccumulativeCardDiscount();
+		order.calculateFullPrice();
+		double expectedPrice = order.calculateFullPrice() - order.calculateAccumulativeCardDiscount();
 		double totalPriceWithDiscounts = order.calculateTotalPriceWithDiscounts();
 		double eps = 1E-5;
 		assertEquals(expectedPrice, totalPriceWithDiscounts, eps);
@@ -277,8 +277,8 @@ public class OrderTest {
 		order.setCustomer(customer);
 		order.setDiscount(discount);
 		order.setPizzas(pizzas);
-		order.calculateTotalPrice();
-		double expectedPrice = order.calculateTotalPrice() 
+		order.calculateFullPrice();
+		double expectedPrice = order.calculateFullPrice() 
 				- order.calculateAccumulativeCardDiscount()
 				- order.calculateDiscount();
 		double totalPriceWithDiscounts = order.calculateTotalPriceWithDiscounts();
@@ -290,10 +290,10 @@ public class OrderTest {
 	public void testCancelFromNewStateReturnsTrue() {
 		System.out.println("test cancel from new state returns true");
 		OrderStatus status = OrderStatus.NEW;
-		order.setStatus(status);
+		order.setState(status);
 		boolean orderCanceled = order.cancel();
 		assertTrue(orderCanceled);
-		OrderStatus orderStatus = order.getStatus();
+		OrderStatus orderStatus = order.getState();
 		OrderStatus expectedOrderStatus = OrderStatus.CANCELLED;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
@@ -302,10 +302,10 @@ public class OrderTest {
 	public void testCancelFromInProgressStateReturnsTrue() {
 		System.out.println("test cancel from IN_PROGRESS state returns true");
 		OrderStatus status = OrderStatus.IN_PROGRESS;
-		order.setStatus(status);
+		order.setState(status);
 		boolean orderCanceled = order.cancel();
 		assertTrue(orderCanceled);
-		OrderStatus orderStatus = order.getStatus();
+		OrderStatus orderStatus = order.getState();
 		OrderStatus expectedOrderStatus = OrderStatus.CANCELLED;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
@@ -314,10 +314,10 @@ public class OrderTest {
 	public void testCancelFromDoneStateReturnsFalse() {
 		System.out.println("test cancel from DONE state returns true");
 		OrderStatus status = OrderStatus.DONE;
-		order.setStatus(status);
+		order.setState(status);
 		boolean orderCanceled = order.cancel();
 		assertFalse(orderCanceled);
-		OrderStatus orderStatus = order.getStatus();
+		OrderStatus orderStatus = order.getState();
 		OrderStatus expectedOrderStatus = OrderStatus.DONE;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
@@ -326,10 +326,10 @@ public class OrderTest {
 	public void testCancelFromCancelledStateReturnsFalse() {
 		System.out.println("test cancel from CANCELLED state returns true");
 		OrderStatus status = OrderStatus.CANCELLED;
-		order.setStatus(status);
+		order.setState(status);
 		boolean orderCanceled = order.cancel();
 		assertFalse(orderCanceled);
-		OrderStatus orderStatus = order.getStatus();
+		OrderStatus orderStatus = order.getState();
 		OrderStatus expectedOrderStatus = OrderStatus.CANCELLED;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
@@ -338,10 +338,10 @@ public class OrderTest {
 	public void testSetInProgressFromNewStateReturnsTrue() {
 		System.out.println("test setInProgress from New state returns true");
 		OrderStatus status = OrderStatus.NEW;
-		order.setStatus(status);
+		order.setState(status);
 		boolean orderSetedInProgress = order.setInProgress();
 		assertTrue(orderSetedInProgress);
-		OrderStatus orderStatus = order.getStatus();
+		OrderStatus orderStatus = order.getState();
 		OrderStatus expectedOrderStatus = OrderStatus.IN_PROGRESS;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
@@ -350,10 +350,10 @@ public class OrderTest {
 	public void testSetInProgressFromInProgressStateReturnsFalse() {
 		System.out.println("test setInProgress from IN_PROGRESS state returns true");
 		OrderStatus status = OrderStatus.IN_PROGRESS;
-		order.setStatus(status);
+		order.setState(status);
 		boolean orderSetedInProgress = order.setInProgress();
 		assertFalse(orderSetedInProgress);
-		OrderStatus orderStatus = order.getStatus();
+		OrderStatus orderStatus = order.getState();
 		OrderStatus expectedOrderStatus = OrderStatus.IN_PROGRESS;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
@@ -362,10 +362,10 @@ public class OrderTest {
 	public void testSetInProgressFromCancelledStateReturnsFalse() {
 		System.out.println("test setInProgress from CANCELLED state returns true");
 		OrderStatus status = OrderStatus.CANCELLED;
-		order.setStatus(status);
+		order.setState(status);
 		boolean orderSetedInProgress = order.setInProgress();
 		assertFalse(orderSetedInProgress);
-		OrderStatus orderStatus = order.getStatus();
+		OrderStatus orderStatus = order.getState();
 		OrderStatus expectedOrderStatus = OrderStatus.CANCELLED;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
@@ -374,10 +374,10 @@ public class OrderTest {
 	public void testSetInProgressFromDoneStateReturnsFalse() {
 		System.out.println("test setInProgress from DONE state returns true");
 		OrderStatus status = OrderStatus.DONE;
-		order.setStatus(status);
+		order.setState(status);
 		boolean orderSetedInProgress = order.setInProgress();
 		assertFalse(orderSetedInProgress);
-		OrderStatus orderStatus = order.getStatus();
+		OrderStatus orderStatus = order.getState();
 		OrderStatus expectedOrderStatus = OrderStatus.DONE;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
@@ -386,10 +386,10 @@ public class OrderTest {
 	public void testSetDoneFromNewStateReturnsFalse() {
 		System.out.println("test setDone from NEW state returns false");
 		OrderStatus status = OrderStatus.NEW;
-		order.setStatus(status);
+		order.setState(status);
 		boolean orderSetedDone = order.setDone();
 		assertFalse(orderSetedDone);
-		OrderStatus orderStatus = order.getStatus();
+		OrderStatus orderStatus = order.getState();
 		OrderStatus expectedOrderStatus = OrderStatus.NEW;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
@@ -400,10 +400,10 @@ public class OrderTest {
 		OrderStatus status = OrderStatus.IN_PROGRESS;
 		Customer customer = new Customer();
 		order.setCustomer(customer);
-		order.setStatus(status);
+		order.setState(status);
 		boolean orderSetedDone = order.setDone();
 		assertTrue(orderSetedDone);
-		OrderStatus orderStatus = order.getStatus();
+		OrderStatus orderStatus = order.getState();
 		OrderStatus expectedOrderStatus = OrderStatus.DONE;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
@@ -412,10 +412,10 @@ public class OrderTest {
 	public void testSetDoneFromCancelledStateReturnsFalse() {
 		System.out.println("test setDone from CANCELLED state returns false");
 		OrderStatus status = OrderStatus.CANCELLED;
-		order.setStatus(status);
+		order.setState(status);
 		boolean orderSetedDone = order.setDone();
 		assertFalse(orderSetedDone);
-		OrderStatus orderStatus = order.getStatus();
+		OrderStatus orderStatus = order.getState();
 		OrderStatus expectedOrderStatus = OrderStatus.CANCELLED;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
@@ -424,10 +424,10 @@ public class OrderTest {
 	public void testSetDoneFromDoneStateReturnsFalse() {
 		System.out.println("test setDone from DONE state returns false");
 		OrderStatus status = OrderStatus.DONE;
-		order.setStatus(status);
+		order.setState(status);
 		boolean orderSetedDone = order.setDone();
 		assertFalse(orderSetedDone);
-		OrderStatus orderStatus = order.getStatus();
+		OrderStatus orderStatus = order.getState();
 		OrderStatus expectedOrderStatus = OrderStatus.DONE;
 		assertEquals(expectedOrderStatus, orderStatus);
 	}
@@ -444,8 +444,8 @@ public class OrderTest {
 		OrderStatus status = OrderStatus.IN_PROGRESS;
 		order.setCustomer(customer);
 		order.setPizzas(discountablePizzaList);
-		order.setStatus(status);
-		double priceToAccumulate = order.calculateTotalPrice() - order.calculateDiscount();
+		order.setState(status);
+		double priceToAccumulate = order.calculateFullPrice() - order.calculateDiscount();
 		double expectedCardAmount = cardAmount + priceToAccumulate;
 		boolean setDone = order.setDone();
 		assertTrue(setDone);

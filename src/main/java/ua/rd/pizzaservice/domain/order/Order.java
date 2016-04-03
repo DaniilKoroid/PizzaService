@@ -7,19 +7,11 @@ import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 
 public class Order {
-
-	public enum OrderStatus {
-		NEW,
-		IN_PROGRESS,
-		DONE,
-		CANCELLED,
-		;
-	}
 	
 	private static Long idCounter = 0L;
 	
 	private Long id;
-	private OrderStatus status;
+	private OrderState state;
 	private Customer customer;
 	private List<Pizza> pizzas;
 	private Discount discount;
@@ -28,24 +20,24 @@ public class Order {
 	}
 	
 	public Order(Customer customer, List<Pizza> pizzas, Discount discount) {
-		this(++idCounter, OrderStatus.NEW, customer, pizzas, discount);
+		this(++idCounter, OrderState.NEW, customer, pizzas, discount);
 	}
 
-	public Order(Long id, OrderStatus status, Customer customer, List<Pizza> pizzas) {
-		this(id, status, customer, pizzas, null);
+	public Order(Long id, OrderState state, Customer customer, List<Pizza> pizzas) {
+		this(id, state, customer, pizzas, null);
 	}
 
 	public Order(Long id, Customer customer, List<Pizza> pizzas) {
-		this(id, OrderStatus.NEW, customer, pizzas, null);
+		this(id, OrderState.NEW, customer, pizzas, null);
 	}
 	
 	public Order(Customer customer, List<Pizza> pizzas) {
-		this(++idCounter, OrderStatus.NEW, customer, pizzas, null);
+		this(++idCounter, OrderState.NEW, customer, pizzas, null);
 	}
 	
-	public Order(Long id, OrderStatus status, Customer customer, List<Pizza> pizzas, Discount discount) {
+	public Order(Long id, OrderState state, Customer customer, List<Pizza> pizzas, Discount discount) {
 		this.id = id;
-		this.status = status;
+		this.state = state;
 		this.customer = customer;
 		this.pizzas = pizzas;
 		this.discount = discount;
@@ -75,12 +67,12 @@ public class Order {
 		this.pizzas = pizzas;
 	}
 
-	public OrderStatus getStatus() {
-		return status;
+	public OrderState getState() {
+		return state;
 	}
 
-	public void setStatus(OrderStatus status) {
-		this.status = status;
+	public void setState(OrderState state) {
+		this.state = state;
 	}
 
 	public Discount getDiscount() {
@@ -96,15 +88,19 @@ public class Order {
 		return "Order [id=" + id + ", customer=" + customer + ", pizzas=" + pizzas + "]";
 	}
 	
-	public boolean changeOrder(List<Pizza> newPizzas) {
-		if(!checkOrderStatusToBe(OrderStatus.NEW)) {
-			return false;
-		}
-		pizzas = newPizzas;
-		return true;
+	public Boolean canChange() {
+		return state.canChange();
 	}
 	
-	public Double calculateTotalPrice() {
+	public Boolean changeOrder(List<Pizza> newPizzas) {
+		Boolean canChange = state.canChange();
+		if (canChange) {
+			pizzas = newPizzas;
+		}
+		return canChange;
+	}
+	
+	public Double calculateFullPrice() {
 		double totalPrice = 0d;
 		for (Pizza pizza : pizzas) {
 			totalPrice += pizza.getPrice();
@@ -112,33 +108,11 @@ public class Order {
 		return totalPrice;
 	}
 	
-	public boolean cancel() {
-		if(checkOrderStatusToBe(OrderStatus.CANCELLED)
-				|| checkOrderStatusToBe(OrderStatus.DONE)) {
-			
-			return false;
-		}
-		status = OrderStatus.CANCELLED;
-		return true;
+	public Boolean cancel() {
+		return state.cancel(this);
 	}
 	
-	public boolean setInProgress() {
-		if(!checkOrderStatusToBe(OrderStatus.NEW)) {
-			return false;
-		}
-		status = OrderStatus.IN_PROGRESS;
-		return true;
-	}
-	
-	public boolean setDone() {
-		if(!checkOrderStatusToBe(OrderStatus.IN_PROGRESS)) {
-			return false;
-		}
-		status = OrderStatus.DONE;
-		return true;
-	}
-	
-	private boolean checkOrderStatusToBe(OrderStatus status) {
-		return status == this.status;
+	public Boolean nextState() {
+		return state.nextState(this);
 	}
 }
