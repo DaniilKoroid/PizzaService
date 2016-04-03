@@ -96,7 +96,7 @@ public class SimpleOrderService implements OrderService {
 
 	@Override
 	public Double getFinalPrice(Order order) {
-		Double finalPrice = order.calculateTotalPrice() - discountService.calculateDiscountAmount(order);
+		Double finalPrice = getFullPrice(order) - getDiscountAmount(order);
 		return finalPrice;
 	}
 }
