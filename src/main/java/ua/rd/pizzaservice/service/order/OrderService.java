@@ -12,5 +12,7 @@ public interface OrderService {
 	Boolean processOrder(Order order);
 	Boolean cancelOrder(Order order);
 	Boolean doneOrder(Order order);
-
+	Double getFullPrice(Order order);
+	Double getDiscountAmount(Order order);
+	Double getFinalPrice(Order order);
 }
