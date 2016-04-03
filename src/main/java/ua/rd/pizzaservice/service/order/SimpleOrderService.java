@@ -11,11 +11,15 @@ import ua.rd.pizzaservice.repository.order.InMemOrderRepository;
 import ua.rd.pizzaservice.repository.order.OrderRepository;
 import ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository;
 import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
+import ua.rd.pizzaservice.service.discount.DiscountService;
+import ua.rd.pizzaservice.service.discount.DiscountServiceImpl;
 
 public class SimpleOrderService implements OrderService {
 	
 	private static final int MIN_PIZZA_IN_ORDER_COUNT = 1;
 	private static final int MAX_PIZZA_IN_ORDER_COUNT = 10;
+	
+	private DiscountService discountService = new DiscountServiceImpl();
 	
 	private PizzaRepository pizzaRepository = new InMemPizzaRepository();
 	private OrderRepository orderRepository = new InMemOrderRepository();
@@ -78,5 +82,21 @@ public class SimpleOrderService implements OrderService {
 	@Override
 	public Boolean doneOrder(Order order) {
 		return order.setDone();
+	}
+
+	@Override
+	public Double getFullPrice(Order order) {
+		return order.calculateTotalPrice();
+	}
+
+	@Override
+	public Double getDiscountAmount(Order order) {
+		return discountService.calculateDiscountAmount(order);
+	}
+
+	@Override
+	public Double getFinalPrice(Order order) {
+		Double finalPrice = order.calculateTotalPrice() - discountService.calculateDiscountAmount(order);
+		return finalPrice;
 	}
 }
