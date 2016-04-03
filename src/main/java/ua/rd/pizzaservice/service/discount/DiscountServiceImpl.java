@@ -16,12 +16,11 @@ public class DiscountServiceImpl implements DiscountService {
 	private DiscountRepository discountRepository = new InMemDiscountRepository();
 	
 	@Override
-	public Double calculateDiscountAmount(Order order) {
-		List<Discount> appliableDiscounts = discountRepository.getAppliableDiscounts(order);
-		Double discountAmount = calculateDiscountAmount(order, appliableDiscounts);
-		Double orderPriceWithDiscounts = order.calculateTotalPrice() - discountAmount;
+	public Double calculateFinalDiscountAmount(Order order) {
+		Double discountsAmount = calculateDiscountsAmount(order);
+		Double orderPriceWithDiscounts = order.calculateTotalPrice() - discountsAmount;
 		Double cardDiscountAmount = calculateAccumulationCardDiscountAmount(order.getCustomer(), orderPriceWithDiscounts);
-		Double totalDiscountAmount = discountAmount + cardDiscountAmount;
+		Double totalDiscountAmount = discountsAmount + cardDiscountAmount;
 		return totalDiscountAmount;
 	}
 	
@@ -40,6 +39,13 @@ public class DiscountServiceImpl implements DiscountService {
 		AccumulationCard card = customer.getAccumulationCard();
 		Double cardDiscountAmount = card.calculateDiscount(orderPriceWithDiscounts);
 		return cardDiscountAmount;
+	}
+
+	@Override
+	public Double calculateDiscountsAmount(Order order) {
+		List<Discount> appliableDiscounts = discountRepository.getAppliableDiscounts(order);
+		Double discountAmount = calculateDiscountAmount(order, appliableDiscounts);
+		return discountAmount;
 	}
 
 }

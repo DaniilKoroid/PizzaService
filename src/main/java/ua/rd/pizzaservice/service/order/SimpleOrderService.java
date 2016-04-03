@@ -91,7 +91,7 @@ public class SimpleOrderService implements OrderService {
 
 	@Override
 	public Double getDiscountAmount(Order order) {
-		return discountService.calculateDiscountAmount(order);
+		return discountService.calculateFinalDiscountAmount(order);
 	}
 
 	@Override

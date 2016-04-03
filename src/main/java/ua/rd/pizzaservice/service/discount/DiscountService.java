@@ -4,5 +4,6 @@ import ua.rd.pizzaservice.domain.order.Order;
 
 public interface DiscountService {
 
-	Double calculateDiscountAmount(Order order);
+	Double calculateFinalDiscountAmount(Order order);
+	Double calculateDiscountsAmount(Order order);
 }
