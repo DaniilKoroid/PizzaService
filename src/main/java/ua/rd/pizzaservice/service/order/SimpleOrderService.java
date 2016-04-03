@@ -60,23 +60,23 @@ public class SimpleOrderService implements OrderService {
 	}
 
 	@Override
-	public boolean changeOrder(Order order, Integer... pizzasID) {
+	public Boolean changeOrder(Order order, Integer... pizzasID) {
 		List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
 		return order.changeOrder(pizzas);
 	}
 
 	@Override
-	public boolean processOrder(Order order) {
+	public Boolean processOrder(Order order) {
 		return order.setInProgress();
 	}
 
 	@Override
-	public boolean cancelOrder(Order order) {
+	public Boolean cancelOrder(Order order) {
 		return order.cancel();
 	}
 
 	@Override
-	public boolean doneOrder(Order order) {
+	public Boolean doneOrder(Order order) {
 		return order.setDone();
 	}
 }
