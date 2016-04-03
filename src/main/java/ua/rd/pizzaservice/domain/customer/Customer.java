@@ -12,31 +12,10 @@ public class Customer {
 	private Address address;
 	private AccumulationCard accumulationCard;
 	
-	public Customer() {
-	}
-
 	public Customer(String name) {
 		id = ++idCounter;
 		this.name = name;
-	}
-
-	public Customer(Integer id, String name, Address adress) {
-		this.id = id;
-		this.name = name;
-		this.address = adress;
-	}
-
-	public Customer(Integer id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-
-	
-	public Customer(Integer id, String name, Address address, AccumulationCard discountCard) {
-		this.id = id;
-		this.name = name;
-		this.address = address;
-		this.accumulationCard = discountCard;
+		accumulationCard = new AccumulationCard(this);
 	}
 
 	public Integer getId() {
@@ -71,11 +50,14 @@ public class Customer {
 		this.accumulationCard = accumulationCard;
 	}
 
+	public Boolean isAccumulationCardPresent() {
+		return accumulationCard.getIsActivated();
+	}
+	
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", name=" + name + ", address=" + address + ", accumulationCard="
 				+ accumulationCard + "]";
 	}	
-	
 	
 }

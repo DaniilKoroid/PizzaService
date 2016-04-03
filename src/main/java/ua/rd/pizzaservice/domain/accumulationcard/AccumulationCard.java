@@ -69,6 +69,7 @@ public class AccumulationCard {
 
 	@Override
 	public String toString() {
-		return "AccumulationCard [id=" + id + ", amount=" + amount + ", owner=" + owner + "]";
+		return "AccumulationCard [id=" + id + ", amount=" + amount + ", owner=" + owner + ", isActivated=" + isActivated
+				+ "]";
 	}
 }
