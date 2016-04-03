@@ -48,4 +48,12 @@ public class DiscountServiceImpl implements DiscountService {
 		return discountAmount;
 	}
 
+	@Override
+	public Double calculatePriceWithDiscounts(Order order) {
+		Double orderPrice = order.calculateTotalPrice();
+		Double discountsAmount = calculateDiscountsAmount(order);
+		Double priceWithDiscounts = orderPrice - discountsAmount;
+		return priceWithDiscounts;
+	}
+
 }

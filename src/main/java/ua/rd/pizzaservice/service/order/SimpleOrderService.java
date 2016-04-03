@@ -3,6 +3,7 @@ package ua.rd.pizzaservice.service.order;
 import java.util.ArrayList;
 import java.util.List;
 
+import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.order.Order;
@@ -81,9 +82,24 @@ public class SimpleOrderService implements OrderService {
 
 	@Override
 	public Boolean doneOrder(Order order) {
+		Boolean setDone = order.setDone();
+		if(!setDone) {
+			return setDone;
+		}
+		processPayment(order);
 		return order.setDone();
 	}
 
+	private Boolean processPayment(Order order) {
+		Customer customer = order.getCustomer();
+		if(customer.isAccumulationCardPresent()) {
+			Double priceWithDiscounts = discountService.calculatePriceWithDiscounts(order);
+			AccumulationCard card = customer.getAccumulationCard();
+			card.use(priceWithDiscounts);
+		}
+		return Boolean.TRUE;
+	}
+	
 	@Override
 	public Double getFullPrice(Order order) {
 		return order.calculateTotalPrice();

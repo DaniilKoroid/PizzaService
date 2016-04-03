@@ -113,33 +113,6 @@ public class Order {
 		return totalPrice;
 	}
 	
-	public Double calculateTotalPriceWithDiscounts() {
-		double totalPrice = calculateTotalPrice();
-		Double discountAmount = calculateDiscount();
-		double priceWithDiscount = totalPrice - discountAmount;
-		Double discountCardDiscountAmount = calculateAccumulativeCardDiscount();
-		double totalPriceWithDiscounts = priceWithDiscount - discountCardDiscountAmount;
-		return totalPriceWithDiscounts;
-	}
-	
-	public Double calculateDiscount() {
-		double discountAmount = 0d;
-		if(discount != null) {
-			discountAmount = discount.calculateDiscount(this);
-		}
-		return discountAmount;
-	}
-	
-	public Double calculateAccumulativeCardDiscount() {
-		double totalPrice = calculateTotalPrice() - calculateDiscount();
-		AccumulationCard accumulationCard = customer.getAccumulationCard();
-		if(accumulationCard == null) {
-			return 0d;
-		}
-		double accumulationCardDiscountAmount = accumulationCard.calculateDiscount(totalPrice);
-		return accumulationCardDiscountAmount;
-	}
-	
 	public boolean cancel() {
 		if(checkOrderStatusToBe(OrderStatus.CANCELLED)
 				|| checkOrderStatusToBe(OrderStatus.DONE)) {
@@ -163,20 +136,10 @@ public class Order {
 			return false;
 		}
 		status = OrderStatus.DONE;
-		processPayment();
 		return true;
 	}
 	
 	private boolean checkOrderStatusToBe(OrderStatus status) {
 		return status == this.status;
-	}
-	
-	private boolean processPayment() {
-		AccumulationCard accumulationCard = customer.getAccumulationCard();
-		if(accumulationCard != null) {
-			double priceToBeAccumulated = calculateTotalPrice() - calculateDiscount();
-			accumulationCard.use(priceToBeAccumulated);
-		}
-		return true;
 	}
 }
