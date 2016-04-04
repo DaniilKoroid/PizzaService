@@ -47,6 +47,24 @@ public class FourPizzaDiscountTest {
 	}
 	
 	@Test
+	public void testDiscountIsAppliableWithAppropriateOrder() {
+		System.out.println("test discount is appliable with appropriate order");
+		Integer pizzaListSize = 4;
+		when(mockedOrder.getPizzas()).thenReturn(pizzaList);
+		when(pizzaList.size()).thenReturn(pizzaListSize);
+		assertTrue(discount.isAppliable(mockedOrder));
+	}
+	
+	@Test
+	public void testDiscountIsNotAppliableWithNotAppropriateOrder() {
+		System.out.println("test discount is appliable with appropriate order");
+		Integer pizzaListSize = 3;
+		when(mockedOrder.getPizzas()).thenReturn(pizzaList);
+		when(pizzaList.size()).thenReturn(pizzaListSize);
+		assertFalse(discount.isAppliable(mockedOrder));
+	}
+	
+	@Test
 	public void testDiscountNotToWorkWithLessThanNeededPizzaCount() {
 		System.out.println("test discount not to work with less than needed pizza count");
 		Integer lowPizzaListSize = 3;
