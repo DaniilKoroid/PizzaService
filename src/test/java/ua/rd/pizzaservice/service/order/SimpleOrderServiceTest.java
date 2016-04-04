@@ -1,15 +1,23 @@
 package ua.rd.pizzaservice.service.order;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
+import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.order.OrderState;
+import ua.rd.pizzaservice.domain.pizza.Pizza;
+
 
 public class SimpleOrderServiceTest {
 
@@ -434,5 +442,63 @@ public class SimpleOrderServiceTest {
 		order.setState(stateFrom);
 		orderService.doneOrder(order);
 		assertEquals(stateTo, order.getState());
+	}
+	
+	@Mock
+	Order order;
+	
+	@Mock
+	List<Pizza> pizzaList;
+	
+	@Mock
+	Pizza pizzaOne;
+	
+	@Mock
+	Pizza pizzaTwo;
+	
+	@Mock
+	Pizza pizzaThree;
+	
+	@Mock
+	Pizza pizzaFour;
+	
+	@Test
+	public void testGetFinalPriceOfOrderWithoutDiscountsAndWithoutAccumulationCard() {
+		System.out.println("test getFinalPrice of order without discounts and "
+				+ "without accumulation card");
+		Order order = new Order();
+		AccumulationCard card = new AccumulationCard(customer);
+		Boolean isCardActivated = false;
+		card.setIsActivated(isCardActivated);
+		customer.setAccumulationCard(card);
+		order.setCustomer(customer);
+		when(order.getPizzas()).thenReturn(pizzaList);
+		
+		orderService.getFinalPrice(order);
+	}
+	
+	private List<Pizza> getMockedPizzas() {
+		@SuppressWarnings("serial")
+		List<Pizza> mockedPizzasList = new ArrayList<Pizza>() {
+			{
+				add(pizzaOne);
+				add(pizzaTwo);
+				add(pizzaThree);
+				add(pizzaFour);
+			}
+		};
+		return mockedPizzasList;
+	}
+	
+	private List<Pizza> getFirstThreeMockedPizzas() {
+		@SuppressWarnings("serial")
+		List<Pizza> mockedPizzasList = new ArrayList<Pizza>() {
+			{
+				add(pizzaOne);
+				add(pizzaTwo);
+				add(pizzaThree);
+			}
+		};
+		return mockedPizzasList;
 	}
 }
