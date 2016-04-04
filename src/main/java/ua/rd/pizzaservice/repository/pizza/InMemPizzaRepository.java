@@ -20,7 +20,7 @@ public class InMemPizzaRepository implements PizzaRepository {
 	public Pizza getPizzaByID(Integer id) {
 		Pizza result = null;
 		for (Pizza pizza : pizzas) {
-			if(pizza.getId() == id) {
+			if(pizza.getId().equals(id)) {
 				result = pizza;
 				break;
 			}
