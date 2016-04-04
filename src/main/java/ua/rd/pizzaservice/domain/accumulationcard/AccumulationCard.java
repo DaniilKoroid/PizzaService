@@ -8,14 +8,14 @@ public class AccumulationCard {
 	private static final double MAX_TOTAL_PRICE_DISCOUNTED_PERCENT = 0.3d;
 	private static final double DEFAULT_AMOUNT = 0d;
 	private static final Boolean DEFAULT_IS_ACTIVATED = Boolean.FALSE;
-	
+
 	private static int idCounter = 0;
-	
+
 	private Integer id;
 	private Double amount;
 	private Customer owner;
 	private Boolean isActivated;
-	
+
 	public AccumulationCard(Customer owner) {
 		id = ++idCounter;
 		amount = DEFAULT_AMOUNT;
@@ -46,7 +46,7 @@ public class AccumulationCard {
 	public void setOwner(Customer owner) {
 		this.owner = owner;
 	}
-	
+
 	public Boolean getIsActivated() {
 		return isActivated;
 	}
@@ -60,7 +60,7 @@ public class AccumulationCard {
 		amount += totalPrice;
 		return discountAmount;
 	}
-	
+
 	public Double calculateDiscount(Double totalPrice) {
 		double discountAmount = 0d;
 		discountAmount = Math.min(amount * DISCOUNT_PRECENTAGE, totalPrice * MAX_TOTAL_PRICE_DISCOUNTED_PERCENT);

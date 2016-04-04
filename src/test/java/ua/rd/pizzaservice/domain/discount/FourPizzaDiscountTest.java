@@ -1,6 +1,8 @@
 package ua.rd.pizzaservice.domain.discount;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -19,33 +21,33 @@ import ua.rd.pizzaservice.domain.pizza.Pizza;
 public class FourPizzaDiscountTest {
 
 	Discount discount;
-	
+
 	double discountPercentage;
-	
+
 	@Mock
 	Order mockedOrder;
-	
+
 	@Mock
 	List<Pizza> pizzaList;
-	
+
 	@Mock
 	Pizza pizzaOne;
-	
+
 	@Mock
 	Pizza pizzaTwo;
-	
+
 	@Mock
 	Pizza pizzaThree;
-	
+
 	@Mock
 	Pizza pizzaFour;
-	
+
 	@Before
 	public void setUpDiscount() {
 		discount = new FourPizzaDiscount();
 		discountPercentage = FourPizzaDiscount.DISCOUNT_PERCENTAGE_FOR_MAX_PRICED_PIZZA;
 	}
-	
+
 	@Test
 	public void testDiscountIsAppliableWithAppropriateOrder() {
 		System.out.println("test discount is appliable with appropriate order");
@@ -54,7 +56,7 @@ public class FourPizzaDiscountTest {
 		when(pizzaList.size()).thenReturn(pizzaListSize);
 		assertTrue(discount.isAppliable(mockedOrder));
 	}
-	
+
 	@Test
 	public void testDiscountIsNotAppliableWithNotAppropriateOrder() {
 		System.out.println("test discount is appliable with appropriate order");
@@ -63,7 +65,7 @@ public class FourPizzaDiscountTest {
 		when(pizzaList.size()).thenReturn(pizzaListSize);
 		assertFalse(discount.isAppliable(mockedOrder));
 	}
-	
+
 	@Test
 	public void testDiscountNotToWorkWithLessThanNeededPizzaCount() {
 		System.out.println("test discount not to work with less than needed pizza count");
@@ -75,7 +77,7 @@ public class FourPizzaDiscountTest {
 		double calculateDiscount = discount.calculateDiscount(mockedOrder);
 		assertEquals(expectedDiscount, calculateDiscount, eps);
 	}
-	
+
 	@Test
 	public void testDiscountWithFourPizzasOfDifferentPrice() {
 		System.out.println("test discount with four pizzas of different price");
@@ -90,7 +92,7 @@ public class FourPizzaDiscountTest {
 		double actualDiscount = discount.calculateDiscount(mockedOrder);
 		assertEquals(expectedDiscount, actualDiscount, eps);
 	}
-	
+
 	@Test
 	public void testDiscountWithFourPizzasOfEqualPrice() {
 		System.out.println("test discount with four pizzas of equal price");

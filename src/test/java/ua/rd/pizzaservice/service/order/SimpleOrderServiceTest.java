@@ -25,18 +25,18 @@ public class SimpleOrderServiceTest {
 
 	Customer customer;
 	OrderService orderService;
-	
+
 	@Before
 	public void setUpCustomer() {
 		String name = "";
 		customer = new Customer(name);
 	}
-	
+
 	@Before
 	public void setUpOrderService() {
 		orderService = new SimpleOrderService();
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testPlaceNewOrderWithTooMuchPizzasThrowsIllegalArgumentException() {
 		System.out.println("test placeNewOrder with too much pizzas throws IllegalArgumentException");
@@ -44,7 +44,7 @@ public class SimpleOrderServiceTest {
 		Integer[] arr = new Integer[length];
 		orderService.placeNewOrder(customer, arr);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testPlaceNewOrderWithZeroPizzasThrowsIllegalArgumentException() {
 		System.out.println("test placeNewOrder with zero pizzas throws IllegalArgumentException");
@@ -52,7 +52,7 @@ public class SimpleOrderServiceTest {
 		Integer[] arr = new Integer[length];
 		orderService.placeNewOrder(customer, arr);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testPlaceNewOrderWithNullCustomerThrowsIllegalArgumentException() {
 		System.out.println("test placeNewOrder with null customer throws IllegalArgumentException");
@@ -61,11 +61,11 @@ public class SimpleOrderServiceTest {
 		Customer nullCustomer = null;
 		orderService.placeNewOrder(nullCustomer, arr);
 	}
-	
+
 	@Test
 	public void testPlaceNewOrderWithAppropriatePizzasCount() {
 		System.out.println("test placeNewOrder with appropriate pizzas count");
-		Integer[] pizzasID = new Integer[]{1, 2, 3, 3, 2, 1};
+		Integer[] pizzasID = new Integer[] { 1, 2, 3, 3, 2, 1 };
 		int expectedOrderSize = pizzasID.length;
 		Order newOrder = orderService.placeNewOrder(customer, pizzasID);
 		int orderSize = newOrder.getPizzas().size();
@@ -80,7 +80,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertTrue(orderService.canChange(order));
 	}
-	
+
 	@Test
 	public void testCanChangeOrderWithInProgressStateReturnsFalse() {
 		System.out.println("test canChange order with IN_PROGRESS state returns false");
@@ -89,7 +89,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.canChange(order));
 	}
-	
+
 	@Test
 	public void testCanChangeOrderWithDoneStateReturnsFalse() {
 		System.out.println("test canChange order with DONE state returns false");
@@ -98,7 +98,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.canChange(order));
 	}
-	
+
 	@Test
 	public void testCanChangeOrderWithCancelledStateReturnsFalse() {
 		System.out.println("test canChange order with CANCELLED state returns false");
@@ -107,11 +107,10 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.canChange(order));
 	}
-	
+
 	@Test
 	public void testChangeOrderWithNewStateAndAppropriatePizzaCountReturnsTrue() {
-		System.out.println("test changeOrder with NEW state and appropriate pizza count "
-				+ "returns true");
+		System.out.println("test changeOrder with NEW state and appropriate pizza count " + "returns true");
 		int pizzaCount = 5;
 		Integer[] arr = new Integer[pizzaCount];
 		OrderState state = OrderState.NEW;
@@ -119,11 +118,10 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertTrue(orderService.changeOrder(order, arr));
 	}
-	
+
 	@Test
 	public void testChangeOrderWithInProgressStateAndAppropriatePizzaCountReturnsFalse() {
-		System.out.println("test changeOrder with IN_PROGRESS state and appropriate "
-				+ "pizza count returns false");
+		System.out.println("test changeOrder with IN_PROGRESS state and appropriate " + "pizza count returns false");
 		int pizzaCount = 5;
 		Integer[] arr = new Integer[pizzaCount];
 		OrderState state = OrderState.IN_PROGRESS;
@@ -131,11 +129,10 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.changeOrder(order, arr));
 	}
-	
+
 	@Test
 	public void testChangeOrderWithDoneStateAndAppropriatePizzaCountReturnsFalse() {
-		System.out.println("test changeOrder with DONE state and appropriate "
-				+ "pizza count returns false");
+		System.out.println("test changeOrder with DONE state and appropriate " + "pizza count returns false");
 		int pizzaCount = 5;
 		Integer[] arr = new Integer[pizzaCount];
 		OrderState state = OrderState.DONE;
@@ -143,11 +140,10 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.changeOrder(order, arr));
 	}
-	
+
 	@Test
 	public void testChangeOrderWithCancelledStateAndAppropriatePizzaCountReturnsFalse() {
-		System.out.println("test changeOrder with CANCELLED state and appropriate "
-				+ "pizza count returns false");
+		System.out.println("test changeOrder with CANCELLED state and appropriate " + "pizza count returns false");
 		int pizzaCount = 5;
 		Integer[] arr = new Integer[pizzaCount];
 		OrderState state = OrderState.CANCELLED;
@@ -155,11 +151,11 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.changeOrder(order, arr));
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testChangeOrderWithNewStateAndNotAppropriatePizzaCountThrowsIllegalArgumentException() {
-		System.out.println("test changeOrder with NEW state and not appropriate pizza count "
-				+ "throws IllegalArgumentException");
+		System.out.println(
+				"test changeOrder with NEW state and not appropriate pizza count " + "throws IllegalArgumentException");
 		int pizzaCount = 11;
 		Integer[] arr = new Integer[pizzaCount];
 		OrderState state = OrderState.NEW;
@@ -167,7 +163,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		orderService.changeOrder(order, arr);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testChangeOrderWithInProgressStateAndNotAppropriatePizzaCountThrowsIllegalArgumentException() {
 		System.out.println("test changeOrder with IN_PROGRESS state and not appropriate "
@@ -179,7 +175,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		orderService.changeOrder(order, arr);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testChangeOrderWithDoneStateNotAppropriatePizzaCountThrowsIllegalArgumentException() {
 		System.out.println("test changeOrder with DONE state and not appropriate "
@@ -191,7 +187,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		orderService.changeOrder(order, arr);
 	}
-	
+
 	@Test(expected = IllegalArgumentException.class)
 	public void testChangeOrderWithCancelledStateAndNotAppropriatePizzaCountThrowsIllegalArgumentException() {
 		System.out.println("test changeOrder with CANCELLED state and not appropriate "
@@ -203,7 +199,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		orderService.changeOrder(order, arr);
 	}
-	
+
 	@Test
 	public void testProcessOrderWithNewStateReturnsTrue() {
 		System.out.println("test processOrder with NEW state returns true");
@@ -212,7 +208,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertTrue(orderService.processOrder(order));
 	}
-	
+
 	@Test
 	public void testProcessOrderWithNewStateChangesStateToInProgress() {
 		System.out.println("test processOrder with NEW state changes state to IN_PROGRESS");
@@ -223,7 +219,7 @@ public class SimpleOrderServiceTest {
 		orderService.processOrder(order);
 		assertEquals(stateTo, order.getState());
 	}
-	
+
 	@Test
 	public void testProcessOrderWithInProgressStateReturnsFalse() {
 		System.out.println("test processOrder with IN_PROGRESS state returns false");
@@ -232,7 +228,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.processOrder(order));
 	}
-	
+
 	@Test
 	public void testProcessOrderWithInProgressStateDontChangesState() {
 		System.out.println("test processOrder with IN_PROGRESS state dont changes state");
@@ -243,7 +239,7 @@ public class SimpleOrderServiceTest {
 		orderService.processOrder(order);
 		assertEquals(stateTo, order.getState());
 	}
-	
+
 	@Test
 	public void testProcessOrderWithDoneStateReturnsFalse() {
 		System.out.println("test processOrder with DONE state returns false");
@@ -252,7 +248,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.processOrder(order));
 	}
-	
+
 	@Test
 	public void testProcessOrderWithDoneStateDontChangesState() {
 		System.out.println("test processOrder with DONE state dont changes state");
@@ -263,7 +259,7 @@ public class SimpleOrderServiceTest {
 		orderService.processOrder(order);
 		assertEquals(stateTo, order.getState());
 	}
-	
+
 	@Test
 	public void testProcessOrderWithCancelledStateReturnsFalse() {
 		System.out.println("test processOrder with CANCELLED state returns false");
@@ -272,7 +268,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.processOrder(order));
 	}
-	
+
 	@Test
 	public void testProcessOrderWithCancelledStateDontChangesState() {
 		System.out.println("test processOrder with CANCELLED state dont changes state");
@@ -283,7 +279,7 @@ public class SimpleOrderServiceTest {
 		orderService.processOrder(order);
 		assertEquals(stateTo, order.getState());
 	}
-	
+
 	@Test
 	public void testCancelOrderWithNewStateReturnsTrue() {
 		System.out.println("test cancelOrder with NEW state returns true");
@@ -292,7 +288,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertTrue(orderService.cancelOrder(order));
 	}
-	
+
 	@Test
 	public void testCancelOrderWithNewStateChangesStateToCancelled() {
 		System.out.println("test cancelOrder with NEW state changes state to cancelled");
@@ -303,7 +299,7 @@ public class SimpleOrderServiceTest {
 		orderService.cancelOrder(order);
 		assertEquals(stateTo, order.getState());
 	}
-	
+
 	@Test
 	public void testCancelOrderWithInProgressStateReturnsTrue() {
 		System.out.println("test cancelOrder with IN_PROGRESS state returns true");
@@ -312,7 +308,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertTrue(orderService.cancelOrder(order));
 	}
-	
+
 	@Test
 	public void testCancelOrderWithInProgressStateChangesStateToCancelled() {
 		System.out.println("test cancelOrder with IN_PROGRESS state changes state to cancelled");
@@ -323,7 +319,7 @@ public class SimpleOrderServiceTest {
 		orderService.cancelOrder(order);
 		assertEquals(stateTo, order.getState());
 	}
-	
+
 	@Test
 	public void testCancelOrderWithDoneStateReturnsFalse() {
 		System.out.println("test cancelOrder with DONE state returns false");
@@ -332,7 +328,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.cancelOrder(order));
 	}
-	
+
 	@Test
 	public void testCancelOrderWithDoneStateDontChangesState() {
 		System.out.println("test cancelOrder with DONE state dont changes state");
@@ -343,7 +339,7 @@ public class SimpleOrderServiceTest {
 		orderService.cancelOrder(order);
 		assertEquals(stateTo, order.getState());
 	}
-	
+
 	@Test
 	public void testCancelOrderWithCancelledStateReturnsFalse() {
 		System.out.println("test cancelOrder with CANCELLED state returns false");
@@ -352,7 +348,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.cancelOrder(order));
 	}
-	
+
 	@Test
 	public void testCancelOrderWithCancelledStateDontChangesState() {
 		System.out.println("test cancelOrder with CANCELLED state dont changes state");
@@ -363,7 +359,7 @@ public class SimpleOrderServiceTest {
 		orderService.cancelOrder(order);
 		assertEquals(stateTo, order.getState());
 	}
-	
+
 	@Test
 	public void testDoneOrderWithNewStateReturnsFalse() {
 		System.out.println("test doneOrder with NEW state returns false");
@@ -372,7 +368,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.doneOrder(order));
 	}
-	
+
 	@Test
 	public void testDoneOrderWithNewStateDontChangesState() {
 		System.out.println("test doneOrder with NEW state dont changes state");
@@ -383,7 +379,7 @@ public class SimpleOrderServiceTest {
 		orderService.doneOrder(order);
 		assertEquals(stateTo, order.getState());
 	}
-	
+
 	@Test
 	public void testDoneOrderWithInProgressStateReturnsTrue() {
 		System.out.println("test doneOrder with IN_PROGRESS state returns true");
@@ -393,7 +389,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertTrue(orderService.doneOrder(order));
 	}
-	
+
 	@Test
 	public void testDoneOrderWithInProgressStateChangesStateToDone() {
 		System.out.println("test doneOrder with IN_PROGRESS state changes state to DONE");
@@ -405,7 +401,7 @@ public class SimpleOrderServiceTest {
 		orderService.doneOrder(order);
 		assertEquals(stateTo, order.getState());
 	}
-	
+
 	@Test
 	public void testDoneOrderWithDoneStateReturnsFalse() {
 		System.out.println("test doneOrder with DONE state returns false");
@@ -414,7 +410,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.doneOrder(order));
 	}
-	
+
 	@Test
 	public void testDoneOrderWithDoneStateDontChangesState() {
 		System.out.println("test doneOrder with DONE state dont changes state");
@@ -425,7 +421,7 @@ public class SimpleOrderServiceTest {
 		orderService.doneOrder(order);
 		assertEquals(stateTo, order.getState());
 	}
-	
+
 	@Test
 	public void testDoneOrderWithCancelledStateReturnsFalse() {
 		System.out.println("test doneOrder with CANCELLED state returns false");
@@ -434,7 +430,7 @@ public class SimpleOrderServiceTest {
 		order.setState(state);
 		assertFalse(orderService.doneOrder(order));
 	}
-	
+
 	@Test
 	public void testDoneOrderWithCancelledStateDontChangesState() {
 		System.out.println("test doneOrder with CANCELLED state dont changes state");
@@ -445,29 +441,28 @@ public class SimpleOrderServiceTest {
 		orderService.doneOrder(order);
 		assertEquals(stateTo, order.getState());
 	}
-	
+
 	@Mock
 	Order order;
-	
+
 	@Mock
 	List<Pizza> pizzaList;
-	
+
 	@Mock
 	Pizza pizzaOne;
-	
+
 	@Mock
 	Pizza pizzaTwo;
-	
+
 	@Mock
 	Pizza pizzaThree;
-	
+
 	@Mock
 	Pizza pizzaFour;
-	
+
 	@Test
 	public void testGetFinalPriceOfOrderWithoutDiscountsAndWithoutAccumulationCard() {
-		System.out.println("test getFinalPrice of order without discounts and "
-				+ "without accumulation card");
+		System.out.println("test getFinalPrice of order without discounts and " + "without accumulation card");
 		AccumulationCard card = new AccumulationCard(customer);
 		Boolean isCardActivated = false;
 		card.setIsActivated(isCardActivated);
@@ -483,7 +478,7 @@ public class SimpleOrderServiceTest {
 		double eps = 1E-5;
 		assertEquals(sum, finalPrice, eps);
 	}
-	
+
 	@Test
 	public void testGetFinalPriceOfOrderWithoutDiscountsAndWithAccumulationCard() {
 		System.out.println("test getFinalPrice of order without discounts and with accumulation card");
@@ -505,7 +500,7 @@ public class SimpleOrderServiceTest {
 		double eps = 1E-5;
 		assertEquals(expectedFinalPrice, finalPrice, eps);
 	}
-	
+
 	@Test
 	public void testGetFinalPriceOfOrderWithDiscountsAndWithoutAccumulationCard() {
 		System.out.println("test getFinalPrice of order with discounts and without accumulation card");
@@ -526,7 +521,7 @@ public class SimpleOrderServiceTest {
 		double eps = 1E-5;
 		assertEquals(expectedFinalPrice, finalPrice, eps);
 	}
-	
+
 	@Test
 	public void testGetFinalPriceOfOrderWithDiscountsAndWithAccumulationCard() {
 		System.out.println("test getFinalPrice of order with discounts and with accumulation card");
@@ -549,7 +544,7 @@ public class SimpleOrderServiceTest {
 		double eps = 1E-5;
 		assertEquals(expectedFinalPrice, finalPrice, eps);
 	}
-	
+
 	private List<Pizza> getMockedPizzas() {
 		@SuppressWarnings("serial")
 		List<Pizza> mockedPizzasList = new ArrayList<Pizza>() {
@@ -562,7 +557,7 @@ public class SimpleOrderServiceTest {
 		};
 		return mockedPizzasList;
 	}
-	
+
 	private List<Pizza> getFirstThreeMockedPizzas() {
 		@SuppressWarnings("serial")
 		List<Pizza> mockedPizzasList = new ArrayList<Pizza>() {

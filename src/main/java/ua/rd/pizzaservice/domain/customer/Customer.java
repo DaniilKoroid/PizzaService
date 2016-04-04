@@ -6,12 +6,12 @@ import ua.rd.pizzaservice.domain.address.Address;
 public class Customer {
 
 	private static int idCounter = 0;
-	
+
 	private Integer id;
 	private String name;
 	private Address address;
 	private AccumulationCard accumulationCard;
-	
+
 	public Customer(String name) {
 		id = ++idCounter;
 		this.name = name;
@@ -53,11 +53,11 @@ public class Customer {
 	public Boolean isAccumulationCardPresent() {
 		return accumulationCard.getIsActivated();
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", name=" + name + ", address=" + address + ", accumulationCard="
 				+ accumulationCard + "]";
-	}	
-	
+	}
+
 }

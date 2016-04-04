@@ -21,21 +21,21 @@ public class InMemDiscountRepositoryTest {
 
 	@Mock
 	Order order;
-	
-	@Mock 
+
+	@Mock
 	List<Pizza> pizzas;
-	
+
 	DiscountRepository discountRepository;
-	
+
 	@Before
 	public void setUpDiscountRepository() {
 		discountRepository = new InMemDiscountRepository();
 	}
-	
+
 	@Test
 	public void testGetAppliableDiscountsReturnsForOrderWithAppliableDiscountsListWithDiscounts() {
-		System.out.println("test getAppliableDiscounts returns for order with appliable discounts "
-				+ "list with discounts");
+		System.out.println(
+				"test getAppliableDiscounts returns for order with appliable discounts " + "list with discounts");
 		Integer appliableSize = 4;
 		when(order.getPizzas()).thenReturn(pizzas);
 		when(pizzas.size()).thenReturn(appliableSize);
@@ -44,11 +44,10 @@ public class InMemDiscountRepositoryTest {
 		int actualSize = appliableDiscounts.size();
 		assertEquals(expectedSize, actualSize);
 	}
-	
+
 	@Test
 	public void testGetAppliableDiscountsReturnsEmptyListWhenThereAreNoAppliableDiscounts() {
-		System.out.println("test getAppliableDiscounts returns empty list when there are no "
-				+ "appliable discounts");
+		System.out.println("test getAppliableDiscounts returns empty list when there are no " + "appliable discounts");
 		Integer notAppliableSize = 3;
 		when(order.getPizzas()).thenReturn(pizzas);
 		when(pizzas.size()).thenReturn(notAppliableSize);

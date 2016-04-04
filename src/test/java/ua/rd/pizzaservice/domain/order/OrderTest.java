@@ -17,40 +17,40 @@ import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 public class OrderTest {
 
 	Order order;
-	
+
 	@Before
 	public void setUpOrder() {
 		order = new Order();
 	}
-	
+
 	@Test
 	public void testOrderCanChangeReturnsTrueFromNewState() {
 		System.out.println("test order canChange returns true from NEW state");
 		order.setState(OrderState.NEW);
 		assertTrue(order.canChange());
 	}
-	
+
 	@Test
 	public void testOrderCanChangeReturnsFalseFromInProgressState() {
 		System.out.println("test order canChange returns false from IN_PROGRESS state");
 		order.setState(OrderState.IN_PROGRESS);
 		assertFalse(order.canChange());
 	}
-	
+
 	@Test
 	public void testOrderCanChangeReturnsFalseFromDoneState() {
 		System.out.println("test order canChange returns false from DONE state");
 		order.setState(OrderState.DONE);
 		assertFalse(order.canChange());
 	}
-	
+
 	@Test
 	public void testOrderCanChangeReturnsFalseFromCancelledState() {
 		System.out.println("test order canChange returns false from CANCELLED state");
 		order.setState(OrderState.CANCELLED);
 		assertFalse(order.canChange());
 	}
-	
+
 	@Test
 	public void testChangeOrderFromNewStateReturnsTrue() {
 		System.out.println("test change order from NEW state returns true");
@@ -68,7 +68,7 @@ public class OrderTest {
 		assertTrue(orderChanged);
 		assertEquals(newPizzas, afterChangePizzas);
 	}
-	
+
 	@Test
 	public void testChangeOrderFromInProgressStateReturnsFalse() {
 		System.out.println("test change order from IN_PROGRESS state returns false");
@@ -86,7 +86,7 @@ public class OrderTest {
 		assertFalse(orderChanged);
 		assertNotEquals(newPizzas, afterChangePizzas);
 	}
-	
+
 	@Test
 	public void testChangeOrderFromCancelledStateReturnsFalse() {
 		System.out.println("test change order from CANCELLED state returns false");
@@ -104,7 +104,7 @@ public class OrderTest {
 		assertFalse(orderChanged);
 		assertNotEquals(newPizzas, afterChangePizzas);
 	}
-	
+
 	@Test
 	public void testChangeOrderFromDoneStateReturnsFalse() {
 		System.out.println("test change order from DONE state returns false");
@@ -136,7 +136,7 @@ public class OrderTest {
 			assertEquals(totalPrice, order.calculateFullPrice(), eps);
 		}
 	}
-	
+
 	@Test
 	public void testCalculateFullPrice() {
 		System.out.println("test calculate full price");
@@ -159,7 +159,7 @@ public class OrderTest {
 		OrderState expectedOrderState = OrderState.CANCELLED;
 		assertEquals(expectedOrderState, orderState);
 	}
-	
+
 	@Test
 	public void testCancelFromInProgressStateReturnsTrue() {
 		System.out.println("test cancel from IN_PROGRESS state returns true");
@@ -171,7 +171,7 @@ public class OrderTest {
 		OrderState expectedOrderState = OrderState.CANCELLED;
 		assertEquals(expectedOrderState, orderState);
 	}
-	
+
 	@Test
 	public void testCancelFromDoneStateReturnsFalse() {
 		System.out.println("test cancel from DONE state returns true");
@@ -183,7 +183,7 @@ public class OrderTest {
 		OrderState expectedOrderState = OrderState.DONE;
 		assertEquals(expectedOrderState, orderState);
 	}
-	
+
 	@Test
 	public void testCancelFromCancelledStateReturnsFalse() {
 		System.out.println("test cancel from CANCELLED state returns true");
@@ -204,7 +204,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertFalse(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateInProgressFromNewReturnsTrue() {
 		System.out.println("test canProceedToState IN_PROGRESS from NEW returns true");
@@ -213,7 +213,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertTrue(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateDoneFromNewReturnsFalse() {
 		System.out.println("test canProceedToState DONE from NEW returns false");
@@ -222,7 +222,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertFalse(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateCancelledFromNewReturnsTrue() {
 		System.out.println("test canProceedToState CANCELLED from NEW returns true");
@@ -231,7 +231,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertTrue(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateNewFromInProgressReturnsFalse() {
 		System.out.println("test canProceedToState NEW from IN_PROGRESS returns false");
@@ -240,7 +240,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertFalse(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateInProgressFromInProgressReturnsFalse() {
 		System.out.println("test canProceedToState IN_PROGRESS from IN_PROGRESS returns false");
@@ -249,7 +249,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertFalse(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateDoneFromInProgressReturnsTrue() {
 		System.out.println("test canProceedToState DONE from IN_PROGRESS returns true");
@@ -258,7 +258,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertTrue(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateCancelledFromInProgressReturnsTrue() {
 		System.out.println("test canProceedToState CANCELLED from IN_PROGRESS returns true");
@@ -267,7 +267,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertTrue(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateNewFromCancelledReturnsFalse() {
 		System.out.println("test canProceedToState NEW from CANCELLED returns false");
@@ -276,7 +276,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertFalse(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateInProgressFromCancelledReturnsFalse() {
 		System.out.println("test canProceedToState IN_PROGRESS from CANCELLED returns false");
@@ -285,7 +285,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertFalse(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateDoneFromCancelledReturnsFalse() {
 		System.out.println("test canProceedToState DONE from CANCELLED returns true");
@@ -294,7 +294,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertFalse(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateCancelledFromCancelledReturnsFalse() {
 		System.out.println("test canProceedToState CANCELLED from CANCELLED returns true");
@@ -303,7 +303,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertFalse(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateNewFromDoneReturnsFalse() {
 		System.out.println("test canProceedToState NEW from DONE returns false");
@@ -312,7 +312,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertFalse(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateInProgressFromDoneReturnsFalse() {
 		System.out.println("test canProceedToState IN_PROGRESS from DONE returns false");
@@ -321,7 +321,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertFalse(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateDoneFromDoneReturnsFalse() {
 		System.out.println("test canProceedToState DONE from DONE returns true");
@@ -330,7 +330,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertFalse(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testCanProceedToStateCancelledFromDoneReturnsFalse() {
 		System.out.println("test canProceedToState CANCELLED from DONE returns true");
@@ -339,7 +339,7 @@ public class OrderTest {
 		order.setState(stateFrom);
 		assertFalse(order.canProceedToState(stateTo));
 	}
-	
+
 	@Test
 	public void testNextStateFromNewStateReturnsTrue() {
 		System.out.println("test nextState from NEW state returns true");
@@ -347,7 +347,7 @@ public class OrderTest {
 		order.setState(state);
 		assertTrue(order.nextState());
 	}
-	
+
 	@Test
 	public void testNextStateFromNewStateChangesStateToInProgress() {
 		System.out.println("test nextState from NEW state changes state to IN_PROGRESS");
@@ -358,7 +358,7 @@ public class OrderTest {
 		OrderState actualState = order.getState();
 		assertEquals(toState, actualState);
 	}
-	
+
 	@Test
 	public void testNextStateFromInProgressStateReturnsTrue() {
 		System.out.println("test nextState from IN_PROGRESS state returns true");
@@ -366,7 +366,7 @@ public class OrderTest {
 		order.setState(state);
 		assertTrue(order.nextState());
 	}
-	
+
 	@Test
 	public void testNextStateFromInProgressStateChangesStateToDone() {
 		System.out.println("test nextState from IN_PROGRESS state changes state to DONE");
@@ -377,7 +377,7 @@ public class OrderTest {
 		OrderState actualState = order.getState();
 		assertEquals(toState, actualState);
 	}
-	
+
 	@Test
 	public void testNextStateFromDoneStateReturnsFalse() {
 		System.out.println("test nextState from DONE state returns false");
@@ -385,7 +385,7 @@ public class OrderTest {
 		order.setState(state);
 		assertFalse(order.nextState());
 	}
-	
+
 	@Test
 	public void testNextStateFromDoneStateDontChangesState() {
 		System.out.println("test nextState from DONE state dont changes state");
@@ -396,7 +396,7 @@ public class OrderTest {
 		OrderState actualState = order.getState();
 		assertEquals(toState, actualState);
 	}
-	
+
 	@Test
 	public void testNextStateFromCancelledStateReturnsFalse() {
 		System.out.println("test nextState from CANCELLED state returns false");
@@ -404,7 +404,7 @@ public class OrderTest {
 		order.setState(state);
 		assertFalse(order.nextState());
 	}
-	
+
 	@Test
 	public void testNextStateFromCancelledStateDontChangesState() {
 		System.out.println("test nextState from CANCELLED state dont changes state");
@@ -415,20 +415,20 @@ public class OrderTest {
 		OrderState actualState = order.getState();
 		assertEquals(toState, actualState);
 	}
+
 	private List<Pizza> getDefaultPizzaList() {
 		List<Pizza> pizzaList = new ArrayList<>();
 		Pizza pizzaOne = new Pizza(1, "Margarita", 60d, PizzaType.MEAT);
 		Pizza pizzaTwo = new Pizza(2, "SeaPizza", 90d, PizzaType.SEA);
 		Pizza pizzaThree = new Pizza(3, "Ayurveda", 80d, PizzaType.VEGETERIAN);
-		
-		
+
 		pizzaList.add(pizzaOne);
 		pizzaList.add(pizzaTwo);
 		pizzaList.add(pizzaThree);
-		
+
 		return pizzaList;
 	}
-	
+
 	private Double calculateTotalPrice(List<Pizza> pizzas) {
 		double result = 0d;
 		for (Pizza pizza : pizzas) {

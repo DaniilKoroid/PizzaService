@@ -16,27 +16,27 @@ import ua.rd.pizzaservice.service.discount.DiscountService;
 import ua.rd.pizzaservice.service.discount.DiscountServiceImpl;
 
 public class SimpleOrderService implements OrderService {
-	
+
 	private static final int MIN_PIZZA_IN_ORDER_COUNT = 1;
 	private static final int MAX_PIZZA_IN_ORDER_COUNT = 10;
-	
+
 	private DiscountService discountService = new DiscountServiceImpl();
-	
+
 	private PizzaRepository pizzaRepository = new InMemPizzaRepository();
 	private OrderRepository orderRepository = new InMemOrderRepository();
-	
+
 	@Override
 	public Order placeNewOrder(Customer customer, Integer... pizzasID) {
 		checkOrderedPizzasNumber(pizzasID);
 		checkCustomerExistance(customer);
-		
+
 		List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
 		Order newOrder = createOrder(customer, pizzas);
-		
+
 		orderRepository.saveOrder(newOrder);
 		return newOrder;
 	}
-	
+
 	private Order createOrder(Customer customer, List<Pizza> pizzas) {
 		Order newOrder = new Order(customer, pizzas);
 		return newOrder;
@@ -45,23 +45,21 @@ public class SimpleOrderService implements OrderService {
 	private List<Pizza> pizzasByArrOfId(Integer... pizzasID) {
 		List<Pizza> pizzas = new ArrayList<>();
 
-        for(Integer id : pizzasID){
-        	pizzas.add(pizzaRepository.getPizzaByID(id));
-        }
+		for (Integer id : pizzasID) {
+			pizzas.add(pizzaRepository.getPizzaByID(id));
+		}
 		return pizzas;
 	}
-	
+
 	private void checkOrderedPizzasNumber(Integer... pizzasId) {
-		if(pizzasId.length < MIN_PIZZA_IN_ORDER_COUNT
-				|| pizzasId.length > MAX_PIZZA_IN_ORDER_COUNT) {
-			
-			throw new IllegalArgumentException("Can't place order with "
-					+ "not allowed number of pizzas.");
+		if (pizzasId.length < MIN_PIZZA_IN_ORDER_COUNT || pizzasId.length > MAX_PIZZA_IN_ORDER_COUNT) {
+
+			throw new IllegalArgumentException("Can't place order with " + "not allowed number of pizzas.");
 		}
 	}
-	
+
 	private void checkCustomerExistance(Customer customer) {
-		if(customer == null) {
+		if (customer == null) {
 			throw new IllegalArgumentException("Customer must exist to place new order");
 		}
 	}
@@ -70,13 +68,13 @@ public class SimpleOrderService implements OrderService {
 	public Boolean changeOrder(Order order, Integer... pizzasID) {
 		checkOrderedPizzasNumber(pizzasID);
 		Boolean canChange = canChange(order);
-		if(canChange) {
+		if (canChange) {
 			List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
 			canChange = order.changeOrder(pizzas);
 		}
 		return canChange;
 	}
-	
+
 	@Override
 	public Boolean canChange(Order order) {
 		Boolean canChange = order.canChange();
@@ -111,14 +109,14 @@ public class SimpleOrderService implements OrderService {
 
 	private Boolean processPayment(Order order) {
 		Customer customer = order.getCustomer();
-		if(customer.isAccumulationCardPresent()) {
+		if (customer.isAccumulationCardPresent()) {
 			Double priceWithDiscounts = discountService.calculatePriceWithDiscounts(order);
 			AccumulationCard card = customer.getAccumulationCard();
 			card.use(priceWithDiscounts);
 		}
 		return Boolean.TRUE;
 	}
-	
+
 	@Override
 	public Double getFullPrice(Order order) {
 		return order.calculateFullPrice();

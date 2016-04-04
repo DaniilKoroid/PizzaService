@@ -6,7 +6,7 @@ public class Address {
 	private String city;
 	private String street;
 	private String building;
-	
+
 	public Address(String country, String city, String street, String building) {
 		this.country = country;
 		this.city = city;
@@ -53,6 +53,5 @@ public class Address {
 	public String toString() {
 		return "Address [country=" + country + ", city=" + city + ", street=" + street + ", building=" + building + "]";
 	}
-	
-	
+
 }

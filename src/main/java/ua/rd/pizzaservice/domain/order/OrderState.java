@@ -19,14 +19,14 @@ public enum OrderState {
 		public Boolean canProceedTo(OrderState state) {
 			Boolean result;
 			switch (state) {
-				case IN_PROGRESS:
-				case CANCELLED:
-					result = Boolean.TRUE;
-					break;
-				case NEW:
-				case DONE:
-				default:
-					result = Boolean.FALSE;
+			case IN_PROGRESS:
+			case CANCELLED:
+				result = Boolean.TRUE;
+				break;
+			case NEW:
+			case DONE:
+			default:
+				result = Boolean.FALSE;
 			}
 			return result;
 		}
@@ -44,19 +44,19 @@ public enum OrderState {
 			order.setState(CANCELLED);
 			return Boolean.TRUE;
 		}
-		
+
 		@Override
 		public Boolean canProceedTo(OrderState state) {
 			Boolean result;
 			switch (state) {
-				case DONE:
-				case CANCELLED:
-					result = Boolean.TRUE;
-					break;
-				case NEW:
-				case IN_PROGRESS:
-				default:
-					result = Boolean.FALSE;
+			case DONE:
+			case CANCELLED:
+				result = Boolean.TRUE;
+				break;
+			case NEW:
+			case IN_PROGRESS:
+			default:
+				result = Boolean.FALSE;
 			}
 			return result;
 		}
@@ -72,7 +72,7 @@ public enum OrderState {
 		public Boolean cancel(Order order) {
 			return Boolean.FALSE;
 		}
-		
+
 		@Override
 		public Boolean canProceedTo(OrderState state) {
 			Boolean result = Boolean.FALSE;
@@ -96,10 +96,11 @@ public enum OrderState {
 			Boolean result = Boolean.FALSE;
 			return result;
 		}
-	},
-	;
-	
+	},;
+
 	public abstract Boolean nextState(Order order);
+
 	public abstract Boolean cancel(Order order);
+
 	public abstract Boolean canProceedTo(OrderState state);
 }

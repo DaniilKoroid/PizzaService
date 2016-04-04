@@ -1,26 +1,25 @@
 package ua.rd.pizzaservice.domain.accumulationcard;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
 
 public class AccumulationCardTest {
 
 	AccumulationCard card;
-	
+
 	@Before
 	public void setUpAccumulationCard() {
 		Double baseAmount = 100d;
 		Customer owner = null;
 		card = new AccumulationCard(owner);
 		card.setAmount(baseAmount);
-		
+
 	}
-	
+
 	@Test
 	public void testUseDiscountWithCardPercentage() {
 		System.out.println("test use discount with card percentage");
@@ -32,7 +31,7 @@ public class AccumulationCardTest {
 		assertEquals(expectedDiscount, discount, eps);
 		assertEquals(newCardAmount, card.getAmount(), eps);
 	}
-	
+
 	@Test
 	public void testUseDiscountWithTotalPricePercentage() {
 		System.out.println("test use discount with total price percentage");
@@ -44,11 +43,10 @@ public class AccumulationCardTest {
 		assertEquals(expectedDiscount, discount, eps);
 		assertEquals(newCardAmount, card.getAmount(), eps);
 	}
-	
+
 	@Test
 	public void testUseDiscountWhenTotalPriceAndCardPercentagesAreEqual() {
-		System.out.println("test use discount when total price and "
-				+ "card percentages are equal");
+		System.out.println("test use discount when total price and " + "card percentages are equal");
 		double cardAmount = 300d;
 		card.setAmount(cardAmount);
 		double totalPrice = 100d;
@@ -69,7 +67,7 @@ public class AccumulationCardTest {
 		double discount = card.calculateDiscount(totalPrice);
 		assertEquals(expectedDiscount, discount, eps);
 	}
-	
+
 	@Test
 	public void testCalculateDiscountWithTotalPricePercentage() {
 		System.out.println("test calculate discount with total price percentage");
@@ -79,11 +77,10 @@ public class AccumulationCardTest {
 		double discount = card.calculateDiscount(totalPrice);
 		assertEquals(expectedDiscount, discount, eps);
 	}
-	
+
 	@Test
 	public void testCalculateDiscountWhenTotalPriceAndCardPercentagesAreEqual() {
-		System.out.println("test calculate discount when total price and "
-				+ "card percentages are equal");
+		System.out.println("test calculate discount when total price and " + "card percentages are equal");
 		double cardAmount = 300d;
 		card.setAmount(cardAmount);
 		double totalPrice = 100d;

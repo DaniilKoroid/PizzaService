@@ -10,20 +10,20 @@ import ua.rd.pizzaservice.domain.order.Order;
 public class InMemDiscountRepository implements DiscountRepository {
 
 	private List<Discount> discounts = new ArrayList<>();
-	
+
 	{
 		discounts.add(new FourPizzaDiscount());
 	}
-	
+
 	@Override
 	public List<Discount> getAppliableDiscounts(Order order) {
 		List<Discount> appliableDiscounts = new ArrayList<>();
-		for(Discount discount : discounts) {
+		for (Discount discount : discounts) {
 			if (discount.isAppliable(order)) {
 				appliableDiscounts.add(discount);
 			}
 		}
-		if(appliableDiscounts.isEmpty()) {
+		if (appliableDiscounts.isEmpty()) {
 			appliableDiscounts = java.util.Collections.emptyList();
 		}
 		return appliableDiscounts;

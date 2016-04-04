@@ -21,30 +21,30 @@ import ua.rd.pizzaservice.domain.pizza.Pizza;
 public class DiscountServiceImplTest {
 
 	DiscountService discountService;
-	
+
 	@Mock
 	Order order;
-	
+
 	@Mock
 	List<Pizza> pizzaList;
-	
+
 	@Mock
 	Pizza pizzaOne;
-	
+
 	@Mock
 	Pizza pizzaTwo;
-	
+
 	@Mock
 	Pizza pizzaThree;
-	
+
 	@Mock
 	Pizza pizzaFour;
-	
+
 	@Before
 	public void setUpDiscountService() {
 		discountService = new DiscountServiceImpl();
 	}
-	
+
 	@Test
 	public void testCalculateDiscountsAmountOnOrderWithoutDiscounts() {
 		System.out.println("test calculateDiscountsAmount on order without discounts");
@@ -56,7 +56,7 @@ public class DiscountServiceImplTest {
 		double eps = 1E-5;
 		assertEquals(expectedDiscountAmount, discountsAmount, eps);
 	}
-	
+
 	@Test
 	public void testCalculateDiscountsAmountOnOrderWithDiscounts() {
 		System.out.println("test calculateDiscountsAmount on order with discounts");
@@ -70,7 +70,7 @@ public class DiscountServiceImplTest {
 		double actualDiscount = discountService.calculateDiscountsAmount(order);
 		assertEquals(expectedDiscount, actualDiscount, eps);
 	}
-	
+
 	@Test
 	public void testCalculatePriceWithDiscountsOnOrderWithoutDiscounts() {
 		System.out.println("test calculate price with discounts on order without discounts");
@@ -85,7 +85,7 @@ public class DiscountServiceImplTest {
 		double eps = 1E-5;
 		assertEquals(expectedPriceWithDiscounts, priceWithDiscounts, eps);
 	}
-	
+
 	@Test
 	public void testCalculatePriceWithDiscountsOnOrderWithDiscounts() {
 		System.out.println("test calculate price with discounts on order without discounts");
@@ -101,7 +101,7 @@ public class DiscountServiceImplTest {
 		double eps = 1E-5;
 		assertEquals(expectedPriceWithDiscounts, priceWithDiscounts, eps);
 	}
-	
+
 	@Test
 	public void testCalculateFinalDiscountAmountOnOrderWithoutDiscountsAndCustomerWithoutAccumulationCard() {
 		System.out.println("test calculateFinalDiscountAmount on order withour discounts "
@@ -123,7 +123,7 @@ public class DiscountServiceImplTest {
 		double eps = 1E-5;
 		assertEquals(expectedDiscountAmount, finalDiscountAmount, eps);
 	}
-	
+
 	@Test
 	public void testCalculateFinalDiscountAmountOnOrderWithoutDiscountsAndCustomerWithAccumulationCard() {
 		System.out.println("test calculateFinalDiscountAmount on order withour discounts "
@@ -147,7 +147,7 @@ public class DiscountServiceImplTest {
 		double eps = 1E-5;
 		assertEquals(expectedDiscountAmount, finalDiscountAmount, eps);
 	}
-	
+
 	@Test
 	public void testCalculateFinalDiscountAmountOnOrderWithDiscountsAndCustomerWithoutAccumulationCard() {
 		System.out.println("test calculateFinalDiscountAmount on order with discounts "
@@ -170,11 +170,11 @@ public class DiscountServiceImplTest {
 		double eps = 1E-5;
 		assertEquals(expectedDiscountAmount, finalDiscountAmount, eps);
 	}
-	
+
 	@Test
 	public void testCalculateFinalDiscountAmountOnOrderWithDiscountsAndCustomerWithAccumulationCard() {
-		System.out.println("test calculateFinalDiscountAmount on order with discounts "
-				+ "and customer with accumulation card");
+		System.out.println(
+				"test calculateFinalDiscountAmount on order with discounts " + "and customer with accumulation card");
 		Customer customer = new Customer("name");
 		AccumulationCard card = new AccumulationCard(customer);
 		Double cardAmount = 100d;
@@ -195,7 +195,7 @@ public class DiscountServiceImplTest {
 		double eps = 1E-5;
 		assertEquals(expectedDiscountAmount, finalDiscountAmount, eps);
 	}
-	
+
 	private List<Pizza> getMockedPizzas() {
 		@SuppressWarnings("serial")
 		List<Pizza> mockedPizzasList = new ArrayList<Pizza>() {
@@ -208,7 +208,7 @@ public class DiscountServiceImplTest {
 		};
 		return mockedPizzasList;
 	}
-	
+
 	private List<Pizza> getFirstThreeMockedPizzas() {
 		@SuppressWarnings("serial")
 		List<Pizza> mockedPizzasList = new ArrayList<Pizza>() {
@@ -220,5 +220,5 @@ public class DiscountServiceImplTest {
 		};
 		return mockedPizzasList;
 	}
-	
+
 }

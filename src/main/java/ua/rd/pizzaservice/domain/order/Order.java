@@ -6,17 +6,17 @@ import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 
 public class Order {
-	
+
 	private static Long idCounter = 0L;
-	
+
 	private Long id;
 	private OrderState state;
 	private Customer customer;
 	private List<Pizza> pizzas;
-	
+
 	public Order() {
 	}
-	
+
 	public Order(Customer customer, List<Pizza> pizzas) {
 		this(++idCounter, OrderState.NEW, customer, pizzas);
 	}
@@ -24,7 +24,7 @@ public class Order {
 	public Order(Long id, Customer customer, List<Pizza> pizzas) {
 		this(id, OrderState.NEW, customer, pizzas);
 	}
-	
+
 	public Order(Long id, OrderState state, Customer customer, List<Pizza> pizzas) {
 		this.id = id;
 		this.state = state;
@@ -68,11 +68,11 @@ public class Order {
 	public String toString() {
 		return "Order [id=" + id + ", customer=" + customer + ", pizzas=" + pizzas + "]";
 	}
-	
+
 	public Boolean canChange() {
 		return state == OrderState.NEW;
 	}
-	
+
 	public Boolean changeOrder(List<Pizza> newPizzas) {
 		Boolean canChange = canChange();
 		if (canChange) {
@@ -80,7 +80,7 @@ public class Order {
 		}
 		return canChange;
 	}
-	
+
 	public Double calculateFullPrice() {
 		double totalPrice = 0d;
 		for (Pizza pizza : pizzas) {
@@ -88,15 +88,15 @@ public class Order {
 		}
 		return totalPrice;
 	}
-	
+
 	public Boolean cancel() {
 		return state.cancel(this);
 	}
-	
+
 	public Boolean nextState() {
 		return state.nextState(this);
 	}
-	
+
 	public Boolean canProceedToState(OrderState proceedToState) {
 		Boolean canProceedTo = state.canProceedTo(proceedToState);
 		System.out.println("Can proceed from " + state + " to " + proceedToState + " -> " + canProceedTo);

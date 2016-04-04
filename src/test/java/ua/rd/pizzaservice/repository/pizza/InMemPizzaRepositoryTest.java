@@ -16,7 +16,7 @@ public class InMemPizzaRepositoryTest {
 	public void setUpVariables() {
 		pizzaRepository = new InMemPizzaRepository();
 	}
-	
+
 	@Test
 	public void testGetPizzaByIdReturnsAppropriatePizza() {
 		System.out.println("test get pizza by id returns appropriate pizza");
@@ -25,7 +25,7 @@ public class InMemPizzaRepositoryTest {
 		Pizza pizzaByID = pizzaRepository.getPizzaByID(id);
 		assertEquals(pizzaOne, pizzaByID);
 	}
-	
+
 	@Test
 	public void testGetPizzaByIdReturnsNullIfThereIsNoSuchPizza() {
 		System.out.println("test get pizza by id returns null if there is no such pizza");
