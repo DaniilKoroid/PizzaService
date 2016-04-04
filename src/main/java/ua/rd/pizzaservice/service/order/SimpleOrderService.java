@@ -28,6 +28,7 @@ public class SimpleOrderService implements OrderService {
 	@Override
 	public Order placeNewOrder(Customer customer, Integer... pizzasID) {
 		checkOrderedPizzasNumber(pizzasID);
+		checkCustomerExistance(customer);
 		
 		List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
 		Order newOrder = createOrder(customer, pizzas);
@@ -58,14 +59,27 @@ public class SimpleOrderService implements OrderService {
 					+ "not allowed number of pizzas.");
 		}
 	}
+	
+	private void checkCustomerExistance(Customer customer) {
+		if(customer == null) {
+			throw new IllegalArgumentException("Customer must exist to place new order");
+		}
+	}
 
 	@Override
 	public Boolean changeOrder(Order order, Integer... pizzasID) {
-		Boolean canChange = order.canChange();
+		checkOrderedPizzasNumber(pizzasID);
+		Boolean canChange = canChange(order);
 		if(canChange) {
 			List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
 			canChange = order.changeOrder(pizzas);
 		}
+		return canChange;
+	}
+	
+	@Override
+	public Boolean canChange(Order order) {
+		Boolean canChange = order.canChange();
 		return canChange;
 	}
 

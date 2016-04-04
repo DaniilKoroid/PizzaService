@@ -7,6 +7,7 @@ public interface OrderService {
 
 	Order placeNewOrder(Customer customer, Integer... pizzasID);
 	Boolean changeOrder(Order order, Integer... pizzasID);
+	Boolean canChange(Order order);
 	Boolean processOrder(Order order);
 	Boolean cancelOrder(Order order);
 	Boolean doneOrder(Order order);
