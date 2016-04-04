@@ -14,33 +14,23 @@ public class Order {
 	private OrderState state;
 	private Customer customer;
 	private List<Pizza> pizzas;
-	private Discount discount;
 	
 	public Order() {
 	}
 	
-	public Order(Customer customer, List<Pizza> pizzas, Discount discount) {
-		this(++idCounter, OrderState.NEW, customer, pizzas, discount);
-	}
-
-	public Order(Long id, OrderState state, Customer customer, List<Pizza> pizzas) {
-		this(id, state, customer, pizzas, null);
+	public Order(Customer customer, List<Pizza> pizzas) {
+		this(++idCounter, OrderState.NEW, customer, pizzas);
 	}
 
 	public Order(Long id, Customer customer, List<Pizza> pizzas) {
-		this(id, OrderState.NEW, customer, pizzas, null);
+		this(id, OrderState.NEW, customer, pizzas);
 	}
 	
-	public Order(Customer customer, List<Pizza> pizzas) {
-		this(++idCounter, OrderState.NEW, customer, pizzas, null);
-	}
-	
-	public Order(Long id, OrderState state, Customer customer, List<Pizza> pizzas, Discount discount) {
+	public Order(Long id, OrderState state, Customer customer, List<Pizza> pizzas) {
 		this.id = id;
 		this.state = state;
 		this.customer = customer;
 		this.pizzas = pizzas;
-		this.discount = discount;
 	}
 
 	public Long getId() {
@@ -75,25 +65,17 @@ public class Order {
 		this.state = state;
 	}
 
-	public Discount getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(Discount discount) {
-		this.discount = discount;
-	}
-
 	@Override
 	public String toString() {
 		return "Order [id=" + id + ", customer=" + customer + ", pizzas=" + pizzas + "]";
 	}
 	
 	public Boolean canChange() {
-		return state.canChange();
+		return state == OrderState.NEW;
 	}
 	
 	public Boolean changeOrder(List<Pizza> newPizzas) {
-		Boolean canChange = state.canChange();
+		Boolean canChange = canChange();
 		if (canChange) {
 			pizzas = newPizzas;
 		}
@@ -114,5 +96,9 @@ public class Order {
 	
 	public Boolean nextState() {
 		return state.nextState(this);
+	}
+	
+	public Boolean canProceedToState(OrderState state) {
+		return state.canProceedTo(state);
 	}
 }

@@ -14,7 +14,7 @@ public class FourPizzaDiscount implements Discount {
 	@Override
 	public Double calculateDiscount(Order order) {
 		List<Pizza> pizzas = order.getPizzas();
-		if(isAppliable(pizzas)) {
+		if(!isAppliable(pizzas)) {
 			return DEFAULT_DISCOUNT_AMOUNT_FOR_UNAPPLIABLE;
 		}
 		Double maxPizzaPrice = getMaxPizzaPrice(pizzas);

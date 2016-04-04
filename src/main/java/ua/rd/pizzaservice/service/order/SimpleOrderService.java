@@ -7,6 +7,7 @@ import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.order.Order;
+import ua.rd.pizzaservice.domain.order.OrderState;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.repository.order.InMemOrderRepository;
 import ua.rd.pizzaservice.repository.order.OrderRepository;
@@ -76,8 +77,12 @@ public class SimpleOrderService implements OrderService {
 
 	@Override
 	public Boolean processOrder(Order order) {
-		Boolean nextStateDone = order.nextState();
-		return nextStateDone;
+		Boolean result = Boolean.FALSE;
+		Boolean canProceedToState = order.canProceedToState(OrderState.IN_PROGRESS);
+		if (canProceedToState) {
+			result = order.nextState();
+		}
+		return result;
 	}
 
 	@Override
@@ -87,9 +92,13 @@ public class SimpleOrderService implements OrderService {
 
 	@Override
 	public Boolean doneOrder(Order order) {
-		Boolean nextStateDone = order.nextState();
-		processPayment(order);
-		return nextStateDone;
+		Boolean canProceedToState = order.canProceedToState(OrderState.DONE);
+		Boolean result = Boolean.FALSE;
+		if (canProceedToState) {
+			result = order.nextState();
+			processPayment(order);
+		}
+		return result;
 	}
 
 	private Boolean processPayment(Order order) {
