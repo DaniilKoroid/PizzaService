@@ -3,7 +3,6 @@ package ua.rd.pizzaservice.service.order;
 import java.util.ArrayList;
 import java.util.List;
 
-import infrastructure.ServiceLocator;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
