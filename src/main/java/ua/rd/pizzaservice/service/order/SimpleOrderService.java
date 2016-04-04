@@ -5,7 +5,6 @@ import java.util.List;
 
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
-import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.order.OrderState;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
@@ -28,22 +27,17 @@ public class SimpleOrderService implements OrderService {
 	
 	@Override
 	public Order placeNewOrder(Customer customer, Integer... pizzasID) {
-		return placeNewOrder(customer, null, pizzasID);
-	}
-	
-	@Override
-	public Order placeNewOrder(Customer customer, Discount discount, Integer... pizzasID) {
 		checkOrderedPizzasNumber(pizzasID);
 		
 		List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
-		Order newOrder = createOrder(customer, pizzas, discount);
+		Order newOrder = createOrder(customer, pizzas);
 		
 		orderRepository.saveOrder(newOrder);
 		return newOrder;
 	}
 	
-	private Order createOrder(Customer customer, List<Pizza> pizzas, Discount discount) {
-		Order newOrder = new Order(customer, pizzas, discount);
+	private Order createOrder(Customer customer, List<Pizza> pizzas) {
+		Order newOrder = new Order(customer, pizzas);
 		return newOrder;
 	}
 
