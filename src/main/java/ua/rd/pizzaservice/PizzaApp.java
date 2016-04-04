@@ -2,7 +2,6 @@ package ua.rd.pizzaservice;
 
 import infrastructure.ApplicationContext;
 import infrastructure.JavaConfigApplicationContext;
-import infrastructure.ServiceLocator;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
