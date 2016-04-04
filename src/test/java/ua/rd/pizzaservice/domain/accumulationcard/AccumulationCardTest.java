@@ -10,14 +10,15 @@ import ua.rd.pizzaservice.domain.customer.Customer;
 
 public class AccumulationCardTest {
 
-	AccumulationCard accumulationCard;
+	AccumulationCard card;
 	
 	@Before
 	public void setUpAccumulationCard() {
-		double baseAmount = 100d;
+		Double baseAmount = 100d;
 		Customer owner = null;
-		int id = 0;
-		accumulationCard = new AccumulationCard(id, baseAmount, owner);
+		card = new AccumulationCard(owner);
+		card.setAmount(baseAmount);
+		
 	}
 	
 	@Test
@@ -26,10 +27,10 @@ public class AccumulationCardTest {
 		double totalPrice = 100d;
 		double expectedDiscount = 10d;
 		double eps = 1E-5;
-		double newCardAmount = accumulationCard.getAmount() + totalPrice;
-		double discount = accumulationCard.use(totalPrice);
+		double newCardAmount = card.getAmount() + totalPrice;
+		double discount = card.use(totalPrice);
 		assertEquals(expectedDiscount, discount, eps);
-		assertEquals(newCardAmount, accumulationCard.getAmount(), eps);
+		assertEquals(newCardAmount, card.getAmount(), eps);
 	}
 	
 	@Test
@@ -38,10 +39,10 @@ public class AccumulationCardTest {
 		double totalPrice = 30d;
 		double expectedDiscount = 9d;
 		double eps = 1E-5;
-		double newCardAmount = accumulationCard.getAmount() + totalPrice;
-		double discount = accumulationCard.use(totalPrice);
+		double newCardAmount = card.getAmount() + totalPrice;
+		double discount = card.use(totalPrice);
 		assertEquals(expectedDiscount, discount, eps);
-		assertEquals(newCardAmount, accumulationCard.getAmount(), eps);
+		assertEquals(newCardAmount, card.getAmount(), eps);
 	}
 	
 	@Test
@@ -49,14 +50,14 @@ public class AccumulationCardTest {
 		System.out.println("test use discount when total price and "
 				+ "card percentages are equal");
 		double cardAmount = 300d;
-		accumulationCard.setAmount(cardAmount);
+		card.setAmount(cardAmount);
 		double totalPrice = 100d;
 		double expectedDiscount = 30d;
 		double eps = 1E-5;
-		double newCardAmount = accumulationCard.getAmount() + totalPrice;
-		double discount = accumulationCard.use(totalPrice);
+		double newCardAmount = card.getAmount() + totalPrice;
+		double discount = card.use(totalPrice);
 		assertEquals(expectedDiscount, discount, eps);
-		assertEquals(newCardAmount, accumulationCard.getAmount(), eps);
+		assertEquals(newCardAmount, card.getAmount(), eps);
 	}
 
 	@Test
@@ -65,7 +66,7 @@ public class AccumulationCardTest {
 		double totalPrice = 100d;
 		double expectedDiscount = 10d;
 		double eps = 1E-5;
-		double discount = accumulationCard.calculateDiscount(totalPrice);
+		double discount = card.calculateDiscount(totalPrice);
 		assertEquals(expectedDiscount, discount, eps);
 	}
 	
@@ -75,7 +76,7 @@ public class AccumulationCardTest {
 		double totalPrice = 30d;
 		double expectedDiscount = 9d;
 		double eps = 1E-5;
-		double discount = accumulationCard.calculateDiscount(totalPrice);
+		double discount = card.calculateDiscount(totalPrice);
 		assertEquals(expectedDiscount, discount, eps);
 	}
 	
@@ -84,11 +85,11 @@ public class AccumulationCardTest {
 		System.out.println("test calculate discount when total price and "
 				+ "card percentages are equal");
 		double cardAmount = 300d;
-		accumulationCard.setAmount(cardAmount);
+		card.setAmount(cardAmount);
 		double totalPrice = 100d;
 		double expectedDiscount = 30d;
 		double eps = 1E-5;
-		double discount = accumulationCard.calculateDiscount(totalPrice);
+		double discount = card.calculateDiscount(totalPrice);
 		assertEquals(expectedDiscount, discount, eps);
 	}
 
