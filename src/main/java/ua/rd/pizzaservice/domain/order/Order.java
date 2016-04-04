@@ -97,7 +97,9 @@ public class Order {
 		return state.nextState(this);
 	}
 	
-	public Boolean canProceedToState(OrderState state) {
-		return state.canProceedTo(state);
+	public Boolean canProceedToState(OrderState proceedToState) {
+		Boolean canProceedTo = state.canProceedTo(proceedToState);
+		System.out.println("Can proceed from " + state + " to " + proceedToState + " -> " + canProceedTo);
+		return canProceedTo;
 	}
 }

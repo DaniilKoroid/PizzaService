@@ -22,6 +22,7 @@ public enum OrderState {
 				case IN_PROGRESS:
 				case CANCELLED:
 					result = Boolean.TRUE;
+					break;
 				case NEW:
 				case DONE:
 				default:
@@ -51,6 +52,7 @@ public enum OrderState {
 				case DONE:
 				case CANCELLED:
 					result = Boolean.TRUE;
+					break;
 				case NEW:
 				case IN_PROGRESS:
 				default:
