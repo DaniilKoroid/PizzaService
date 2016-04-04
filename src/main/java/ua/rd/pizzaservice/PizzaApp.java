@@ -7,7 +7,7 @@ import ua.rd.pizzaservice.service.order.SimpleOrderService;
 
 public class PizzaApp {
 	public static void main(String[] args) {
-		Customer customer = null;
+		Customer customer = new Customer("Ivan");
 		Order order;
 
 		OrderService orderService = new SimpleOrderService();

@@ -56,8 +56,8 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", name=" + name + ", address=" + address + ", accumulationCard="
-				+ accumulationCard + "]";
+		return "Customer [id=" + id + ", name=" + name + ", address=" + address + ", accumulationCardPresent="
+				+ isAccumulationCardPresent() + "]";
 	}
 
 }
