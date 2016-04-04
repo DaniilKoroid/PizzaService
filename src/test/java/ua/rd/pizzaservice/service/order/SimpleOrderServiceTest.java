@@ -10,7 +10,9 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
@@ -18,7 +20,7 @@ import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.order.OrderState;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 
-
+@RunWith(MockitoJUnitRunner.class)
 public class SimpleOrderServiceTest {
 
 	Customer customer;
@@ -466,15 +468,86 @@ public class SimpleOrderServiceTest {
 	public void testGetFinalPriceOfOrderWithoutDiscountsAndWithoutAccumulationCard() {
 		System.out.println("test getFinalPrice of order without discounts and "
 				+ "without accumulation card");
-		Order order = new Order();
 		AccumulationCard card = new AccumulationCard(customer);
 		Boolean isCardActivated = false;
 		card.setIsActivated(isCardActivated);
 		customer.setAccumulationCard(card);
-		order.setCustomer(customer);
-		when(order.getPizzas()).thenReturn(pizzaList);
-		
-		orderService.getFinalPrice(order);
+		when(order.getCustomer()).thenReturn(customer);
+		when(order.getPizzas()).thenReturn(getFirstThreeMockedPizzas());
+		when(pizzaOne.getPrice()).thenReturn(60d);
+		when(pizzaTwo.getPrice()).thenReturn(70d);
+		when(pizzaThree.getPrice()).thenReturn(75d);
+		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice();
+		when(order.calculateFullPrice()).thenReturn(sum);
+		Double finalPrice = orderService.getFinalPrice(order);
+		double eps = 1E-5;
+		assertEquals(sum, finalPrice, eps);
+	}
+	
+	@Test
+	public void testGetFinalPriceOfOrderWithoutDiscountsAndWithAccumulationCard() {
+		System.out.println("test getFinalPrice of order without discounts and with accumulation card");
+		AccumulationCard card = new AccumulationCard(customer);
+		Double cardAmount = 100d;
+		Boolean isCardActivated = true;
+		card.setIsActivated(isCardActivated);
+		card.setAmount(cardAmount);
+		customer.setAccumulationCard(card);
+		when(order.getCustomer()).thenReturn(customer);
+		when(order.getPizzas()).thenReturn(getFirstThreeMockedPizzas());
+		when(pizzaOne.getPrice()).thenReturn(60d);
+		when(pizzaTwo.getPrice()).thenReturn(70d);
+		when(pizzaThree.getPrice()).thenReturn(75d);
+		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice();
+		when(order.calculateFullPrice()).thenReturn(sum);
+		double finalPrice = orderService.getFinalPrice(order);
+		double expectedFinalPrice = sum - 10d;
+		double eps = 1E-5;
+		assertEquals(expectedFinalPrice, finalPrice, eps);
+	}
+	
+	@Test
+	public void testGetFinalPriceOfOrderWithDiscountsAndWithoutAccumulationCard() {
+		System.out.println("test getFinalPrice of order with discounts and without accumulation card");
+		AccumulationCard card = new AccumulationCard(customer);
+		Boolean isCardActivated = false;
+		card.setIsActivated(isCardActivated);
+		customer.setAccumulationCard(card);
+		when(order.getCustomer()).thenReturn(customer);
+		when(order.getPizzas()).thenReturn(getMockedPizzas());
+		when(pizzaOne.getPrice()).thenReturn(60d);
+		when(pizzaTwo.getPrice()).thenReturn(70d);
+		when(pizzaThree.getPrice()).thenReturn(75d);
+		when(pizzaFour.getPrice()).thenReturn(100d);
+		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice() + pizzaFour.getPrice();
+		when(order.calculateFullPrice()).thenReturn(sum);
+		double finalPrice = orderService.getFinalPrice(order);
+		double expectedFinalPrice = sum - 30d;
+		double eps = 1E-5;
+		assertEquals(expectedFinalPrice, finalPrice, eps);
+	}
+	
+	@Test
+	public void testGetFinalPriceOfOrderWithDiscountsAndWithAccumulationCard() {
+		System.out.println("test getFinalPrice of order with discounts and with accumulation card");
+		AccumulationCard card = new AccumulationCard(customer);
+		Double cardAmount = 100d;
+		Boolean isCardActivated = true;
+		card.setIsActivated(isCardActivated);
+		card.setAmount(cardAmount);
+		customer.setAccumulationCard(card);
+		when(order.getCustomer()).thenReturn(customer);
+		when(order.getPizzas()).thenReturn(getMockedPizzas());
+		when(pizzaOne.getPrice()).thenReturn(60d);
+		when(pizzaTwo.getPrice()).thenReturn(70d);
+		when(pizzaThree.getPrice()).thenReturn(75d);
+		when(pizzaFour.getPrice()).thenReturn(100d);
+		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice() + pizzaFour.getPrice();
+		when(order.calculateFullPrice()).thenReturn(sum);
+		double finalPrice = orderService.getFinalPrice(order);
+		double expectedFinalPrice = sum - 40d;
+		double eps = 1E-5;
+		assertEquals(expectedFinalPrice, finalPrice, eps);
 	}
 	
 	private List<Pizza> getMockedPizzas() {
