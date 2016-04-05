@@ -10,12 +10,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
+import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DiscountServiceImplTest {
@@ -23,7 +25,22 @@ public class DiscountServiceImplTest {
 	DiscountService discountService;
 
 	@Mock
+	AccumulationCardService accCardService;
+
+	@Mock
 	Order order;
+
+	@Mock
+	Customer customerWithCard;
+
+	@Mock
+	Customer customerWithoutCard;
+
+	@Spy
+	AccumulationCard activatedCard;
+
+	@Mock
+	AccumulationCard notActivatedCard;
 
 	@Mock
 	List<Pizza> pizzaList;
@@ -42,7 +59,12 @@ public class DiscountServiceImplTest {
 
 	@Before
 	public void setUpDiscountService() {
-		discountService = new DiscountServiceImpl();
+		discountService = new DiscountServiceImpl(accCardService);
+		double cardAmount = 100d;
+		activatedCard.setAmount(cardAmount);
+		when(accCardService.hasAccumulationCard(customerWithCard)).thenReturn(true);
+		when(accCardService.hasAccumulationCard(customerWithoutCard)).thenReturn(false);
+		when(accCardService.getAccumulationCardByCustomer(customerWithCard)).thenReturn(activatedCard);
 	}
 
 	@Test
@@ -104,15 +126,10 @@ public class DiscountServiceImplTest {
 
 	@Test
 	public void testCalculateFinalDiscountAmountOnOrderWithoutDiscountsAndCustomerWithoutAccumulationCard() {
-		System.out.println("test calculateFinalDiscountAmount on order withour discounts "
+		System.out.println("test calculateFinalDiscountAmount on order without discounts "
 				+ "and customer without accumulation card");
-		Customer customer = new Customer("name");
-		AccumulationCard card = new AccumulationCard(customer);
-		Boolean isCardActivated = false;
-		card.setIsActivated(isCardActivated);
-		customer.setAccumulationCard(card);
 		when(order.getPizzas()).thenReturn(getFirstThreeMockedPizzas());
-		when(order.getCustomer()).thenReturn(customer);
+		when(order.getCustomer()).thenReturn(customerWithoutCard);
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
 		when(pizzaThree.getPrice()).thenReturn(75d);
@@ -126,17 +143,10 @@ public class DiscountServiceImplTest {
 
 	@Test
 	public void testCalculateFinalDiscountAmountOnOrderWithoutDiscountsAndCustomerWithAccumulationCard() {
-		System.out.println("test calculateFinalDiscountAmount on order withour discounts "
+		System.out.println("test calculateFinalDiscountAmount on order without discounts "
 				+ "and customer with accumulation card");
-		Customer customer = new Customer("name");
-		AccumulationCard card = new AccumulationCard(customer);
-		Double cardAmount = 100d;
-		card.setAmount(cardAmount);
-		Boolean isCardActivated = true;
-		card.setIsActivated(isCardActivated);
-		customer.setAccumulationCard(card);
 		when(order.getPizzas()).thenReturn(getFirstThreeMockedPizzas());
-		when(order.getCustomer()).thenReturn(customer);
+		when(order.getCustomer()).thenReturn(customerWithCard);
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
 		when(pizzaThree.getPrice()).thenReturn(75d);
@@ -152,13 +162,8 @@ public class DiscountServiceImplTest {
 	public void testCalculateFinalDiscountAmountOnOrderWithDiscountsAndCustomerWithoutAccumulationCard() {
 		System.out.println("test calculateFinalDiscountAmount on order with discounts "
 				+ "and customer without accumulation card");
-		Customer customer = new Customer("name");
-		AccumulationCard card = new AccumulationCard(customer);
-		Boolean isCardActivated = false;
-		card.setIsActivated(isCardActivated);
-		customer.setAccumulationCard(card);
 		when(order.getPizzas()).thenReturn(getMockedPizzas());
-		when(order.getCustomer()).thenReturn(customer);
+		when(order.getCustomer()).thenReturn(customerWithoutCard);
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
 		when(pizzaThree.getPrice()).thenReturn(75d);
@@ -175,15 +180,8 @@ public class DiscountServiceImplTest {
 	public void testCalculateFinalDiscountAmountOnOrderWithDiscountsAndCustomerWithAccumulationCard() {
 		System.out.println(
 				"test calculateFinalDiscountAmount on order with discounts " + "and customer with accumulation card");
-		Customer customer = new Customer("name");
-		AccumulationCard card = new AccumulationCard(customer);
-		Double cardAmount = 100d;
-		card.setAmount(cardAmount);
-		Boolean isCardActivated = true;
-		card.setIsActivated(isCardActivated);
-		customer.setAccumulationCard(card);
 		when(order.getPizzas()).thenReturn(getMockedPizzas());
-		when(order.getCustomer()).thenReturn(customer);
+		when(order.getCustomer()).thenReturn(customerWithCard);
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
 		when(pizzaThree.getPrice()).thenReturn(75d);

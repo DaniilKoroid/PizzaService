@@ -1,6 +1,5 @@
 package ua.rd.pizzaservice.domain.customer;
 
-import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.address.Address;
 
 public class Customer {
@@ -10,12 +9,10 @@ public class Customer {
 	private Integer id;
 	private String name;
 	private Address address;
-	private AccumulationCard accumulationCard;
 
 	public Customer(String name) {
 		id = ++idCounter;
 		this.name = name;
-		accumulationCard = new AccumulationCard(this);
 	}
 
 	public Integer getId() {
@@ -42,22 +39,9 @@ public class Customer {
 		this.address = address;
 	}
 
-	public AccumulationCard getAccumulationCard() {
-		return accumulationCard;
-	}
-
-	public void setAccumulationCard(AccumulationCard accumulationCard) {
-		this.accumulationCard = accumulationCard;
-	}
-
-	public Boolean isAccumulationCardPresent() {
-		return accumulationCard.getIsActivated();
-	}
-
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", name=" + name + ", address=" + address + ", accumulationCardPresent="
-				+ isAccumulationCardPresent() + "]";
+		return "Customer [id=" + id + ", name=" + name + ", address=" + address + "]";
 	}
 
 	@Override

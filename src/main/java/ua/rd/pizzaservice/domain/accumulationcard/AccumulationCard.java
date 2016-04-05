@@ -1,7 +1,5 @@
 package ua.rd.pizzaservice.domain.accumulationcard;
 
-import ua.rd.pizzaservice.domain.customer.Customer;
-
 public class AccumulationCard {
 
 	private static final double DISCOUNT_PRECENTAGE = 0.1d;
@@ -13,13 +11,11 @@ public class AccumulationCard {
 
 	private Integer id;
 	private Double amount;
-	private Customer owner;
 	private Boolean isActivated;
 
-	public AccumulationCard(Customer owner) {
+	public AccumulationCard() {
 		id = ++idCounter;
 		amount = DEFAULT_AMOUNT;
-		this.owner = owner;
 		isActivated = DEFAULT_IS_ACTIVATED;
 	}
 
@@ -37,14 +33,6 @@ public class AccumulationCard {
 
 	public void setAmount(Double amount) {
 		this.amount = amount;
-	}
-
-	public Customer getOwner() {
-		return owner;
-	}
-
-	public void setOwner(Customer owner) {
-		this.owner = owner;
 	}
 
 	public Boolean getIsActivated() {
@@ -69,7 +57,6 @@ public class AccumulationCard {
 
 	@Override
 	public String toString() {
-		return "AccumulationCard [id=" + id + ", amount=" + amount + ", owner=" + owner + ", isActivated=" + isActivated
-				+ "]";
+		return "AccumulationCard [id=" + id + ", amount=" + amount + ", isActivated=" + isActivated + "]";
 	}
 }

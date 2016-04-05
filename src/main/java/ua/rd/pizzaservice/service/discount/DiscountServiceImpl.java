@@ -8,12 +8,18 @@ import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.repository.discount.DiscountRepository;
 import ua.rd.pizzaservice.repository.discount.InMemDiscountRepository;
+import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 
 public class DiscountServiceImpl implements DiscountService {
 
 	private static final Double DISCOUNT_AMOUNT_WITHOUT_ACCUMULATION_CARD = 0d;
 
 	private DiscountRepository discountRepository = new InMemDiscountRepository();
+	private AccumulationCardService accCardService;
+
+	public DiscountServiceImpl(AccumulationCardService accCardService) {
+		this.accCardService = accCardService;
+	}
 
 	@Override
 	public Double calculateFinalDiscountAmount(Order order) {
@@ -34,10 +40,11 @@ public class DiscountServiceImpl implements DiscountService {
 	}
 
 	private Double calculateAccumulationCardDiscountAmount(Customer customer, Double orderPriceWithDiscounts) {
-		if (!customer.isAccumulationCardPresent()) {
+
+		if (!accCardService.hasAccumulationCard(customer)) {
 			return DISCOUNT_AMOUNT_WITHOUT_ACCUMULATION_CARD;
 		}
-		AccumulationCard card = customer.getAccumulationCard();
+		AccumulationCard card = accCardService.getAccumulationCardByCustomer(customer);
 		Double cardDiscountAmount = card.calculateDiscount(orderPriceWithDiscounts);
 		return cardDiscountAmount;
 	}

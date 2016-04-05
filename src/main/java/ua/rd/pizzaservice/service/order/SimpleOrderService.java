@@ -12,19 +12,25 @@ import ua.rd.pizzaservice.repository.order.InMemOrderRepository;
 import ua.rd.pizzaservice.repository.order.OrderRepository;
 import ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository;
 import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
+import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 import ua.rd.pizzaservice.service.discount.DiscountService;
-import ua.rd.pizzaservice.service.discount.DiscountServiceImpl;
 
 public class SimpleOrderService implements OrderService {
 
 	private static final int MIN_PIZZA_IN_ORDER_COUNT = 1;
 	private static final int MAX_PIZZA_IN_ORDER_COUNT = 10;
 
-	private DiscountService discountService = new DiscountServiceImpl();
+	private DiscountService discountService;
+	private AccumulationCardService accCardService;
 
 	private PizzaRepository pizzaRepository = new InMemPizzaRepository();
 	private OrderRepository orderRepository = new InMemOrderRepository();
 
+	public SimpleOrderService(DiscountService discountService, AccumulationCardService accCardService) {
+		this.discountService = discountService;
+		this.accCardService = accCardService;
+	}
+	
 	@Override
 	public Order placeNewOrder(Customer customer, Integer... pizzasID) {
 		checkOrderedPizzasNumber(pizzasID);
@@ -109,9 +115,9 @@ public class SimpleOrderService implements OrderService {
 
 	private Boolean processPayment(Order order) {
 		Customer customer = order.getCustomer();
-		if (customer.isAccumulationCardPresent()) {
+		if (accCardService.hasAccumulationCard(customer)) {
 			Double priceWithDiscounts = discountService.calculatePriceWithDiscounts(order);
-			AccumulationCard card = customer.getAccumulationCard();
+			AccumulationCard card = accCardService.getAccumulationCardByCustomer(customer);
 			card.use(priceWithDiscounts);
 		}
 		return Boolean.TRUE;

@@ -5,8 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import ua.rd.pizzaservice.domain.customer.Customer;
-
 public class AccumulationCardTest {
 
 	AccumulationCard card;
@@ -14,8 +12,7 @@ public class AccumulationCardTest {
 	@Before
 	public void setUpAccumulationCard() {
 		Double baseAmount = 100d;
-		Customer owner = null;
-		card = new AccumulationCard(owner);
+		card = new AccumulationCard();
 		card.setAmount(baseAmount);
 
 	}
