@@ -18,7 +18,7 @@ public class SimpleOrderService implements OrderService {
 	private OrderRepository orderRepository;
 //	 = (OrderRepository) locator.lookup("orderRepository");
 
-	public SimpleOrderService(PizzaRepository pizzaRepository, OrderRepository orderRepository) {
+	public SimpleOrderService(OrderRepository orderRepository, PizzaRepository pizzaRepository) {
 		this.pizzaRepository = pizzaRepository;
 		this.orderRepository = orderRepository;
 	}

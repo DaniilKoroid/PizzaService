@@ -61,36 +61,23 @@ public class BeanBuilder {
 			return;
 		}
 		isProxyPresent = true;
-		ClassLoader loader = clazz.getClassLoader();
-		Class<?>[] interfaces = clazz.getInterfaces();
-		InvocationHandler h = new DynamicInvocationHandler(bean);
-		Object proxyInstance = Proxy.newProxyInstance(loader, interfaces, h);
-		beanProxy = proxyInstance;
-	}
 
-	static class DynamicInvocationHandler implements InvocationHandler {
-
-		private Object obj;
-
-		public DynamicInvocationHandler(Object obj) {
-			this.obj = obj;
-		}
-
-		@Override
-		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-			Benchmark benchmark = method.getAnnotation(Benchmark.class);
-			if (benchmark == null || !benchmark.active()) {
-				return method.invoke(obj, args);
+		beanProxy = Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), new InvocationHandler() {
+			@Override
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+				if (!clazz.getMethod(method.getName(), method.getParameterTypes())
+						.isAnnotationPresent(Benchmark.class)) {
+					return method.invoke(bean, args);
+				}
+				long startTime = System.nanoTime();
+				Object result = method.invoke(bean, args);
+				long endTime = System.nanoTime();
+				long totalTime = endTime - startTime;
+				System.out.println("Invoked " + method.getName() + " on " + bean.getClass().getSimpleName()
+						+ " with args: " + Arrays.toString(args) + ". Total time: " + totalTime);
+				return result;
 			}
-			long startTime = System.nanoTime();
-			Object object = method.invoke(obj, args);
-			long endTime = System.nanoTime();
-			long totalTime = endTime - startTime;
-			System.out.println("Invoked " + method.getName() + " on " + obj.getClass().getSimpleName() + " with args: "
-					+ Arrays.toString(args) + ". Total time: " + totalTime);
-			return object;
-		}
-
+		});
 	}
 
 	void createBean() throws InstantiationException, IllegalAccessException, Exception, InvocationTargetException {

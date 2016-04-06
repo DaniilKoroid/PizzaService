@@ -24,9 +24,9 @@ public class JavaConfigApplicationContext implements ApplicationContext {
 
 		BeanBuilder builder = new BeanBuilder(clazz, this);
 		builder.createBean();
-		builder.createBeanProxy();
 		builder.callPostCreateMethod();
 		builder.callInitMethod();
+		builder.createBeanProxy();
 		bean = builder.build();
 
 		context.put(beanName, bean);
