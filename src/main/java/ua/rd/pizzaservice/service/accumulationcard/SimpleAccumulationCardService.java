@@ -15,7 +15,8 @@ public class SimpleAccumulationCardService implements AccumulationCardService {
 	public AccumulationCard getAccumulationCardByCustomer(Customer customer) {
 		if (!hasAccumulationCard(customer)) {
 			throw new NoSuchElementException(
-					"Given customer with id " + customer.getId() + " has " + "no accumulation card.");
+					"Given customer with id " + customer.getId() 
+					+ " has " + "no accumulation card.");
 		}
 		AccumulationCard card = ownedCards.get(customer);
 		return card;

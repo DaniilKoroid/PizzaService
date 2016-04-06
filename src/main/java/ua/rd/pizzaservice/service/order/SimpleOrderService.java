@@ -58,9 +58,11 @@ public class SimpleOrderService implements OrderService {
 	}
 
 	private void checkOrderedPizzasNumber(Integer... pizzasId) {
-		if (pizzasId.length < MIN_PIZZA_IN_ORDER_COUNT || pizzasId.length > MAX_PIZZA_IN_ORDER_COUNT) {
+		if (pizzasId.length < MIN_PIZZA_IN_ORDER_COUNT 
+				|| pizzasId.length > MAX_PIZZA_IN_ORDER_COUNT) {
 
-			throw new IllegalArgumentException("Can't place order with " + "not allowed number of pizzas.");
+			throw new IllegalArgumentException("Can't place order with " 
+			+ "not allowed number of pizzas.");
 		}
 	}
 
@@ -135,7 +137,8 @@ public class SimpleOrderService implements OrderService {
 
 	@Override
 	public Double getFinalPrice(Order order) {
-		Double finalPrice = getFullPrice(order) - getDiscountAmount(order);
+		Double finalPrice = getFullPrice(order) 
+				- getDiscountAmount(order);
 		return finalPrice;
 	}
 }

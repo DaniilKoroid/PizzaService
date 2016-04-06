@@ -7,9 +7,9 @@ import ua.rd.pizzaservice.domain.pizza.Pizza;
 
 public class FourPizzaDiscount implements Discount {
 
-	protected final static Double DEFAULT_DISCOUNT_AMOUNT_FOR_UNAPPLIABLE = 0d;
-	protected final static int PIZZA_MIN_COUNT_FOR_DISCOUNT = 4;
-	protected final static double DISCOUNT_PERCENTAGE_FOR_MAX_PRICED_PIZZA = 0.3d;
+	protected static final Double DEFAULT_DISCOUNT_AMOUNT_FOR_UNAPPLIABLE = 0d;
+	protected static final int PIZZA_MIN_COUNT_FOR_DISCOUNT = 4;
+	protected static final double DISCOUNT_PERCENTAGE_FOR_MAX_PRICED_PIZZA = 0.3d;
 
 	@Override
 	public Double calculateDiscount(Order order) {

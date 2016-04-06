@@ -3,7 +3,10 @@ package ua.rd.pizzaservice.domain.pizza;
 public class Pizza {
 
 	public enum PizzaType {
-		MEAT, VEGETERIAN, SEA,;
+		MEAT,
+		VEGETERIAN,
+		SEA, 
+		;
 	}
 
 	private Integer id;
@@ -55,7 +58,8 @@ public class Pizza {
 
 	@Override
 	public String toString() {
-		return "Pizza [id=" + id + ", name=" + name + ", price=" + price + ", type=" + type + "]";
+		return "Pizza [id=" + id + ", name=" + name + ", price=" 
+				+ price + ", type=" + type + "]";
 	}
 
 	@Override
@@ -71,30 +75,40 @@ public class Pizza {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (this == obj) {
+			return true;			
+		}
+		if (obj == null) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
 		Pizza other = (Pizza) obj;
 		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
+			if (other.id != null) {
+				return false;				
+			}
+		} else if (!id.equals(other.id)) {
+			return false;			
+		}
 		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
+			if (other.name != null) {
+				return false;				
+			}
+		} else if (!name.equals(other.name)) {
+			return false;			
+		}
 		if (price == null) {
-			if (other.price != null)
-				return false;
-		} else if (!price.equals(other.price))
-			return false;
-		if (type != other.type)
-			return false;
+			if (other.price != null) {
+				return false;				
+			}
+		} else if (!price.equals(other.price)) {
+			return false;			
+		}
+		if (type != other.type) {
+			return false;			
+		}
 		return true;
 	}
 

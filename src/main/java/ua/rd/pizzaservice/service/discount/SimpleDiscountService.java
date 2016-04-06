@@ -22,7 +22,8 @@ public class SimpleDiscountService implements DiscountService {
 	@Override
 	public Double calculateFinalDiscountAmount(Order order) {
 		Double discountsAmount = calculateDiscountsAmount(order);
-		Double orderPriceWithDiscounts = order.calculateFullPrice() - discountsAmount;
+		Double orderPriceWithDiscounts = order.calculateFullPrice() 
+				- discountsAmount;
 		Double cardDiscountAmount = calculateAccumulationCardDiscountAmount(order.getCustomer(),
 				orderPriceWithDiscounts);
 		Double totalDiscountAmount = discountsAmount + cardDiscountAmount;

@@ -14,10 +14,14 @@ public class PizzaApp {
 		Customer customer = new Customer("Ivan");
 		Order order;
 
-		AccumulationCardService accCardService = new SimpleAccumulationCardService();
-		DiscountService discountService = new SimpleDiscountService(accCardService);
-		OrderService orderService = new SimpleOrderService(discountService, accCardService);
-		order = orderService.placeNewOrder(customer, 1, 2, 3);
+		AccumulationCardService accCardService;
+		DiscountService discountService;
+		OrderService orderService;
+		accCardService = new SimpleAccumulationCardService();
+		discountService = new SimpleDiscountService(accCardService);
+		orderService = new SimpleOrderService(discountService, accCardService);
+		Integer[] pizzasId = new Integer[]{1, 2, 3};
+		order = orderService.placeNewOrder(customer, pizzasId);
 
 		System.out.println(order);
 	}

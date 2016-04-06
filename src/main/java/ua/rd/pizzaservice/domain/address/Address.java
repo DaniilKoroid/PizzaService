@@ -51,7 +51,9 @@ public class Address {
 
 	@Override
 	public String toString() {
-		return "Address [country=" + country + ", city=" + city + ", street=" + street + ", building=" + building + "]";
+		return "Address [country=" + country + ", city=" + city 
+				+ ", street=" + street + ", building=" 
+				+ building + "]";
 	}
 
 	@Override
@@ -67,33 +69,44 @@ public class Address {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (this == obj) {
+			return true;			
+		}
+		if (obj == null) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
 		Address other = (Address) obj;
 		if (building == null) {
-			if (other.building != null)
+			if (other.building != null) {
 				return false;
-		} else if (!building.equals(other.building))
-			return false;
+			}
+		} else if (!building.equals(other.building)) {
+			return false;			
+		}
 		if (city == null) {
-			if (other.city != null)
-				return false;
-		} else if (!city.equals(other.city))
-			return false;
+			if (other.city != null){
+				return false;				
+			}
+		} else if (!city.equals(other.city)) {
+			return false;			
+		}
 		if (country == null) {
-			if (other.country != null)
-				return false;
-		} else if (!country.equals(other.country))
-			return false;
+			if (other.country != null) {
+				return false;				
+			}
+		} else if (!country.equals(other.country)) {
+			return false;			
+		}
 		if (street == null) {
-			if (other.street != null)
-				return false;
-		} else if (!street.equals(other.street))
-			return false;
+			if (other.street != null) {
+				return false;				
+			}
+		} else if (!street.equals(other.street)) {
+			return false;			
+		}
 		return true;
 	}
 

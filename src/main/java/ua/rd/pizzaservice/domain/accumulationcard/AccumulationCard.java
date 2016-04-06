@@ -5,7 +5,7 @@ public class AccumulationCard {
 	private static final double DISCOUNT_PRECENTAGE = 0.1d;
 	private static final double MAX_TOTAL_PRICE_DISCOUNTED_PERCENT = 0.3d;
 	private static final double DEFAULT_AMOUNT = 0d;
-	private static final Boolean DEFAULT_IS_ACTIVATED = Boolean.FALSE;
+	private static final boolean DEFAULT_IS_ACTIVATED = false;
 
 	private static int idCounter = 0;
 
@@ -51,12 +51,15 @@ public class AccumulationCard {
 
 	public Double calculateDiscount(Double totalPrice) {
 		double discountAmount = 0d;
-		discountAmount = Math.min(amount * DISCOUNT_PRECENTAGE, totalPrice * MAX_TOTAL_PRICE_DISCOUNTED_PERCENT);
+		discountAmount = Math.min(
+				amount * DISCOUNT_PRECENTAGE,
+				totalPrice * MAX_TOTAL_PRICE_DISCOUNTED_PERCENT);
 		return discountAmount;
 	}
 
 	@Override
 	public String toString() {
-		return "AccumulationCard [id=" + id + ", amount=" + amount + ", isActivated=" + isActivated + "]";
+		return "AccumulationCard [id=" + id + ", amount=" + amount 
+				+ ", isActivated=" + isActivated + "]";
 	}
 }

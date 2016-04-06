@@ -66,7 +66,8 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", customer=" + customer + ", pizzas=" + pizzas + "]";
+		return "Order [id=" + id + ", customer=" + customer 
+				+ ", pizzas=" + pizzas + "]";
 	}
 
 	public Boolean canChange() {
@@ -99,7 +100,8 @@ public class Order {
 
 	public Boolean canProceedToState(OrderState proceedToState) {
 		Boolean canProceedTo = state.canProceedTo(proceedToState);
-		System.out.println("Can proceed from " + state + " to " + proceedToState + " -> " + canProceedTo);
+		System.out.println("Can proceed from " + state + " to " 
+		+ proceedToState + " -> " + canProceedTo);
 		return canProceedTo;
 	}
 }

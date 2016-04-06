@@ -96,7 +96,7 @@ public enum OrderState {
 			Boolean result = Boolean.FALSE;
 			return result;
 		}
-	},;
+	}, ;
 
 	public abstract Boolean nextState(Order order);
 
