@@ -2,6 +2,7 @@ package ua.rd.pizzaservice.service.accumulationcard;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
@@ -13,7 +14,7 @@ public class SimpleAccumulationCardService implements AccumulationCardService {
 	@Override
 	public AccumulationCard getAccumulationCardByCustomer(Customer customer) {
 		if (!hasAccumulationCard(customer)) {
-			throw new IllegalArgumentException(
+			throw new NoSuchElementException(
 					"Given customer with id " + customer.getId() + " has " + "no accumulation card.");
 		}
 		AccumulationCard card = ownedCards.get(customer);
