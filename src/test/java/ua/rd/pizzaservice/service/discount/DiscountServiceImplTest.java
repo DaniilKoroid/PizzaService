@@ -59,7 +59,7 @@ public class DiscountServiceImplTest {
 
 	@Before
 	public void setUpDiscountService() {
-		discountService = new DiscountServiceImpl(accCardService);
+		discountService = new SimpleDiscountService(accCardService);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);
 		when(accCardService.hasAccumulationCard(customerWithCard)).thenReturn(true);

@@ -6,18 +6,16 @@ import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.order.Order;
-import ua.rd.pizzaservice.repository.discount.DiscountRepository;
-import ua.rd.pizzaservice.repository.discount.InMemDiscountRepository;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 
-public class DiscountServiceImpl implements DiscountService {
+public class SimpleDiscountService implements DiscountService {
 
 	private static final Double DISCOUNT_AMOUNT_WITHOUT_ACCUMULATION_CARD = 0d;
 
-	private DiscountRepository discountRepository = new InMemDiscountRepository();
+	private DiscountProvider discountProvider = new InMemDiscountProvider();
 	private AccumulationCardService accCardService;
 
-	public DiscountServiceImpl(AccumulationCardService accCardService) {
+	public SimpleDiscountService(AccumulationCardService accCardService) {
 		this.accCardService = accCardService;
 	}
 
@@ -51,7 +49,7 @@ public class DiscountServiceImpl implements DiscountService {
 
 	@Override
 	public Double calculateDiscountsAmount(Order order) {
-		List<Discount> appliableDiscounts = discountRepository.getAppliableDiscounts(order);
+		List<Discount> appliableDiscounts = discountProvider.getAppliableDiscounts(order);
 		Double discountAmount = calculateDiscountAmount(order, appliableDiscounts);
 		return discountAmount;
 	}

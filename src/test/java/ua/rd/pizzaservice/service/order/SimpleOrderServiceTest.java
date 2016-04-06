@@ -22,7 +22,7 @@ import ua.rd.pizzaservice.domain.order.OrderState;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 import ua.rd.pizzaservice.service.discount.DiscountService;
-import ua.rd.pizzaservice.service.discount.DiscountServiceImpl;
+import ua.rd.pizzaservice.service.discount.SimpleDiscountService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SimpleOrderServiceTest {
@@ -69,7 +69,7 @@ public class SimpleOrderServiceTest {
 
 	@Before
 	public void setUpVariables() {
-		discountService = new DiscountServiceImpl(accCardService);
+		discountService = new SimpleDiscountService(accCardService);
 		orderService = new SimpleOrderService(discountService, accCardService);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);

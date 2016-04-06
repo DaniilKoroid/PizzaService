@@ -15,6 +15,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
+import ua.rd.pizzaservice.service.discount.DiscountProvider;
+import ua.rd.pizzaservice.service.discount.InMemDiscountProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InMemDiscountRepositoryTest {
@@ -25,11 +27,11 @@ public class InMemDiscountRepositoryTest {
 	@Mock
 	List<Pizza> pizzas;
 
-	DiscountRepository discountRepository;
+	DiscountProvider discountRepository;
 
 	@Before
 	public void setUpDiscountRepository() {
-		discountRepository = new InMemDiscountRepository();
+		discountRepository = new InMemDiscountProvider();
 	}
 
 	@Test
