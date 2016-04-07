@@ -8,9 +8,7 @@ import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.order.OrderState;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
-import ua.rd.pizzaservice.repository.order.InMemOrderRepository;
 import ua.rd.pizzaservice.repository.order.OrderRepository;
-import ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository;
 import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 import ua.rd.pizzaservice.service.discount.DiscountService;
@@ -23,12 +21,17 @@ public class SimpleOrderService implements OrderService {
 	private DiscountService discountService;
 	private AccumulationCardService accCardService;
 
-	private PizzaRepository pizzaRepository = new InMemPizzaRepository();
-	private OrderRepository orderRepository = new InMemOrderRepository();
+	private PizzaRepository pizzaRepository;
+	private OrderRepository orderRepository;
 
-	public SimpleOrderService(DiscountService discountService, AccumulationCardService accCardService) {
+	public SimpleOrderService(DiscountService discountService,
+			AccumulationCardService accCardService,
+			PizzaRepository pizzaRepository,
+			OrderRepository orderRepository) {
 		this.discountService = discountService;
 		this.accCardService = accCardService;
+		this.pizzaRepository = pizzaRepository;
+		this.orderRepository = orderRepository;
 	}
 	
 	@Override

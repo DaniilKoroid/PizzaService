@@ -20,8 +20,14 @@ import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.order.OrderState;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
+import ua.rd.pizzaservice.repository.order.InMemOrderRepository;
+import ua.rd.pizzaservice.repository.order.OrderRepository;
+import ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository;
+import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
+import ua.rd.pizzaservice.service.discount.DiscountProvider;
 import ua.rd.pizzaservice.service.discount.DiscountService;
+import ua.rd.pizzaservice.service.discount.InMemDiscountProvider;
 import ua.rd.pizzaservice.service.discount.SimpleDiscountService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -69,8 +75,11 @@ public class SimpleOrderServiceTest {
 
 	@Before
 	public void setUpVariables() {
-		discountService = new SimpleDiscountService(accCardService);
-		orderService = new SimpleOrderService(discountService, accCardService);
+		DiscountProvider discountProvider = new InMemDiscountProvider();
+		PizzaRepository pizzaRepository = new InMemPizzaRepository();
+		OrderRepository orderRepository = new InMemOrderRepository();
+		discountService = new SimpleDiscountService(accCardService, discountProvider);
+		orderService = new SimpleOrderService(discountService, accCardService, pizzaRepository, orderRepository);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);
 		when(accCardService.hasAccumulationCard(customerWithCard)).thenReturn(true);

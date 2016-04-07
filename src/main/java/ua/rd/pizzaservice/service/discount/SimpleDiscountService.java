@@ -12,11 +12,12 @@ public class SimpleDiscountService implements DiscountService {
 
 	private static final Double DISCOUNT_AMOUNT_WITHOUT_ACCUMULATION_CARD = 0d;
 
-	private DiscountProvider discountProvider = new InMemDiscountProvider();
+	private DiscountProvider discountProvider;
 	private AccumulationCardService accCardService;
 
-	public SimpleDiscountService(AccumulationCardService accCardService) {
+	public SimpleDiscountService(AccumulationCardService accCardService, DiscountProvider discountProvider) {
 		this.accCardService = accCardService;
+		this.discountProvider = discountProvider;
 	}
 
 	@Override
