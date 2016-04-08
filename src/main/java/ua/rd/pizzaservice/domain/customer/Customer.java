@@ -3,10 +3,10 @@ package ua.rd.pizzaservice.domain.customer;
 public class Customer {
 
 	private static int idCounter = 0;
-	
+
 	private Integer id;
 	private String name;
-	
+
 	public Customer() {
 	}
 
@@ -39,6 +39,6 @@ public class Customer {
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", name=" + name + "]";
-	}	
-	
+	}
+
 }

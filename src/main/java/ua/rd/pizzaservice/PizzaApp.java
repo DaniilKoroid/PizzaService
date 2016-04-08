@@ -8,17 +8,18 @@ import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 import ua.rd.pizzaservice.service.order.OrderService;
 
 public class PizzaApp {
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         Customer customer = null;
         Order order;
 
         ApplicationContext ac = new JavaConfigApplicationContext();
-        PizzaRepository pizzaRepository = (PizzaRepository) ac.getBean("pizzaRepository");
+        PizzaRepository pizzaRepository = (PizzaRepository) ac
+                .getBean("pizzaRepository");
         System.out.println(pizzaRepository.getPizzaByID(1));
-        
+
         OrderService orderService = (OrderService) ac.getBean("orderService");
         order = orderService.placeNewOrder(customer, 1, 2, 3);
 
         System.out.println(order);
-	}
+    }
 }

@@ -11,14 +11,15 @@ import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 
 public class SimpleOrderService implements OrderService {
 
-//	private ServiceLocator locator = ServiceLocator.getInstance();
+	// private ServiceLocator locator = ServiceLocator.getInstance();
 
 	private PizzaRepository pizzaRepository;
-//	 = (PizzaRepository) locator.lookup("pizzaRepository");
+	// = (PizzaRepository) locator.lookup("pizzaRepository");
 	private OrderRepository orderRepository;
-//	 = (OrderRepository) locator.lookup("orderRepository");
+	// = (OrderRepository) locator.lookup("orderRepository");
 
-	public SimpleOrderService(OrderRepository orderRepository, PizzaRepository pizzaRepository) {
+	public SimpleOrderService(OrderRepository orderRepository,
+			PizzaRepository pizzaRepository) {
 		this.pizzaRepository = pizzaRepository;
 		this.orderRepository = orderRepository;
 	}

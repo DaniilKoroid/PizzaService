@@ -1,20 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean name="pizzaRepository"
-	      class="ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository" 
-	      init-method="cookPizzas"/>
+	<bean name="orderService" class="ua.rd.pizzaservice.service.order.SimpleOrderService">
+		<constructor-arg ref="orderRepository" />
+		<constructor-arg ref="pizzaRepository" />
+	</bean>
 
-	<bean name="orderRepository"
-	      class="ua.rd.pizzaservice.repository.order.InMemOrderRepository" />
-	      
-	<bean name="orderService"
-		  class="ua.rd.pizzaservice.service.order.SimpleOrderService">
-		  <constructor-arg ref="orderRepository" />
-		  <constructor-arg ref="pizzaRepository" /> 
+	<bean id="customer" class="ua.rd.pizzaservice.domain.customer.Customer">
+		<constructor-arg value="1" />
+		<constructor-arg value="abc" />
+	</bean>
+
+	<bean id="str" class="java.lang.String">
+		<constructor-arg value="name" />
+	</bean>
+
+	<bean factory-bean="createPizzaBean" factory-method="createPizza">
+		<constructor-arg index="0">
+			<null />
+		</constructor-arg>
+		<constructor-arg index="1">
+			<ref parent="str"/>
+		</constructor-arg>
+		<constructor-arg index="2">
+			<value>2.4</value>
+		</constructor-arg>
+		<constructor-arg index="3" value="SEA" />
 	</bean>
 
 </beans>

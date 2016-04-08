@@ -14,11 +14,11 @@ public class InMemPizzaRepository implements PizzaRepository {
 
 	@PostConstruction
 	public void cookPizzas() {
-		pizzas.add(new Pizza(1, "Margarita", 60d, PizzaType.MEAT));
-		pizzas.add(new Pizza(2, "SeaPizza", 90d, PizzaType.SEA));
-		pizzas.add(new Pizza(3, "Ayurveda", 80d, PizzaType.VEGETERIAN));
+//		pizzas.add(new Pizza(1, "Margarita", 60d, PizzaType.MEAT));
+//		pizzas.add(new Pizza(2, "SeaPizza", 90d, PizzaType.SEA));
+//		pizzas.add(new Pizza(3, "Ayurveda", 80d, PizzaType.VEGETERIAN));
 	}
-	
+
 	public void init() {
 		System.out.println("init method");
 	}
@@ -35,5 +35,9 @@ public class InMemPizzaRepository implements PizzaRepository {
 		}
 		return result;
 	}
+
+    public void setPizzas(List<Pizza> pizzas) {
+        this.pizzas = pizzas;
+    }
 
 }
