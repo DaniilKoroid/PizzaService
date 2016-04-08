@@ -17,10 +17,9 @@ import ua.rd.pizzaservice.service.order.SimpleOrderService;
 
 public class PizzaApp {
 	public static void main(String[] args) {
-		
+
 		ConfigurableApplicationContext appContext = new ClassPathXmlApplicationContext("appContext.xml");
-		
-		
+
 		Customer customer = new Customer("Ivan");
 		Order order;
 
@@ -37,7 +36,7 @@ public class PizzaApp {
 		order = orderService.placeNewOrder(customer, pizzasId);
 
 		System.out.println(order);
-		
+
 		appContext.close();
 	}
 }

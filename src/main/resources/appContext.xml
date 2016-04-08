@@ -5,28 +5,29 @@
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean name="pizzaRepository"
-	      class="ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository" />
+	      class="ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository"
+	      init-method="cookPizzas" />
 
 	<bean name="orderRepository"
 	      class="ua.rd.pizzaservice.repository.order.InMemOrderRepository" />
-	      
+
 	<bean name="discountProvider"
 		  class="ua.rd.pizzaservice.service.discount.InMemDiscountProvider" />
-	      
+
 	<bean name="accumulationCardService"
 		  class="ua.rd.pizzaservice.service.accumulationcard.SimpleAccumulationCardService" />
-		  
+
 	<bean name="discountService"
 		  class="ua.rd.pizzaservice.service.discount.SimpleDiscountService">
 		  <constructor-arg ref="accumulationCardService" />
-		  <constructor-arg ref="discountProvider" />	  
+		  <constructor-arg ref="discountProvider" />
   	</bean>
-  	
+
 	<bean name="orderService"
 		  class="ua.rd.pizzaservice.service.order.SimpleOrderService">
 		  <constructor-arg ref="discountService" />
 		  <constructor-arg ref="accumulationCardService" />
-		  <constructor-arg ref="pizzaRepository" /> 
+		  <constructor-arg ref="pizzaRepository" />
 		  <constructor-arg ref="orderRepository" />
 	</bean>
 

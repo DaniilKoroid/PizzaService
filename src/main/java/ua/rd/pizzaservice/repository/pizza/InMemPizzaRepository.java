@@ -3,6 +3,8 @@ package ua.rd.pizzaservice.repository.pizza;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 
@@ -10,7 +12,8 @@ public class InMemPizzaRepository implements PizzaRepository {
 
 	List<Pizza> pizzas = new ArrayList<>();
 
-	{
+	@PostConstruct
+	public void cookPizzas() {
 		pizzas.add(new Pizza(1, "Margarita", 60d, PizzaType.MEAT));
 		pizzas.add(new Pizza(2, "SeaPizza", 90d, PizzaType.SEA));
 		pizzas.add(new Pizza(3, "Ayurveda", 80d, PizzaType.VEGETERIAN));
