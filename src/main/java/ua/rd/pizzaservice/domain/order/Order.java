@@ -15,6 +15,7 @@ public class Order {
 	private List<Pizza> pizzas;
 
 	public Order() {
+	    id = ++idCounter;
 	}
 
 	public Order(Customer customer, List<Pizza> pizzas) {
@@ -66,7 +67,7 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", customer=" + customer 
+		return "Order [id=" + id + ", customer=" + customer
 				+ ", pizzas=" + pizzas + "]";
 	}
 
@@ -100,7 +101,7 @@ public class Order {
 
 	public Boolean canProceedToState(OrderState proceedToState) {
 		Boolean canProceedTo = state.canProceedTo(proceedToState);
-		System.out.println("Can proceed from " + state + " to " 
+		System.out.println("Can proceed from " + state + " to "
 		+ proceedToState + " -> " + canProceedTo);
 		return canProceedTo;
 	}
