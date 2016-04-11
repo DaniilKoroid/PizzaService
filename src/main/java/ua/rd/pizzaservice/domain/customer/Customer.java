@@ -14,7 +14,6 @@ public class Customer {
 
 	private Integer id;
         
-        @Value(value = "Ivan")
 	private String name;
         
 	private Address address;
