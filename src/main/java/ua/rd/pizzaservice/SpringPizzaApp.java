@@ -1,6 +1,5 @@
 package ua.rd.pizzaservice;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -39,9 +38,6 @@ public class SpringPizzaApp {
 
         Pizza pizza = appContext.getBean(Pizza.class);
         System.out.println(pizza);
-
-        ApplicationContext parent = appContext.getParent();
-        System.out.println("Parent: " + parent);
 
         appContext.close();
         repositoryContext.close();

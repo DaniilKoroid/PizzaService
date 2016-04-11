@@ -4,9 +4,13 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<bean name="order" class="ua.rd.pizzaservice.domain.order.Order"
+		scope="prototype" />
+
 	<bean name="orderService" class="ua.rd.pizzaservice.service.order.SimpleOrderService">
 		<constructor-arg ref="orderRepository" />
 		<constructor-arg ref="pizzaRepository" />
+		<property name="order" ref="order" />
 	</bean>
 
 	<bean id="customer" class="ua.rd.pizzaservice.domain.customer.Customer">
@@ -23,7 +27,7 @@
 			<null />
 		</constructor-arg>
 		<constructor-arg index="1">
-			<ref parent="str"/>
+			<ref parent="str" />
 		</constructor-arg>
 		<constructor-arg index="2">
 			<value>2.4</value>

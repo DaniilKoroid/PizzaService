@@ -11,41 +11,42 @@ import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 
 public class SimpleOrderService implements OrderService {
 
-	// private ServiceLocator locator = ServiceLocator.getInstance();
+    private PizzaRepository pizzaRepository;
+    private OrderRepository orderRepository;
+    private Order order;
 
-	private PizzaRepository pizzaRepository;
-	// = (PizzaRepository) locator.lookup("pizzaRepository");
-	private OrderRepository orderRepository;
-	// = (OrderRepository) locator.lookup("orderRepository");
+    public SimpleOrderService(OrderRepository orderRepository,
+            PizzaRepository pizzaRepository) {
+        this.pizzaRepository = pizzaRepository;
+        this.orderRepository = orderRepository;
+    }
 
-	public SimpleOrderService(OrderRepository orderRepository,
-			PizzaRepository pizzaRepository) {
-		this.pizzaRepository = pizzaRepository;
-		this.orderRepository = orderRepository;
-	}
+    @Override
+    public Order placeNewOrder(Customer customer, Integer... pizzasID) {
 
-	@Override
-	public Order placeNewOrder(Customer customer, Integer... pizzasID) {
+        List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
+        Order newOrder = createOrder();
+        newOrder.setCustomer(customer);
+        newOrder.setPizzas(pizzas);
+        orderRepository.saveOrder(newOrder);
+        return newOrder;
+    }
 
-		List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
-		Order newOrder = createOrder(customer, pizzas);
+    private Order createOrder() {
+        return order;
+    }
 
-		orderRepository.saveOrder(newOrder);
-		return newOrder;
-	}
+    private List<Pizza> pizzasByArrOfId(Integer... pizzasID) {
+        List<Pizza> pizzas = new ArrayList<>();
 
-	private Order createOrder(Customer customer, List<Pizza> pizzas) {
-		Order newOrder = new Order(customer, pizzas);
-		return newOrder;
-	}
+        for (Integer id : pizzasID) {
+            pizzas.add(pizzaRepository.getPizzaByID(id));
+        }
+        return pizzas;
+    }
 
-	private List<Pizza> pizzasByArrOfId(Integer... pizzasID) {
-		List<Pizza> pizzas = new ArrayList<>();
-
-		for (Integer id : pizzasID) {
-			pizzas.add(pizzaRepository.getPizzaByID(id));
-		}
-		return pizzas;
-	}
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 
 }

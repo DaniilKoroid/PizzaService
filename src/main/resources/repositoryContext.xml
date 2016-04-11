@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
@@ -12,19 +13,24 @@
 			<list>
 				<bean class="ua.rd.pizzaservice.domain.pizza.Pizza">
 					<constructor-arg index="0" value="1" />
-					<constructor-arg index="1" value="Pizza1" />
-					<constructor-arg index="2" value="2.4" />
-					<constructor-arg index="3" value="SEA" />
+					<constructor-arg index="1" value="Margarita" />
+					<constructor-arg index="2" value="60" />
+					<constructor-arg index="3" value="MEAT" />
 				</bean>
 				<bean class="ua.rd.pizzaservice.domain.pizza.Pizza">
 					<constructor-arg index="0" value="2" />
-					<constructor-arg index="1" value="Pizza2" />
-					<constructor-arg index="2" value="6.66" />
+					<constructor-arg index="1" value="SeaPizza" />
+					<constructor-arg index="2" value="90" />
+					<constructor-arg index="3" value="SEA" />
+				</bean>
+				<bean class="ua.rd.pizzaservice.domain.pizza.Pizza">
+					<constructor-arg index="0" value="3" />
+					<constructor-arg index="1" value="Ayurveda" />
+					<constructor-arg index="2" value="80" />
 					<constructor-arg index="3" value="VEGETERIAN" />
 				</bean>
 			</list>
 		</property>
-
 	</bean>
 
 	<bean name="orderRepository"
