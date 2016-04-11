@@ -11,9 +11,4 @@
 	<context:annotation-config />
 	<context:component-scan base-package="ua.rd.pizzaservice" />
 
-	<bean id="customer" name="customer"
-		class="ua.rd.pizzaservice.domain.customer.Customer">
-		<constructor-arg value="Ivan" />
-	</bean>
-
 </beans>

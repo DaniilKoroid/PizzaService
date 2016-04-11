@@ -20,7 +20,7 @@ public class PizzaApp {
 
 		ConfigurableApplicationContext appContext = new ClassPathXmlApplicationContext("appContext.xml");
 
-		Customer customer = appContext.getBean("customer", Customer.class);
+		Customer customer = new Customer("Ivan");
 		Order order;
 
 		PizzaRepository pizzaRepository = appContext.getBean("pizzaRepository", PizzaRepository.class);
