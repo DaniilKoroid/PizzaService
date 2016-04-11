@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-	<bean name="pizzaRepository"
-	      class="ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository"
-	      init-method="cookPizzas" />
+	<context:annotation-config />
 
-	<bean name="orderRepository"
-	      class="ua.rd.pizzaservice.repository.order.InMemOrderRepository" />
+	<bean id="pizzaRepository" name="pizzaRepository"
+		class="ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository" />
 
-	<bean name="discountProvider"
-		  class="ua.rd.pizzaservice.service.discount.InMemDiscountProvider" />
+	<bean id="orderRepository" name="orderRepository"
+		class="ua.rd.pizzaservice.repository.order.InMemOrderRepository" />
 
-	<bean name="accumulationCardService"
-		  class="ua.rd.pizzaservice.service.accumulationcard.SimpleAccumulationCardService" />
+	<bean id="discountProvider" name="discountProvider"
+		class="ua.rd.pizzaservice.service.discount.InMemDiscountProvider" />
 
-	<bean name="discountService"
-		  class="ua.rd.pizzaservice.service.discount.SimpleDiscountService">
-		  <constructor-arg ref="accumulationCardService" />
-		  <constructor-arg ref="discountProvider" />
-  	</bean>
+	<bean id="accumulationCardService" name="accumulationCardService"
+		class="ua.rd.pizzaservice.service.accumulationcard.SimpleAccumulationCardService" />
 
-	<bean name="orderService"
-		  class="ua.rd.pizzaservice.service.order.SimpleOrderService">
-		  <constructor-arg ref="discountService" />
-		  <constructor-arg ref="accumulationCardService" />
-		  <constructor-arg ref="pizzaRepository" />
-		  <constructor-arg ref="orderRepository" />
+	<bean id="discountService" name="discountService"
+		class="ua.rd.pizzaservice.service.discount.SimpleDiscountService">
 	</bean>
+
+	<bean id="orderService" name="orderService"
+		class="ua.rd.pizzaservice.service.order.SimpleOrderService">
+	</bean>
+
+	<bean id="customer" name="customer"
+		class="ua.rd.pizzaservice.domain.customer.Customer">
+		<constructor-arg value="Ivan" />
+	</bean>
+
+
+
+
+
 
 </beans>

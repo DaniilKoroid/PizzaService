@@ -76,7 +76,9 @@ public class SimpleOrderServiceTest {
 	@Before
 	public void setUpVariables() {
 		DiscountProvider discountProvider = new InMemDiscountProvider();
+		((InMemDiscountProvider) discountProvider).determineDiscounts();
 		PizzaRepository pizzaRepository = new InMemPizzaRepository();
+		((InMemPizzaRepository) pizzaRepository).cookPizzas();
 		OrderRepository orderRepository = new InMemOrderRepository();
 		discountService = new SimpleDiscountService(accCardService, discountProvider);
 		orderService = new SimpleOrderService(discountService, accCardService, pizzaRepository, orderRepository);

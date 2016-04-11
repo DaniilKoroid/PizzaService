@@ -2,6 +2,8 @@ package ua.rd.pizzaservice.service.discount;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.discount.Discount;
@@ -15,6 +17,7 @@ public class SimpleDiscountService implements DiscountService {
 	private DiscountProvider discountProvider;
 	private AccumulationCardService accCardService;
 
+	@Autowired
 	public SimpleDiscountService(AccumulationCardService accCardService, DiscountProvider discountProvider) {
 		this.accCardService = accCardService;
 		this.discountProvider = discountProvider;
@@ -23,7 +26,7 @@ public class SimpleDiscountService implements DiscountService {
 	@Override
 	public Double calculateFinalDiscountAmount(Order order) {
 		Double discountsAmount = calculateDiscountsAmount(order);
-		Double orderPriceWithDiscounts = order.calculateFullPrice() 
+		Double orderPriceWithDiscounts = order.calculateFullPrice()
 				- discountsAmount;
 		Double cardDiscountAmount = calculateAccumulationCardDiscountAmount(order.getCustomer(),
 				orderPriceWithDiscounts);

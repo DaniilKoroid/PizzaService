@@ -3,6 +3,8 @@ package ua.rd.pizzaservice.service.order;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
@@ -20,10 +22,10 @@ public class SimpleOrderService implements OrderService {
 
 	private DiscountService discountService;
 	private AccumulationCardService accCardService;
-
 	private PizzaRepository pizzaRepository;
 	private OrderRepository orderRepository;
 
+	@Autowired
 	public SimpleOrderService(DiscountService discountService,
 			AccumulationCardService accCardService,
 			PizzaRepository pizzaRepository,
@@ -33,7 +35,7 @@ public class SimpleOrderService implements OrderService {
 		this.pizzaRepository = pizzaRepository;
 		this.orderRepository = orderRepository;
 	}
-	
+
 	@Override
 	public Order placeNewOrder(Customer customer, Integer... pizzasID) {
 		checkOrderedPizzasNumber(pizzasID);
@@ -61,10 +63,10 @@ public class SimpleOrderService implements OrderService {
 	}
 
 	private void checkOrderedPizzasNumber(Integer... pizzasId) {
-		if (pizzasId.length < MIN_PIZZA_IN_ORDER_COUNT 
+		if (pizzasId.length < MIN_PIZZA_IN_ORDER_COUNT
 				|| pizzasId.length > MAX_PIZZA_IN_ORDER_COUNT) {
 
-			throw new IllegalArgumentException("Can't place order with " 
+			throw new IllegalArgumentException("Can't place order with "
 			+ "not allowed number of pizzas.");
 		}
 	}
@@ -140,7 +142,7 @@ public class SimpleOrderService implements OrderService {
 
 	@Override
 	public Double getFinalPrice(Order order) {
-		Double finalPrice = getFullPrice(order) 
+		Double finalPrice = getFullPrice(order)
 				- getDiscountAmount(order);
 		return finalPrice;
 	}

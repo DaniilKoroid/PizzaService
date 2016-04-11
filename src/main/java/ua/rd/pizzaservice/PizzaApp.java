@@ -20,15 +20,15 @@ public class PizzaApp {
 
 		ConfigurableApplicationContext appContext = new ClassPathXmlApplicationContext("appContext.xml");
 
-		Customer customer = new Customer("Ivan");
+		Customer customer = appContext.getBean("customer", Customer.class);
 		Order order;
 
-		PizzaRepository pizzaRepository = (PizzaRepository) appContext.getBean("pizzaRepository");
-		OrderRepository orderRepository = (OrderRepository) appContext.getBean("orderRepository");
-		DiscountProvider discountProvider = (DiscountProvider) appContext.getBean("discountProvider");
-		AccumulationCardService accCardService = (AccumulationCardService) appContext.getBean("accumulationCardService");
-		DiscountService discountService = (DiscountService) appContext.getBean("discountService");
-		OrderService orderService = (OrderService) appContext.getBean("orderService");
+		PizzaRepository pizzaRepository = appContext.getBean("pizzaRepository", PizzaRepository.class);
+		OrderRepository orderRepository = appContext.getBean("orderRepository", OrderRepository.class);
+		DiscountProvider discountProvider = appContext.getBean("discountProvider", DiscountProvider.class);
+		AccumulationCardService accCardService = appContext.getBean("accumulationCardService", AccumulationCardService.class);
+		DiscountService discountService = appContext.getBean("discountService", DiscountService.class);
+		OrderService orderService = appContext.getBean("orderService", OrderService.class);
 		accCardService = new SimpleAccumulationCardService();
 		discountService = new SimpleDiscountService(accCardService, discountProvider);
 		orderService = new SimpleOrderService(discountService, accCardService, pizzaRepository, orderRepository);

@@ -147,7 +147,7 @@ public class SimpleAccumulationCardServiceTest {
 
 	@Test
 	public void testActivateAccumulationCardForCustomerWithActivatedCardDontChangesCardState() {
-		System.out.println("test activateAccumulationCardForCustomer with activated card dont " 
+		System.out.println("test activateAccumulationCardForCustomer with activated card dont "
 				+ "changes card state");
 		AccumulationCard cardBefore = accCardService.getAccumulationCardByCustomer(customerWithActivatedCard);
 		boolean before = cardBefore.getIsActivated();
@@ -162,13 +162,13 @@ public class SimpleAccumulationCardServiceTest {
 		System.out.println("test activateAccumulationCardForCustomer with not activated card returns true");
 		assertTrue(accCardService.activateAccumulationCardForCustomer(customerWithNotActivatedCard));
 	}
-	
+
 	@Test
 	public void testActivateAccumulationCardForCustomerWithNotActivatedCardChangesCardState() {
 		System.out.println("test activateAccumulationCardForCustomer with not activated card "
 				+ "changes card state");
 		AccumulationCard cardBefore = accCardService.getAccumulationCardByCustomer(customerWithNotActivatedCard);
-		boolean before = cardBefore.getIsActivated(); 
+		boolean before = cardBefore.getIsActivated();
 		accCardService.activateAccumulationCardForCustomer(customerWithNotActivatedCard);
 		AccumulationCard cardAfter = accCardService.getAccumulationCardByCustomer(customerWithNotActivatedCard);
 		boolean after = cardAfter.getIsActivated();
@@ -180,16 +180,16 @@ public class SimpleAccumulationCardServiceTest {
 		System.out.println("test activateAccumulationCardForCustomer without card returns false");
 		assertFalse(accCardService.activateAccumulationCardForCustomer(customerWithoutCard));
 	}
-	
+
 	@Test
 	public void testDeactivateAccumulationCardForCustomerWithActivatedCardReturnsTrue() {
 		System.out.println("test deactivateAccumulationCardForCustomer with activated card returns true");
 		assertTrue(accCardService.deactivateAccumulationCardForCustomer(customerWithActivatedCard));
 	}
-	
+
 	@Test
 	public void testDeactivateAccumulationCardForCustomerWithActivatedCardChangesCardState() {
-		System.out.println("test deactivateAccumulationCardForCustomer with activated card " 
+		System.out.println("test deactivateAccumulationCardForCustomer with activated card "
 				+ "changes card state");
 		AccumulationCard cardBefore = accCardService.getAccumulationCardByCustomer(customerWithActivatedCard);
 		boolean before = cardBefore.getIsActivated();
@@ -207,7 +207,7 @@ public class SimpleAccumulationCardServiceTest {
 
 	@Test
 	public void testDeactivateAccumulationCardForCustomerWithNotActivatedCardDontChangesCardState() {
-		System.out.println("test deactivateAccumulationCardForCustomer with not activated card " 
+		System.out.println("test deactivateAccumulationCardForCustomer with not activated card "
 				+ "dont changes card state");
 		AccumulationCard cardBefore = accCardService.getAccumulationCardByCustomer(customerWithNotActivatedCard);
 		boolean before = cardBefore.getIsActivated();
@@ -216,7 +216,7 @@ public class SimpleAccumulationCardServiceTest {
 		boolean after = cardAfter.getIsActivated();
 		assertNotEquals(before, after);
 	}
-	
+
 	@Test
 	public void testDeactivateAccumulationCardForCustomerWithoutCardReturnsFalse() {
 		System.out.println("test deactivateAccumulationCardForCustomer without card returns false");

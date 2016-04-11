@@ -60,6 +60,7 @@ public class DiscountServiceImplTest {
 	@Before
 	public void setUpDiscountService() {
 		DiscountProvider discountProvider = new InMemDiscountProvider();
+		((InMemDiscountProvider) discountProvider).determineDiscounts();
 		discountService = new SimpleDiscountService(accCardService, discountProvider);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);

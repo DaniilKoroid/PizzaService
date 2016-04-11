@@ -11,11 +11,14 @@ public class SimpleAccumulationCardService implements AccumulationCardService {
 
 	private Map<Customer, AccumulationCard> ownedCards = new HashMap<>();
 
-	@Override
+	public SimpleAccumulationCardService() {
+    }
+
+    @Override
 	public AccumulationCard getAccumulationCardByCustomer(Customer customer) {
 		if (!hasAccumulationCard(customer)) {
 			throw new NoSuchElementException(
-					"Given customer with id " + customer.getId() 
+					"Given customer with id " + customer.getId()
 					+ " has " + "no accumulation card.");
 		}
 		AccumulationCard card = ownedCards.get(customer);

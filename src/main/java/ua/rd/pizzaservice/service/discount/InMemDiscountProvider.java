@@ -3,6 +3,8 @@ package ua.rd.pizzaservice.service.discount;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.discount.FourPizzaDiscount;
 import ua.rd.pizzaservice.domain.order.Order;
@@ -11,8 +13,9 @@ public class InMemDiscountProvider implements DiscountProvider {
 
 	private List<Discount> discounts = new ArrayList<>();
 
-	{
-		discounts.add(new FourPizzaDiscount());
+	@PostConstruct
+	public void determineDiscounts() {
+	    discounts.add(new FourPizzaDiscount());
 	}
 
 	@Override
