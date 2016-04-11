@@ -3,6 +3,7 @@ package ua.rd.pizzaservice.service.discount;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
@@ -10,6 +11,7 @@ import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 
+@Service(value = "discountService")
 public class SimpleDiscountService implements DiscountService {
 
 	private static final Double DISCOUNT_AMOUNT_WITHOUT_ACCUMULATION_CARD = 0d;

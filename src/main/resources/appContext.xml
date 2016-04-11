@@ -9,35 +9,11 @@
            http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
 	<context:annotation-config />
-
-	<bean id="pizzaRepository" name="pizzaRepository"
-		class="ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository" />
-
-	<bean id="orderRepository" name="orderRepository"
-		class="ua.rd.pizzaservice.repository.order.InMemOrderRepository" />
-
-	<bean id="discountProvider" name="discountProvider"
-		class="ua.rd.pizzaservice.service.discount.InMemDiscountProvider" />
-
-	<bean id="accumulationCardService" name="accumulationCardService"
-		class="ua.rd.pizzaservice.service.accumulationcard.SimpleAccumulationCardService" />
-
-	<bean id="discountService" name="discountService"
-		class="ua.rd.pizzaservice.service.discount.SimpleDiscountService">
-	</bean>
-
-	<bean id="orderService" name="orderService"
-		class="ua.rd.pizzaservice.service.order.SimpleOrderService">
-	</bean>
+	<context:component-scan base-package="ua.rd.pizzaservice" />
 
 	<bean id="customer" name="customer"
 		class="ua.rd.pizzaservice.domain.customer.Customer">
 		<constructor-arg value="Ivan" />
 	</bean>
-
-
-
-
-
 
 </beans>

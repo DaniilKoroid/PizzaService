@@ -5,10 +5,13 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.stereotype.Repository;
+
 import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.discount.FourPizzaDiscount;
 import ua.rd.pizzaservice.domain.order.Order;
 
+@Repository(value = "discountProvider")
 public class InMemDiscountProvider implements DiscountProvider {
 
 	private List<Discount> discounts = new ArrayList<>();

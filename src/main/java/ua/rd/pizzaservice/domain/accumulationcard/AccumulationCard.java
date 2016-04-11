@@ -59,7 +59,7 @@ public class AccumulationCard {
 
 	@Override
 	public String toString() {
-		return "AccumulationCard [id=" + id + ", amount=" + amount 
+		return "AccumulationCard [id=" + id + ", amount=" + amount
 				+ ", isActivated=" + isActivated + "]";
 	}
 }
