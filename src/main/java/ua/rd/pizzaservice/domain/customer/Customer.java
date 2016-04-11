@@ -1,15 +1,28 @@
 package ua.rd.pizzaservice.domain.customer;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import ua.rd.pizzaservice.domain.address.Address;
 
+@Component("customer")
+@Scope("prototype")
 public class Customer {
 
 	private static int idCounter = 0;
 
 	private Integer id;
+        
+        @Value(value = "Ivan")
 	private String name;
+        
 	private Address address;
 
+        public Customer() {
+            id = ++idCounter;
+        }
+        
 	public Customer(String name) {
 		id = ++idCounter;
 		this.name = name;
