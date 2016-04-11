@@ -8,18 +8,19 @@ import ua.rd.pizzaservice.domain.pizza.Pizza;
 public class Order {
 
 	private static Long idCounter = 0L;
-	
+
 	private Long id;
 	private Customer customer;
 	private List<Pizza> pizzas;
-	
+
 	public Order() {
+	    id = ++idCounter;
 	}
-	
+
 	public Order(Customer customer, List<Pizza> pizzas) {
 		this(++idCounter, customer, pizzas);
 	}
-	
+
 	public Order(Long id, Customer customer, List<Pizza> pizzas) {
 		this.id = id;
 		this.customer = customer;

@@ -26,6 +26,9 @@ public class SpringPizzaApp {
                 .getBean("pizzaRepository");
         OrderService orderService = (OrderService) appContext
                 .getBean("orderService");
+
+        System.out.println(orderService.getClass());
+
         System.out.println(pizzaRepository.getPizzaByID(1));
         Order order = orderService.placeNewOrder(null, 1, 2, 3);
         System.out.println(order);

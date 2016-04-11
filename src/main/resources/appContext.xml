@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<context:annotation-config />
 
 	<bean name="order" class="ua.rd.pizzaservice.domain.order.Order"
 		scope="prototype" />
 
-	<bean name="orderService" class="ua.rd.pizzaservice.service.order.SimpleOrderService">
+	<bean name="orderService" class="ua.rd.pizzaservice.service.order.SimpleOrderService"
+		autowire="byType">
 		<constructor-arg ref="orderRepository" />
 		<constructor-arg ref="pizzaRepository" />
-		<property name="order" ref="order" />
+		<lookup-method name="createOrder" bean="order" />
 	</bean>
 
 	<bean id="customer" class="ua.rd.pizzaservice.domain.customer.Customer">
 		<constructor-arg value="1" />
-		<constructor-arg value="abc" />
+		<constructor-arg value="ABC" />
+	</bean>
+
+	<bean id="customer1" class="ua.rd.pizzaservice.domain.customer.Customer"
+		autowire-candidate="false">
+		<constructor-arg value="2" />
+		<constructor-arg value="QWABC" />
 	</bean>
 
 	<bean id="str" class="java.lang.String">

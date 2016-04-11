@@ -13,7 +13,12 @@ public class SimpleOrderService implements OrderService {
 
     private PizzaRepository pizzaRepository;
     private OrderRepository orderRepository;
-    private Order order;
+    private Customer customer;
+
+    public void setCustomer(Customer customer) {
+        System.out.println("Simple: " + customer);
+        this.customer = customer;
+    }
 
     public SimpleOrderService(OrderRepository orderRepository,
             PizzaRepository pizzaRepository) {
@@ -32,8 +37,8 @@ public class SimpleOrderService implements OrderService {
         return newOrder;
     }
 
-    private Order createOrder() {
-        return order;
+    protected Order createOrder() {
+        return null;
     }
 
     private List<Pizza> pizzasByArrOfId(Integer... pizzasID) {
@@ -43,10 +48,6 @@ public class SimpleOrderService implements OrderService {
             pizzas.add(pizzaRepository.getPizzaByID(id));
         }
         return pizzas;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 
 }
