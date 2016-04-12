@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
@@ -51,8 +52,16 @@ public class SimpleOrderService implements OrderService {
 	}
 
 	private Order createOrder(Customer customer, List<Pizza> pizzas) {
-		Order newOrder = new Order(customer, pizzas);
+	    Order newOrder = createOrder();
+	    newOrder.setCustomer(customer);
+	    newOrder.setPizzas(pizzas);
 		return newOrder;
+	}
+
+
+	@Lookup(value = "order")
+	protected Order createOrder() {
+	    return null;
 	}
 
 	private List<Pizza> pizzasByArrOfId(Integer... pizzasID) {

@@ -8,19 +8,23 @@ import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.service.order.OrderService;
 
 public class PizzaApp {
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		ConfigurableApplicationContext appContext = new ClassPathXmlApplicationContext("appContext.xml");
+        ConfigurableApplicationContext repContext = new ClassPathXmlApplicationContext(
+                "repositoryContext.xml");
+        ConfigurableApplicationContext appContext = new ClassPathXmlApplicationContext(
+                new String[]{"appContext.xml"}, repContext);
 
-		Order order;
-		Customer customer = appContext.getBean("customer", Customer.class);
+        Order order;
+        Customer customer = appContext.getBean("customer", Customer.class);
 
-		OrderService orderService = appContext.getBean("orderService", OrderService.class);
-		Integer[] pizzasId = new Integer[]{1, 2, 3};
-		order = orderService.placeNewOrder(customer, pizzasId);
+        OrderService orderService = appContext.getBean("orderService",
+                OrderService.class);
+        Integer[] pizzasId = new Integer[]{1, 2, 3};
+        order = orderService.placeNewOrder(customer, pizzasId);
 
-		System.out.println(order);
+        System.out.println(order);
 
-		appContext.close();
-	}
+        appContext.close();
+    }
 }

@@ -2,9 +2,12 @@ package ua.rd.pizzaservice.domain.order;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 
+@Component("order")
 public class Order {
 
 	private static Long idCounter = 0L;
