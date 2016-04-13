@@ -1,11 +1,8 @@
 package ua.rd.pizzaservice.domain.customer;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.FactoryBean;
 
-@Component
-@Scope("prototype")
-public class Customer {
+public class Customer implements FactoryBean<Customer> {
 
 	private static int idCounter = 0;
 
@@ -45,5 +42,20 @@ public class Customer {
 	public String toString() {
 		return "Customer [id=" + id + ", name=" + name + "]";
 	}
+
+    @Override
+    public Customer getObject() throws Exception {
+        return new Customer(1, "Abz");
+    }
+
+    @Override
+    public Class<?> getObjectType() {
+        return Customer.class;
+    }
+
+    @Override
+    public boolean isSingleton() {
+        return false;
+    }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
+import infrastructure.Benchmark;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
@@ -18,12 +19,6 @@ public class SimpleOrderService implements OrderService {
 
     private PizzaRepository pizzaRepository;
     private OrderRepository orderRepository;
-    private Customer customer;
-
-    public void setCustomer(Customer customer) {
-        System.out.println("Simple: " + customer);
-        this.customer = customer;
-    }
 
     @Autowired
     public SimpleOrderService(OrderRepository orderRepository,
@@ -33,6 +28,7 @@ public class SimpleOrderService implements OrderService {
     }
 
     @Override
+    @Benchmark
     public Order placeNewOrder(Customer customer, Integer... pizzasID) {
 
         List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
