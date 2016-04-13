@@ -9,6 +9,6 @@
            http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
 	<context:annotation-config />
-	<context:component-scan base-package="ua.rd.pizzaservice" />
+	<context:component-scan base-package="ua.rd.pizzaservice.domain, ua.rd.pizzaservice.service" />
 
 </beans>
