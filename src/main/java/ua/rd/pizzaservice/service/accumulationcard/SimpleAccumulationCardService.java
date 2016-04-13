@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
 
-@Service(value = "accumulationCardService")
+@Service
 public class SimpleAccumulationCardService implements AccumulationCardService {
 
     private Map<Customer, AccumulationCard> ownedCards = new HashMap<>();

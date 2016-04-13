@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 
-@Component("order")
+@Component
 @Scope("prototype")
 public class Order {
 

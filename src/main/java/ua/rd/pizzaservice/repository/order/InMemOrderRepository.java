@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import ua.rd.pizzaservice.domain.order.Order;
 
-@Repository(value = "orderRepository")
+@Repository
 public class InMemOrderRepository implements OrderRepository {
 
     private List<Order> orders = new ArrayList<>();

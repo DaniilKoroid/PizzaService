@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import ua.rd.pizzaservice.domain.address.Address;
 
-@Component("customer")
+@Component
 @Scope("prototype")
 public class Customer {
 

@@ -11,7 +11,7 @@ import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.discount.FourPizzaDiscount;
 import ua.rd.pizzaservice.domain.order.Order;
 
-@Repository(value = "discountProvider")
+@Repository
 public class InMemDiscountProvider implements DiscountProvider {
 
 	private List<Discount> discounts = new ArrayList<>();

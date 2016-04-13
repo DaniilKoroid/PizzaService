@@ -17,7 +17,7 @@ import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 import ua.rd.pizzaservice.service.discount.DiscountService;
 
-@Service(value = "orderService")
+@Service
 public class SimpleOrderService implements OrderService {
 
 	private static final int MIN_PIZZA_IN_ORDER_COUNT = 1;

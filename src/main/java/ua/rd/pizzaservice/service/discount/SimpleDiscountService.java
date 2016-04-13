@@ -11,7 +11,7 @@ import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 
-@Service(value = "discountService")
+@Service
 public class SimpleDiscountService implements DiscountService {
 
 	private static final Double DISCOUNT_AMOUNT_WITHOUT_ACCUMULATION_CARD = 0d;
