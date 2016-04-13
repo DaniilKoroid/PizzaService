@@ -1,5 +1,10 @@
 package ua.rd.pizzaservice.domain.customer;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope("prototype")
 public class Customer {
 
 	private static int idCounter = 0;

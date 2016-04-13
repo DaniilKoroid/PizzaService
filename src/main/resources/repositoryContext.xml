@@ -1,48 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-	<bean name="pizzaRepository"
-		class="ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository"
-		init-method="cookPizzas">
-
-		<property name="pizzas">
-			<list>
-				<bean class="ua.rd.pizzaservice.domain.pizza.Pizza">
-					<constructor-arg index="0" value="1" />
-					<constructor-arg index="1" value="Margarita" />
-					<constructor-arg index="2" value="60" />
-					<constructor-arg index="3" value="MEAT" />
-				</bean>
-				<bean class="ua.rd.pizzaservice.domain.pizza.Pizza">
-					<constructor-arg index="0" value="2" />
-					<constructor-arg index="1" value="SeaPizza" />
-					<constructor-arg index="2" value="90" />
-					<constructor-arg index="3" value="SEA" />
-				</bean>
-				<bean class="ua.rd.pizzaservice.domain.pizza.Pizza">
-					<constructor-arg index="0" value="3" />
-					<constructor-arg index="1" value="Ayurveda" />
-					<constructor-arg index="2" value="80" />
-					<constructor-arg index="3" value="VEGETERIAN" />
-				</bean>
-			</list>
-		</property>
-	</bean>
-
-	<bean name="orderRepository"
-		class="ua.rd.pizzaservice.repository.order.InMemOrderRepository" />
-
-	<bean id="customer" class="ua.rd.pizzaservice.domain.customer.Customer">
-		<constructor-arg value="2" />
-		<constructor-arg value="DEF" />
-	</bean>
-
-	<bean id="createPizzaBean" class="ua.rd.pizzaservice.service.PizzaService" />
-
-	<bean id="str" class="java.lang.String">
-		<constructor-arg value="parentname" />
-	</bean>
+	<context:component-scan base-package="ua.rd.pizzaservice.repository" />
 </beans>

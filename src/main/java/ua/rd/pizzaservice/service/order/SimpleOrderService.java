@@ -3,12 +3,17 @@ package ua.rd.pizzaservice.service.order;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
+import org.springframework.stereotype.Service;
+
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.repository.order.OrderRepository;
 import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 
+@Service
 public class SimpleOrderService implements OrderService {
 
     private PizzaRepository pizzaRepository;
@@ -20,6 +25,7 @@ public class SimpleOrderService implements OrderService {
         this.customer = customer;
     }
 
+    @Autowired
     public SimpleOrderService(OrderRepository orderRepository,
             PizzaRepository pizzaRepository) {
         this.pizzaRepository = pizzaRepository;
@@ -37,6 +43,7 @@ public class SimpleOrderService implements OrderService {
         return newOrder;
     }
 
+    @Lookup
     protected Order createOrder() {
         return null;
     }

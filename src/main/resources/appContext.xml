@@ -1,47 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans.xsd">
-	<context:annotation-config />
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-	<bean name="order" class="ua.rd.pizzaservice.domain.order.Order"
-		scope="prototype" />
-
-	<bean name="orderService" class="ua.rd.pizzaservice.service.order.SimpleOrderService"
-		autowire="byType">
-		<constructor-arg ref="orderRepository" />
-		<constructor-arg ref="pizzaRepository" />
-		<lookup-method name="createOrder" bean="order" />
-	</bean>
-
-	<bean id="customer" class="ua.rd.pizzaservice.domain.customer.Customer">
-		<constructor-arg value="1" />
-		<constructor-arg value="ABC" />
-	</bean>
-
-	<bean id="customer1" class="ua.rd.pizzaservice.domain.customer.Customer"
-		autowire-candidate="false">
-		<constructor-arg value="2" />
-		<constructor-arg value="QWABC" />
-	</bean>
-
-	<bean id="str" class="java.lang.String">
-		<constructor-arg value="name" />
-	</bean>
-
-	<bean factory-bean="createPizzaBean" factory-method="createPizza">
-		<constructor-arg index="0">
-			<null />
-		</constructor-arg>
-		<constructor-arg index="1">
-			<ref parent="str" />
-		</constructor-arg>
-		<constructor-arg index="2">
-			<value>2.4</value>
-		</constructor-arg>
-		<constructor-arg index="3" value="SEA" />
-	</bean>
+	<context:component-scan base-package="ua.rd.pizzaservice.domain, ua.rd.pizzaservice.service" />
 
 </beans>

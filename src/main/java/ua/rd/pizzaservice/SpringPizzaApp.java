@@ -6,8 +6,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
+import ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository;
 import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 import ua.rd.pizzaservice.service.order.OrderService;
+import ua.rd.pizzaservice.service.order.SimpleOrderService;
 
 public class SpringPizzaApp {
 
@@ -17,17 +19,12 @@ public class SpringPizzaApp {
                 new ClassPathXmlApplicationContext("repositoryContext.xml");
 
         ConfigurableApplicationContext appContext =
-                new ClassPathXmlApplicationContext(new String[]{"appContext.xml"}, false);
-
-        appContext.setParent(repositoryContext);
-        appContext.refresh();
+                new ClassPathXmlApplicationContext(new String[]{"appContext.xml"}, repositoryContext);
 
         PizzaRepository pizzaRepository = (PizzaRepository) appContext
-                .getBean("pizzaRepository");
+                .getBean(InMemPizzaRepository.class);
         OrderService orderService = (OrderService) appContext
-                .getBean("orderService");
-
-        System.out.println(orderService.getClass());
+                .getBean(SimpleOrderService.class);
 
         System.out.println(pizzaRepository.getPizzaByID(1));
         Order order = orderService.placeNewOrder(null, 1, 2, 3);
@@ -35,12 +32,6 @@ public class SpringPizzaApp {
 
         Customer customer = appContext.getBean(Customer.class);
         System.out.println("appContext customer: " + customer);
-
-        Customer parentCustomer = appContext.getParent().getBean(Customer.class);
-        System.out.println("repositoryContext customer: " + parentCustomer);
-
-        Pizza pizza = appContext.getBean(Pizza.class);
-        System.out.println(pizza);
 
         appContext.close();
         repositoryContext.close();
