@@ -73,6 +73,23 @@ public class SimpleOrderServiceTest {
 	@Mock
 	Pizza pizzaFour;
 
+
+	class SimpleOrderServiceWithoutLookup extends SimpleOrderService {
+
+        public SimpleOrderServiceWithoutLookup(DiscountService discountService,
+                AccumulationCardService accCardService,
+                PizzaRepository pizzaRepository,
+                OrderRepository orderRepository) {
+            super(discountService, accCardService, pizzaRepository, orderRepository);
+        }
+
+        @Override
+        protected Order createOrder() {
+            return new Order();
+        }
+
+	}
+
 	@Before
 	public void setUpVariables() {
 		DiscountProvider discountProvider = new InMemDiscountProvider();
@@ -81,7 +98,7 @@ public class SimpleOrderServiceTest {
 		((InMemPizzaRepository) pizzaRepository).cookPizzas();
 		OrderRepository orderRepository = new InMemOrderRepository();
 		discountService = new SimpleDiscountService(accCardService, discountProvider);
-		orderService = new SimpleOrderService(discountService, accCardService, pizzaRepository, orderRepository);
+		orderService = new SimpleOrderServiceWithoutLookup(discountService, accCardService, pizzaRepository, orderRepository);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);
 		when(accCardService.hasAccumulationCard(customerWithCard)).thenReturn(true);
@@ -126,10 +143,7 @@ public class SimpleOrderServiceTest {
 		orderService.placeNewOrder(nullCustomer, arr);
 	}
 
-	/**
-	 * Currently can't test this method due to Spring lookup method approach - this method throws NPE.
-	 */
-	@Test(expected = NullPointerException.class)
+	@Test
 	public void testPlaceNewOrderWithAppropriatePizzasCount() {
 		System.out.println("test placeNewOrder with appropriate pizzas count");
 		Integer[] pizzasID = new Integer[] { 1, 2, 3, 3, 2, 1 };
