@@ -6,6 +6,7 @@ import java.lang.reflect.Proxy;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.util.ClassUtils;
 
 public class BenchmarkProxyBeanPostProcessor implements BeanPostProcessor {
 
@@ -28,15 +29,14 @@ public class BenchmarkProxyBeanPostProcessor implements BeanPostProcessor {
         if(!hasBenchmarkAnnotatedMethods(clazz)) {
             returnResult = bean;
         } else {
-            returnResult = createProxy(clazz.getSuperclass(), bean);
+            returnResult = createProxy(clazz, bean);
         }
         return returnResult;
     }
 
     private boolean hasBenchmarkAnnotatedMethods(Class<?> clazz) {
         boolean result = false;
-        Method[] methods = clazz.getMethods();
-        for (Method method : methods) {
+        for (Method method : clazz.getMethods()) {
             if (method.isAnnotationPresent(Benchmark.class)) {
                 result = true;
                 break;
@@ -46,7 +46,8 @@ public class BenchmarkProxyBeanPostProcessor implements BeanPostProcessor {
     }
 
     private Object createProxy(Class<?> clazz, Object bean) {
-        Object proxy = Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), new InvocationHandler() {
+        Class<?>[] interfaces = getAllInterfaces(clazz);
+        Object proxy = Proxy.newProxyInstance(clazz.getClassLoader(), interfaces, new InvocationHandler() {
 
             @Override
             public Object invoke(Object proxy, Method method, Object[] args)
@@ -56,11 +57,15 @@ public class BenchmarkProxyBeanPostProcessor implements BeanPostProcessor {
                 result = method.invoke(bean, args);
                 long end = System.nanoTime();
                 long delta = end - start;
-                System.out.println("Elapsed time: " + delta);
+                System.out.println("Method: " + method.getName() + ". Elapsed time: " + delta);
                 return result;
             }
         });
         return proxy;
+    }
+
+    private Class<?>[] getAllInterfaces(Class<?> clazz) {
+        return ClassUtils.getAllInterfacesForClass(clazz);
     }
 
 }

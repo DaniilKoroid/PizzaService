@@ -27,8 +27,9 @@ public class InMemPizzaRepository implements PizzaRepository {
         System.out.println("init method");
     }
 
-    @Benchmark
+
     @Override
+    @Benchmark
     public Pizza getPizzaByID(Integer id) {
         Pizza result = null;
         for (Pizza pizza : pizzas) {

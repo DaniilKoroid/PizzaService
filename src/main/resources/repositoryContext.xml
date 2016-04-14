@@ -10,4 +10,5 @@
 
 	<context:component-scan base-package="ua.rd.pizzaservice.repository" />
 
+	<bean class="infrastructure.BenchmarkProxyBeanPostProcessor" />
 </beans>
