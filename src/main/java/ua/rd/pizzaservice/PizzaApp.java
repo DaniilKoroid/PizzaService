@@ -18,7 +18,7 @@ public class PizzaApp {
 
         Order order;
         Customer customer = appContext.getBean(Customer.class);
-        OrderService orderService = appContext.getBean(SimpleOrderService.class);
+        OrderService orderService = appContext.getBean(OrderService.class);
         Integer[] pizzasId = new Integer[]{1, 2, 3};
         order = orderService.placeNewOrder(customer, pizzasId);
 
