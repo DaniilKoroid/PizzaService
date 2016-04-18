@@ -73,22 +73,8 @@ public class SimpleOrderServiceTest {
 	@Mock
 	Pizza pizzaFour;
 
-
-	class SimpleOrderServiceWithoutLookup extends SimpleOrderService {
-
-        public SimpleOrderServiceWithoutLookup(DiscountService discountService,
-                AccumulationCardService accCardService,
-                PizzaRepository pizzaRepository,
-                OrderRepository orderRepository) {
-            super(discountService, accCardService, pizzaRepository, orderRepository);
-        }
-
-        @Override
-        protected Order createOrder() {
-            return new Order();
-        }
-
-	}
+	@Mock
+	SimpleOrderService mockedSimpleOrderService;
 
 	@Before
 	public void setUpVariables() {
@@ -98,7 +84,7 @@ public class SimpleOrderServiceTest {
 		((InMemPizzaRepository) pizzaRepository).cookPizzas();
 		OrderRepository orderRepository = new InMemOrderRepository();
 		discountService = new SimpleDiscountService(accCardService, discountProvider);
-		orderService = new SimpleOrderServiceWithoutLookup(discountService, accCardService, pizzaRepository, orderRepository);
+		orderService = new SimpleOrderService(discountService, accCardService, pizzaRepository, orderRepository);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);
 		when(accCardService.hasAccumulationCard(customerWithCard)).thenReturn(true);
@@ -116,6 +102,7 @@ public class SimpleOrderServiceTest {
 		when(discountedOrder.calculateFullPrice()).thenReturn(discountedSum);
 		when(undiscountedOrder.getPizzas()).thenReturn(getFirstThreeMockedPizzas());
 		when(discountedOrder.getPizzas()).thenReturn(getMockedPizzas());
+		when(mockedSimpleOrderService.createOrder()).thenReturn(new Order());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -148,7 +135,7 @@ public class SimpleOrderServiceTest {
 		System.out.println("test placeNewOrder with appropriate pizzas count");
 		Integer[] pizzasID = new Integer[] { 1, 2, 3, 3, 2, 1 };
 		int expectedOrderSize = pizzasID.length;
-		Order newOrder = orderService.placeNewOrder(customer, pizzasID);
+		Order newOrder = mockedSimpleOrderService.placeNewOrder(customer, pizzasID);
 		int orderSize = newOrder.getPizzas().size();
 		assertEquals(expectedOrderSize, orderSize);
 	}

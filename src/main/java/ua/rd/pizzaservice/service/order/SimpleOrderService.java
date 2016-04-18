@@ -28,6 +28,9 @@ public class SimpleOrderService implements OrderService {
 	private PizzaRepository pizzaRepository;
 	private OrderRepository orderRepository;
 
+	SimpleOrderService() {
+    }
+
 	@Autowired
 	public SimpleOrderService(DiscountService discountService,
 			AccumulationCardService accCardService,
