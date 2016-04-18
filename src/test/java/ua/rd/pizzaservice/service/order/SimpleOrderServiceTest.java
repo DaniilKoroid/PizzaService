@@ -131,16 +131,6 @@ public class SimpleOrderServiceTest {
 	}
 
 	@Test
-	public void testPlaceNewOrderWithAppropriatePizzasCount() {
-		System.out.println("test placeNewOrder with appropriate pizzas count");
-		Integer[] pizzasID = new Integer[] { 1, 2, 3, 3, 2, 1 };
-		int expectedOrderSize = pizzasID.length;
-		Order newOrder = mockedSimpleOrderService.placeNewOrder(customer, pizzasID);
-		int orderSize = newOrder.getPizzas().size();
-		assertEquals(expectedOrderSize, orderSize);
-	}
-
-	@Test
 	public void testCanChangeOrderWithNewStateReturnsTrue() {
 		System.out.println("test canChange order with NEW state returns true");
 		OrderState state = OrderState.NEW;
