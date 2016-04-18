@@ -5,13 +5,10 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.stereotype.Repository;
-
 import infrastructure.Benchmark;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 
-@Repository
 public class InMemPizzaRepository implements PizzaRepository {
 
     List<Pizza> pizzas = new ArrayList<>();
