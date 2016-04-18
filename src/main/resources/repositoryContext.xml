@@ -11,7 +11,7 @@
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
-			<value>repository.properties</value>
+			<value>postgreSqlRepository.properties</value>
 		</property>
 	</bean>
 
