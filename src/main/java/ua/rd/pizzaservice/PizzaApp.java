@@ -6,18 +6,19 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.service.order.OrderService;
-import ua.rd.pizzaservice.service.order.SimpleOrderService;
 
 public class PizzaApp {
     public static void main(String[] args) {
 
         ConfigurableApplicationContext repContext = new ClassPathXmlApplicationContext(
                 "repositoryContext.xml");
+        repContext.getEnvironment().setActiveProfiles("dev");
+        repContext.refresh();
         ConfigurableApplicationContext appContext = new ClassPathXmlApplicationContext(
                 new String[]{"appContext.xml"}, repContext);
 
         Order order;
-        Customer customer = appContext.getBean(Customer.class);
+        Customer customer = new Customer();
         OrderService orderService = appContext.getBean(OrderService.class);
         Integer[] pizzasId = new Integer[]{1, 2, 3};
         order = orderService.placeNewOrder(customer, pizzasId);
