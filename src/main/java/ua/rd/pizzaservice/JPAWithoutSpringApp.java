@@ -15,7 +15,7 @@ public class JPAWithoutSpringApp {
                 .createEntityManagerFactory("jpa_mysql");
         EntityManager em = emf.createEntityManager();
         Pizza pizza = new Pizza();
-        pizza.setId(2);
+//        pizza.setId(3);
         pizza.setName("Seazza");
         pizza.setPrice(111.0d);
         pizza.setType(PizzaType.SEA);
