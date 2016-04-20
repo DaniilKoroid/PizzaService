@@ -19,7 +19,7 @@ public class Pizza {
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private Integer id;
 	private String name;
 	private Double price;
