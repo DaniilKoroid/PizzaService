@@ -1,7 +1,22 @@
 package ua.rd.pizzaservice.domain.address;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "address")
 public class Address {
 
+	@Id
+	@Column(name = "address_id")
+	@SequenceGenerator(initialValue = 1, name = "address_id_gen", sequenceName = "address_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_id_gen")
+	private Integer id;
 	private String country;
 	private String city;
 	private String street;
@@ -9,7 +24,7 @@ public class Address {
 	private String flatNumber;
 	private String zipCode;
 
-	public Address(String country, String city, String street, String building, String flatNumber, String zipCode) {
+	public Address(Integer id, String country, String city, String street, String building, String flatNumber, String zipCode) {
 		super();
 		this.country = country;
 		this.city = city;
@@ -21,6 +36,14 @@ public class Address {
 
 	public Address() {
 		super();
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getCountry() {

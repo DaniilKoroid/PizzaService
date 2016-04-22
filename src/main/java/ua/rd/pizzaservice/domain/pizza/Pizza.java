@@ -1,14 +1,20 @@
 package ua.rd.pizzaservice.domain.pizza;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+//@Entity
+//@Table(name = "pizza")
+@Embeddable
 public class Pizza {
 
 	public enum PizzaType {
-		MEAT,
-		VEGETERIAN,
-		SEA, 
-		;
+		MEAT, VEGETERIAN, SEA,;
 	}
 
+//	@Id
 	private Integer id;
 	private String name;
 	private Double price;
@@ -58,8 +64,7 @@ public class Pizza {
 
 	@Override
 	public String toString() {
-		return "Pizza [id=" + id + ", name=" + name + ", price=" 
-				+ price + ", type=" + type + "]";
+		return "Pizza [id=" + id + ", name=" + name + ", price=" + price + ", type=" + type + "]";
 	}
 
 	@Override
@@ -76,38 +81,38 @@ public class Pizza {
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
-			return true;			
+			return true;
 		}
 		if (obj == null) {
-			return false;			
+			return false;
 		}
 		if (getClass() != obj.getClass()) {
-			return false;			
+			return false;
 		}
 		Pizza other = (Pizza) obj;
 		if (id == null) {
 			if (other.id != null) {
-				return false;				
+				return false;
 			}
 		} else if (!id.equals(other.id)) {
-			return false;			
+			return false;
 		}
 		if (name == null) {
 			if (other.name != null) {
-				return false;				
+				return false;
 			}
 		} else if (!name.equals(other.name)) {
-			return false;			
+			return false;
 		}
 		if (price == null) {
 			if (other.price != null) {
-				return false;				
+				return false;
 			}
 		} else if (!price.equals(other.price)) {
-			return false;			
+			return false;
 		}
 		if (type != other.type) {
-			return false;			
+			return false;
 		}
 		return true;
 	}
