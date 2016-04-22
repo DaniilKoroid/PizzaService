@@ -1,16 +1,20 @@
 package ua.rd.pizzaservice.domain.customer;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -24,7 +28,7 @@ import ua.rd.pizzaservice.domain.address.Address;
 @Table(name = "customer")
 public class Customer {
 
-	private static int idCounter = 0;
+//	private static int idCounter = 0;
 
 	@Id
 	@Column(name="customer_id")
@@ -34,10 +38,16 @@ public class Customer {
 
 	private String name;
 
-	@OneToOne(cascade = {CascadeType.ALL})
-	@JoinColumn(name="address_id")
-	private Address address;
+	@OneToMany(cascade = {CascadeType.PERSIST}, mappedBy = "customer")
+//	@JoinColumn(name="address_id")
+	private List<Address> address;
 
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<String> phones;
+	
+	@Version
+	private Integer version;
+	
 	public Customer() {
 //		id = ++idCounter;
 	}
@@ -59,15 +69,23 @@ public class Customer {
 		return name;
 	}
 
+	public List<String> getPhones() {
+		return phones;
+	}
+
+	public void setPhones(List<String> phones) {
+		this.phones = phones;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public Address getAddress() {
+	public List<Address> getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(List<Address> address) {
 		this.address = address;
 	}
 

@@ -1,5 +1,8 @@
 package ua.rd.pizzaservice;
 
+import java.util.Arrays;
+import java.util.Scanner;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -10,8 +13,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
-import ua.rd.pizzaservice.domain.pizza.Pizza;
-import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 import ua.rd.pizzaservice.service.order.OrderService;
 
 public class JPAWithoutSpringApp {
@@ -34,7 +35,38 @@ public class JPAWithoutSpringApp {
 		address.setStreet("K");
 		address.setBuilding("18");
 		address.setFlatNumber("Stanford");
+//		address.setState(new State("state_column"));
 
+		Customer customer = new Customer();
+		customer.setName("empty");
+		customer.setAddress(Arrays.asList(address, address));
+		customer.setPhones(Arrays.asList("123", "456"));
+		address.setCustomer(customer);
+		
+		try {
+			em.getTransaction().begin();
+			em.persist(customer);
+			em.getTransaction().commit();
+			em.clear();
+//			Customer customer2 = address.getCustomer();
+//			System.out.println("Address's customer: " + customer2);
+//			for(Address adr : customer.getAddress()) {
+//				System.out.println("Adr: " + em.find(Address.class, adr.getId()));
+//			}
+//			Address address2 = em.find(Address.class, customer.getAddress().get(0).getId());
+//			System.out.println(address2.getCustomer());
+//			Customer customer1 = em.find(Customer.class, customer.getId());
+//			System.out.println(customer1);
+		} finally {
+			em.close();
+			emf.close();
+		}
+		
+		
+		if (true) {
+			return;
+		}
+		
 		ConfigurableApplicationContext repContext = new ClassPathXmlApplicationContext(
                 "repositoryContext.xml");
         repContext.getEnvironment().setActiveProfiles("dev");
@@ -43,7 +75,7 @@ public class JPAWithoutSpringApp {
                 new String[]{"appContext.xml"}, repContext);
         Order order;
         Customer customerOrder = new Customer();
-        customerOrder.setAddress(address);
+//        customerOrder.setAddress(address);
         customerOrder.setName("CustomerName");
         OrderService orderService = appContext.getBean(OrderService.class);
         Integer[] pizzasId = new Integer[]{1, 2, 3};

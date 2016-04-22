@@ -1,16 +1,33 @@
 package ua.rd.pizzaservice.domain.address;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import ua.rd.pizzaservice.domain.customer.Customer;
+
 @Entity
 @Table(name = "address")
-public class Address {
+//@Embeddable
+public class Address implements Serializable {
+
+	private static final long serialVersionUID = 2343736558189442466L;
+	
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
 
 	@Id
 	@Column(name = "address_id")
@@ -23,6 +40,9 @@ public class Address {
 	private String building;
 	private String flatNumber;
 	private String zipCode;
+	@ManyToOne
+	@JoinTable(name = "cust_addr")
+	private Customer customer;
 
 	public Address(Integer id, String country, String city, String street, String building, String flatNumber, String zipCode) {
 		super();
@@ -93,11 +113,11 @@ public class Address {
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Address [country=" + country + ", city=" + city + ", street=" + street + ", building=" + building
-				+ ", flatNumber=" + flatNumber + ", zipCode=" + zipCode + "]";
+		return "Address [id=" + id + ", country=" + country + ", city=" + city + ", street=" + street + ", building="
+				+ building + ", flatNumber=" + flatNumber + ", zipCode=" + zipCode + "]";
 	}
 
 	@Override
