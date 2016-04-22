@@ -3,8 +3,8 @@ package ua.rd.pizzaservice.service.discount;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,9 +43,6 @@ public class DiscountServiceImplTest {
 	AccumulationCard notActivatedCard;
 
 	@Mock
-	List<Pizza> pizzaList;
-
-	@Mock
 	Pizza pizzaOne;
 
 	@Mock
@@ -72,9 +69,7 @@ public class DiscountServiceImplTest {
 	@Test
 	public void testCalculateDiscountsAmountOnOrderWithoutDiscounts() {
 		System.out.println("test calculateDiscountsAmount on order without discounts");
-		Integer pizzaListSize = 3;
-		when(order.getPizzas()).thenReturn(pizzaList);
-		when(pizzaList.size()).thenReturn(pizzaListSize);
+		when(order.getPizzas()).thenReturn(getUndiscountablePizzas());
 		double discountsAmount = discountService.calculateDiscountsAmount(order);
 		double expectedDiscountAmount = 0d;
 		double eps = 1E-5;
@@ -84,7 +79,7 @@ public class DiscountServiceImplTest {
 	@Test
 	public void testCalculateDiscountsAmountOnOrderWithDiscounts() {
 		System.out.println("test calculateDiscountsAmount on order with discounts");
-		when(order.getPizzas()).thenReturn(getMockedPizzas());
+		when(order.getPizzas()).thenReturn(getDiscountablePizzas());
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
 		when(pizzaThree.getPrice()).thenReturn(75d);
@@ -98,7 +93,7 @@ public class DiscountServiceImplTest {
 	@Test
 	public void testCalculatePriceWithDiscountsOnOrderWithoutDiscounts() {
 		System.out.println("test calculate price with discounts on order without discounts");
-		when(order.getPizzas()).thenReturn(getFirstThreeMockedPizzas());
+		when(order.getPizzas()).thenReturn(getUndiscountablePizzas());
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
 		when(pizzaThree.getPrice()).thenReturn(75d);
@@ -113,7 +108,7 @@ public class DiscountServiceImplTest {
 	@Test
 	public void testCalculatePriceWithDiscountsOnOrderWithDiscounts() {
 		System.out.println("test calculate price with discounts on order without discounts");
-		when(order.getPizzas()).thenReturn(getMockedPizzas());
+		when(order.getPizzas()).thenReturn(getDiscountablePizzas());
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
 		when(pizzaThree.getPrice()).thenReturn(75d);
@@ -130,7 +125,7 @@ public class DiscountServiceImplTest {
 	public void testCalculateFinalDiscountAmountOnOrderWithoutDiscountsAndCustomerWithoutAccumulationCard() {
 		System.out.println("test calculateFinalDiscountAmount on order without discounts "
 				+ "and customer without accumulation card");
-		when(order.getPizzas()).thenReturn(getFirstThreeMockedPizzas());
+		when(order.getPizzas()).thenReturn(getUndiscountablePizzas());
 		when(order.getCustomer()).thenReturn(customerWithoutCard);
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
@@ -147,7 +142,7 @@ public class DiscountServiceImplTest {
 	public void testCalculateFinalDiscountAmountOnOrderWithoutDiscountsAndCustomerWithAccumulationCard() {
 		System.out.println("test calculateFinalDiscountAmount on order without discounts "
 				+ "and customer with accumulation card");
-		when(order.getPizzas()).thenReturn(getFirstThreeMockedPizzas());
+		when(order.getPizzas()).thenReturn(getUndiscountablePizzas());
 		when(order.getCustomer()).thenReturn(customerWithCard);
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
@@ -164,7 +159,7 @@ public class DiscountServiceImplTest {
 	public void testCalculateFinalDiscountAmountOnOrderWithDiscountsAndCustomerWithoutAccumulationCard() {
 		System.out.println("test calculateFinalDiscountAmount on order with discounts "
 				+ "and customer without accumulation card");
-		when(order.getPizzas()).thenReturn(getMockedPizzas());
+		when(order.getPizzas()).thenReturn(getDiscountablePizzas());
 		when(order.getCustomer()).thenReturn(customerWithoutCard);
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
@@ -182,7 +177,7 @@ public class DiscountServiceImplTest {
 	public void testCalculateFinalDiscountAmountOnOrderWithDiscountsAndCustomerWithAccumulationCard() {
 		System.out.println(
 				"test calculateFinalDiscountAmount on order with discounts " + "and customer with accumulation card");
-		when(order.getPizzas()).thenReturn(getMockedPizzas());
+		when(order.getPizzas()).thenReturn(getDiscountablePizzas());
 		when(order.getCustomer()).thenReturn(customerWithCard);
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
@@ -196,29 +191,31 @@ public class DiscountServiceImplTest {
 		assertEquals(expectedDiscountAmount, finalDiscountAmount, eps);
 	}
 
-	private List<Pizza> getMockedPizzas() {
-		@SuppressWarnings("serial")
-		List<Pizza> mockedPizzasList = new ArrayList<Pizza>() {
+	private Map<Pizza, Integer> getDiscountablePizzas() {
+		Map<Pizza, Integer> discountablePizzas = new HashMap<Pizza, Integer>() {
+			private static final long serialVersionUID = -8644030995186868572L;
+
 			{
-				add(pizzaOne);
-				add(pizzaTwo);
-				add(pizzaThree);
-				add(pizzaFour);
+				put(pizzaOne, 1);
+				put(pizzaTwo, 1);
+				put(pizzaThree, 1);
+				put(pizzaFour, 1);
 			}
 		};
-		return mockedPizzasList;
+		return discountablePizzas;
 	}
 
-	private List<Pizza> getFirstThreeMockedPizzas() {
-		@SuppressWarnings("serial")
-		List<Pizza> mockedPizzasList = new ArrayList<Pizza>() {
+	private Map<Pizza, Integer> getUndiscountablePizzas() {
+		Map<Pizza, Integer> undiscountablePizzas = new HashMap<Pizza, Integer>() {
+			private static final long serialVersionUID = 1023848264106081126L;
+
 			{
-				add(pizzaOne);
-				add(pizzaTwo);
-				add(pizzaThree);
+				put(pizzaOne, 1);
+				put(pizzaTwo, 1);
+				put(pizzaThree, 1);
 			}
 		};
-		return mockedPizzasList;
+		return undiscountablePizzas;
 	}
 
 }

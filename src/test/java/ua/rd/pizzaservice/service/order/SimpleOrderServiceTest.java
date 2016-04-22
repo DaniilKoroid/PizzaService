@@ -5,8 +5,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -100,8 +101,8 @@ public class SimpleOrderServiceTest {
 		double undiscountedSum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice();
 		when(undiscountedOrder.calculateFullPrice()).thenReturn(undiscountedSum);
 		when(discountedOrder.calculateFullPrice()).thenReturn(discountedSum);
-		when(undiscountedOrder.getPizzas()).thenReturn(getFirstThreeMockedPizzas());
-		when(discountedOrder.getPizzas()).thenReturn(getMockedPizzas());
+		when(undiscountedOrder.getPizzas()).thenReturn(getUndiscountablePizzas());
+		when(discountedOrder.getPizzas()).thenReturn(getDiscountablePizzas());
 		when(mockedSimpleOrderService.createOrder()).thenReturn(new Order());
 	}
 
@@ -543,28 +544,30 @@ public class SimpleOrderServiceTest {
 		assertEquals(expectedFinalPrice, finalPrice, eps);
 	}
 
-	private List<Pizza> getMockedPizzas() {
-		@SuppressWarnings("serial")
-		List<Pizza> mockedPizzasList = new ArrayList<Pizza>() {
+	private Map<Pizza, Integer> getDiscountablePizzas() {
+		Map<Pizza, Integer> discountablePizzas = new HashMap<Pizza, Integer>() {
+			private static final long serialVersionUID = -8644030995186868572L;
+
 			{
-				add(pizzaOne);
-				add(pizzaTwo);
-				add(pizzaThree);
-				add(pizzaFour);
+				put(pizzaOne, 1);
+				put(pizzaTwo, 1);
+				put(pizzaThree, 1);
+				put(pizzaFour, 1);
 			}
 		};
-		return mockedPizzasList;
+		return discountablePizzas;
 	}
 
-	private List<Pizza> getFirstThreeMockedPizzas() {
-		@SuppressWarnings("serial")
-		List<Pizza> mockedPizzasList = new ArrayList<Pizza>() {
+	private Map<Pizza, Integer> getUndiscountablePizzas() {
+		Map<Pizza, Integer> undiscountablePizzas = new HashMap<Pizza, Integer>() {
+			private static final long serialVersionUID = 1023848264106081126L;
+
 			{
-				add(pizzaOne);
-				add(pizzaTwo);
-				add(pizzaThree);
+				put(pizzaOne, 1);
+				put(pizzaTwo, 1);
+				put(pizzaThree, 1);
 			}
 		};
-		return mockedPizzasList;
+		return undiscountablePizzas;
 	}
 }

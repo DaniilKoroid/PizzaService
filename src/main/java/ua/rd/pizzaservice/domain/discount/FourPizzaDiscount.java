@@ -1,6 +1,6 @@
 package ua.rd.pizzaservice.domain.discount;
 
-import java.util.List;
+import java.util.Map;
 
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
@@ -13,7 +13,7 @@ public class FourPizzaDiscount implements Discount {
 
 	@Override
 	public Double calculateDiscount(Order order) {
-		List<Pizza> pizzas = order.getPizzas();
+		Map<Pizza, Integer> pizzas = order.getPizzas();
 		if (!isAppliable(pizzas)) {
 			return DEFAULT_DISCOUNT_AMOUNT_FOR_UNAPPLIABLE;
 		}
@@ -25,18 +25,26 @@ public class FourPizzaDiscount implements Discount {
 
 	@Override
 	public Boolean isAppliable(Order order) {
-		List<Pizza> pizzas = order.getPizzas();
+		Map<Pizza, Integer> pizzas = order.getPizzas();
 		return isAppliable(pizzas);
 	}
 
-	private Boolean isAppliable(List<Pizza> pizzas) {
-		Boolean result = pizzas.size() >= PIZZA_MIN_COUNT_FOR_DISCOUNT;
+	private Boolean isAppliable(Map<Pizza, Integer> pizzas) {
+		Boolean result = (getOrderSize(pizzas) >= PIZZA_MIN_COUNT_FOR_DISCOUNT);
 		return result;
 	}
 
-	private Double getMaxPizzaPrice(List<Pizza> pizzas) {
+	private int getOrderSize(Map<Pizza, Integer> pizzas) {
+		int size = 0;
+		for (Integer value : pizzas.values()) {
+			size += value;
+		}
+		return size;
+	}
+
+	private Double getMaxPizzaPrice(Map<Pizza, Integer> pizzas) {
 		double maxPrice = 0d;
-		for (Pizza pizza : pizzas) {
+		for (Pizza pizza : pizzas.keySet()) {
 			if (pizza.getPrice() > maxPrice) {
 				maxPrice = pizza.getPrice();
 			}

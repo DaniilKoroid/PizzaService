@@ -1,7 +1,7 @@
 package ua.rd.pizzaservice.service.order;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
@@ -29,13 +29,11 @@ public class SimpleOrderService implements OrderService {
 	private OrderRepository orderRepository;
 
 	SimpleOrderService() {
-    }
+	}
 
 	@Autowired
-	public SimpleOrderService(DiscountService discountService,
-			AccumulationCardService accCardService,
-			PizzaRepository pizzaRepository,
-			OrderRepository orderRepository) {
+	public SimpleOrderService(DiscountService discountService, AccumulationCardService accCardService,
+			PizzaRepository pizzaRepository, OrderRepository orderRepository) {
 		this.discountService = discountService;
 		this.accCardService = accCardService;
 		this.pizzaRepository = pizzaRepository;
@@ -47,41 +45,46 @@ public class SimpleOrderService implements OrderService {
 		checkOrderedPizzasNumber(pizzasID);
 		checkCustomerExistance(customer);
 
-		List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
+		Map<Pizza, Integer> pizzas = pizzasByArrOfId(pizzasID);
 		Order newOrder = createOrder(customer, pizzas);
 
 		orderRepository.saveOrder(newOrder);
 		return newOrder;
 	}
 
-	private Order createOrder(Customer customer, List<Pizza> pizzas) {
-	    Order newOrder = createOrder();
-	    newOrder.setCustomer(customer);
-	    newOrder.setPizzas(pizzas);
+	private Order createOrder(Customer customer, Map<Pizza, Integer> pizzas) {
+		Order newOrder = createOrder();
+		newOrder.setCustomer(customer);
+		newOrder.setPizzas(pizzas);
 		return newOrder;
 	}
 
-
 	@Lookup(value = "order")
 	protected Order createOrder() {
-	    return null;
+		return null;
 	}
 
-	private List<Pizza> pizzasByArrOfId(Integer... pizzasID) {
-		List<Pizza> pizzas = new ArrayList<>();
-
+	private Map<Pizza, Integer> pizzasByArrOfId(Integer... pizzasID) {
+		Map<Pizza, Integer> pizzas = new HashMap<>();
+		int toAdd = 1;
 		for (Integer id : pizzasID) {
-			pizzas.add(pizzaRepository.getPizzaByID(id));
+			Pizza pizza = pizzaRepository.getPizzaByID(id);
+
+			if (pizzas.containsKey(pizza)) {
+				Integer curValue = pizzas.get(pizza);
+				curValue += toAdd;
+				pizzas.put(pizza, curValue);
+			} else {
+				pizzas.put(pizza, toAdd);
+			}
 		}
 		return pizzas;
 	}
 
 	private void checkOrderedPizzasNumber(Integer... pizzasId) {
-		if (pizzasId.length < MIN_PIZZA_IN_ORDER_COUNT
-				|| pizzasId.length > MAX_PIZZA_IN_ORDER_COUNT) {
+		if (pizzasId.length < MIN_PIZZA_IN_ORDER_COUNT || pizzasId.length > MAX_PIZZA_IN_ORDER_COUNT) {
 
-			throw new IllegalArgumentException("Can't place order with "
-			+ "not allowed number of pizzas.");
+			throw new IllegalArgumentException("Can't place order with " + "not allowed number of pizzas.");
 		}
 	}
 
@@ -96,7 +99,7 @@ public class SimpleOrderService implements OrderService {
 		checkOrderedPizzasNumber(pizzasID);
 		Boolean canChange = canChange(order);
 		if (canChange) {
-			List<Pizza> pizzas = pizzasByArrOfId(pizzasID);
+			Map<Pizza, Integer> pizzas = pizzasByArrOfId(pizzasID);
 			canChange = order.changeOrder(pizzas);
 		}
 		return canChange;
@@ -156,8 +159,7 @@ public class SimpleOrderService implements OrderService {
 
 	@Override
 	public Double getFinalPrice(Order order) {
-		Double finalPrice = getFullPrice(order)
-				- getDiscountAmount(order);
+		Double finalPrice = getFullPrice(order) - getDiscountAmount(order);
 		return finalPrice;
 	}
 }

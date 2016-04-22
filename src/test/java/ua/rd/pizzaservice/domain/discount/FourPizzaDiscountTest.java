@@ -5,8 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,9 +28,6 @@ public class FourPizzaDiscountTest {
 	Order mockedOrder;
 
 	@Mock
-	List<Pizza> pizzaList;
-
-	@Mock
 	Pizza pizzaOne;
 
 	@Mock
@@ -43,7 +40,7 @@ public class FourPizzaDiscountTest {
 	Pizza pizzaFour;
 
 	@Before
-	public void setUpDiscount() {
+	public void setUpVariables() {
 		discount = new FourPizzaDiscount();
 		discountPercentage = FourPizzaDiscount.DISCOUNT_PERCENTAGE_FOR_MAX_PRICED_PIZZA;
 	}
@@ -51,27 +48,21 @@ public class FourPizzaDiscountTest {
 	@Test
 	public void testDiscountIsAppliableWithAppropriateOrder() {
 		System.out.println("test discount is appliable with appropriate order");
-		Integer pizzaListSize = 4;
-		when(mockedOrder.getPizzas()).thenReturn(pizzaList);
-		when(pizzaList.size()).thenReturn(pizzaListSize);
+		when(mockedOrder.getPizzas()).thenReturn(getDiscountablePizzas());
 		assertTrue(discount.isAppliable(mockedOrder));
 	}
 
 	@Test
 	public void testDiscountIsNotAppliableWithNotAppropriateOrder() {
 		System.out.println("test discount is appliable with appropriate order");
-		Integer pizzaListSize = 3;
-		when(mockedOrder.getPizzas()).thenReturn(pizzaList);
-		when(pizzaList.size()).thenReturn(pizzaListSize);
+		when(mockedOrder.getPizzas()).thenReturn(getUndiscountablePizzas());
 		assertFalse(discount.isAppliable(mockedOrder));
 	}
 
 	@Test
 	public void testDiscountNotToWorkWithLessThanNeededPizzaCount() {
 		System.out.println("test discount not to work with less than needed pizza count");
-		Integer lowPizzaListSize = 3;
-		when(mockedOrder.getPizzas()).thenReturn(pizzaList);
-		when(pizzaList.size()).thenReturn(lowPizzaListSize);
+		when(mockedOrder.getPizzas()).thenReturn(getUndiscountablePizzas());
 		double expectedDiscount = 0d;
 		double eps = 1E-5;
 		double calculateDiscount = discount.calculateDiscount(mockedOrder);
@@ -81,7 +72,7 @@ public class FourPizzaDiscountTest {
 	@Test
 	public void testDiscountWithFourPizzasOfDifferentPrice() {
 		System.out.println("test discount with four pizzas of different price");
-		when(mockedOrder.getPizzas()).thenReturn(getMockedPizzas());
+		when(mockedOrder.getPizzas()).thenReturn(getDiscountablePizzas());
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
 		when(pizzaThree.getPrice()).thenReturn(75d);
@@ -96,7 +87,7 @@ public class FourPizzaDiscountTest {
 	@Test
 	public void testDiscountWithFourPizzasOfEqualPrice() {
 		System.out.println("test discount with four pizzas of equal price");
-		when(mockedOrder.getPizzas()).thenReturn(getMockedPizzas());
+		when(mockedOrder.getPizzas()).thenReturn(getDiscountablePizzas());
 		double equalPrice = 100d;
 		when(pizzaOne.getPrice()).thenReturn(equalPrice);
 		when(pizzaTwo.getPrice()).thenReturn(equalPrice);
@@ -108,16 +99,30 @@ public class FourPizzaDiscountTest {
 		assertEquals(expectedDiscount, actualDiscount, eps);
 	}
 
-	private List<Pizza> getMockedPizzas() {
-		@SuppressWarnings("serial")
-		List<Pizza> mockedPizzasList = new ArrayList<Pizza>() {
+	private Map<Pizza, Integer> getDiscountablePizzas() {
+		Map<Pizza, Integer> discountablePizzas = new HashMap<Pizza, Integer>() {
+			private static final long serialVersionUID = -8644030995186868572L;
+
 			{
-				add(pizzaOne);
-				add(pizzaTwo);
-				add(pizzaThree);
-				add(pizzaFour);
+				put(pizzaOne, 1);
+				put(pizzaTwo, 1);
+				put(pizzaThree, 1);
+				put(pizzaFour, 1);
 			}
 		};
-		return mockedPizzasList;
+		return discountablePizzas;
+	}
+
+	private Map<Pizza, Integer> getUndiscountablePizzas() {
+		Map<Pizza, Integer> undiscountablePizzas = new HashMap<Pizza, Integer>() {
+			private static final long serialVersionUID = 1023848264106081126L;
+
+			{
+				put(pizzaOne, 1);
+				put(pizzaTwo, 1);
+				put(pizzaThree, 1);
+			}
+		};
+		return undiscountablePizzas;
 	}
 }
