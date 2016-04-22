@@ -1,6 +1,7 @@
 package ua.rd.pizzaservice.domain.order;
 
-import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -17,21 +18,21 @@ public class Order {
 	private Long id;
 	private OrderState state;
 	private Customer customer;
-	private List<Pizza> pizzas;
+	private Map<Pizza, Integer> pizzas;
 
 	public Order() {
-	    id = ++idCounter;
+		id = ++idCounter;
 	}
 
-	public Order(Customer customer, List<Pizza> pizzas) {
+	public Order(Customer customer, Map<Pizza, Integer> pizzas) {
 		this(++idCounter, OrderState.NEW, customer, pizzas);
 	}
 
-	public Order(Long id, Customer customer, List<Pizza> pizzas) {
+	public Order(Long id, Customer customer, Map<Pizza, Integer> pizzas) {
 		this(id, OrderState.NEW, customer, pizzas);
 	}
 
-	public Order(Long id, OrderState state, Customer customer, List<Pizza> pizzas) {
+	public Order(Long id, OrderState state, Customer customer, Map<Pizza, Integer> pizzas) {
 		this.id = id;
 		this.state = state;
 		this.customer = customer;
@@ -54,11 +55,11 @@ public class Order {
 		this.customer = customer;
 	}
 
-	public List<Pizza> getPizzas() {
+	public Map<Pizza, Integer> getPizzas() {
 		return pizzas;
 	}
 
-	public void setPizzas(List<Pizza> pizzas) {
+	public void setPizzas(Map<Pizza, Integer> pizzas) {
 		this.pizzas = pizzas;
 	}
 
@@ -72,15 +73,14 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", customer=" + customer
-				+ ", pizzas=" + pizzas + "]";
+		return "Order [id=" + id + ", customer=" + customer + ", pizzas=" + pizzas + "]";
 	}
 
 	public Boolean canChange() {
 		return state == OrderState.NEW;
 	}
 
-	public Boolean changeOrder(List<Pizza> newPizzas) {
+	public Boolean changeOrder(Map<Pizza, Integer> newPizzas) {
 		Boolean canChange = canChange();
 		if (canChange) {
 			pizzas = newPizzas;
@@ -90,8 +90,12 @@ public class Order {
 
 	public Double calculateFullPrice() {
 		double totalPrice = 0d;
-		for (Pizza pizza : pizzas) {
-			totalPrice += pizza.getPrice();
+		for (Entry<Pizza, Integer> entrySet : pizzas.entrySet()) {
+			double curPrice = 0d;
+			double price = entrySet.getKey().getPrice();
+			Integer count = entrySet.getValue();
+			curPrice = price * count;
+			totalPrice += curPrice;
 		}
 		return totalPrice;
 	}
@@ -106,8 +110,7 @@ public class Order {
 
 	public Boolean canProceedToState(OrderState proceedToState) {
 		Boolean canProceedTo = state.canProceedTo(proceedToState);
-		System.out.println("Can proceed from " + state + " to "
-		+ proceedToState + " -> " + canProceedTo);
+		System.out.println("Can proceed from " + state + " to " + proceedToState + " -> " + canProceedTo);
 		return canProceedTo;
 	}
 }

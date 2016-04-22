@@ -5,8 +5,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,16 +56,16 @@ public class OrderTest {
 	public void testChangeOrderFromNewStateReturnsTrue() {
 		System.out.println("test change order from NEW state returns true");
 		order.setState(OrderState.NEW);
-		List<Pizza> atStartPizzas = order.getPizzas();
+		Map<Pizza, Integer> atStartPizzas = order.getPizzas();
 		@SuppressWarnings("serial")
-		List<Pizza> newPizzas = new ArrayList<Pizza>() {
+		Map<Pizza, Integer> newPizzas = new HashMap<Pizza, Integer>() {
 			{
-				add(new Pizza());
+				put(new Pizza(), 1);
 			}
 		};
 		assertNotEquals(atStartPizzas, newPizzas);
 		boolean orderChanged = order.changeOrder(newPizzas);
-		List<Pizza> afterChangePizzas = order.getPizzas();
+		Map<Pizza, Integer> afterChangePizzas = order.getPizzas();
 		assertTrue(orderChanged);
 		assertEquals(newPizzas, afterChangePizzas);
 	}
@@ -73,16 +74,16 @@ public class OrderTest {
 	public void testChangeOrderFromInProgressStateReturnsFalse() {
 		System.out.println("test change order from IN_PROGRESS state returns false");
 		order.setState(OrderState.IN_PROGRESS);
-		List<Pizza> atStartPizzas = order.getPizzas();
+		Map<Pizza, Integer> atStartPizzas = order.getPizzas();
 		@SuppressWarnings("serial")
-		List<Pizza> newPizzas = new ArrayList<Pizza>() {
+		Map<Pizza, Integer> newPizzas = new HashMap<Pizza, Integer>() {
 			{
-				add(new Pizza());
+				put(new Pizza(), 1);
 			}
 		};
 		assertNotEquals(atStartPizzas, newPizzas);
 		boolean orderChanged = order.changeOrder(newPizzas);
-		List<Pizza> afterChangePizzas = order.getPizzas();
+		Map<Pizza, Integer> afterChangePizzas = order.getPizzas();
 		assertFalse(orderChanged);
 		assertNotEquals(newPizzas, afterChangePizzas);
 	}
@@ -91,16 +92,16 @@ public class OrderTest {
 	public void testChangeOrderFromCancelledStateReturnsFalse() {
 		System.out.println("test change order from CANCELLED state returns false");
 		order.setState(OrderState.CANCELLED);
-		List<Pizza> atStartPizzas = order.getPizzas();
+		Map<Pizza, Integer> atStartPizzas = order.getPizzas();
 		@SuppressWarnings("serial")
-		List<Pizza> newPizzas = new ArrayList<Pizza>() {
+		Map<Pizza, Integer> newPizzas = new HashMap<Pizza, Integer>() {
 			{
-				add(new Pizza());
+				put(new Pizza(), 1);
 			}
 		};
 		assertNotEquals(atStartPizzas, newPizzas);
 		boolean orderChanged = order.changeOrder(newPizzas);
-		List<Pizza> afterChangePizzas = order.getPizzas();
+		Map<Pizza, Integer> afterChangePizzas = order.getPizzas();
 		assertFalse(orderChanged);
 		assertNotEquals(newPizzas, afterChangePizzas);
 	}
@@ -109,16 +110,16 @@ public class OrderTest {
 	public void testChangeOrderFromDoneStateReturnsFalse() {
 		System.out.println("test change order from DONE state returns false");
 		order.setState(OrderState.DONE);
-		List<Pizza> atStartPizzas = order.getPizzas();
+		Map<Pizza, Integer> atStartPizzas = order.getPizzas();
 		@SuppressWarnings("serial")
-		List<Pizza> newPizzas = new ArrayList<Pizza>() {
+		Map<Pizza, Integer> newPizzas = new HashMap<Pizza, Integer>() {
 			{
-				add(new Pizza());
+				put(new Pizza(), 1);
 			}
 		};
 		assertNotEquals(atStartPizzas, newPizzas);
 		boolean orderChanged = order.changeOrder(newPizzas);
-		List<Pizza> afterChangePizzas = order.getPizzas();
+		Map<Pizza, Integer> afterChangePizzas = order.getPizzas();
 		assertFalse(orderChanged);
 		assertNotEquals(newPizzas, afterChangePizzas);
 	}
@@ -126,9 +127,9 @@ public class OrderTest {
 	@Test
 	public void testCalculateFullPriceDontDependsOnOrderStatus() {
 		System.out.println("test calculate full price dont depends on order status");
-		List<Pizza> pizzaList = getDefaultPizzaList();
-		order.setPizzas(pizzaList);
-		double totalPrice = calculateTotalPrice(pizzaList);
+		Map<Pizza, Integer> pizzaMap = getDefaultPizzaMap();
+		order.setPizzas(pizzaMap);
+		double totalPrice = calculateTotalPrice(pizzaMap);
 		double eps = 1E-5;
 		OrderState[] orderStateValues = OrderState.values();
 		for (OrderState orderState : orderStateValues) {
@@ -140,9 +141,9 @@ public class OrderTest {
 	@Test
 	public void testCalculateFullPrice() {
 		System.out.println("test calculate full price");
-		List<Pizza> pizzaList = getDefaultPizzaList();
-		order.setPizzas(pizzaList);
-		double expectedTotalPrice = calculateTotalPrice(pizzaList);
+		Map<Pizza, Integer> pizzaMap = getDefaultPizzaMap();
+		order.setPizzas(pizzaMap);
+		double expectedTotalPrice = calculateTotalPrice(pizzaMap);
 		double actualTotalPrice = order.calculateFullPrice();
 		double eps = 1E-5;
 		assertEquals(expectedTotalPrice, actualTotalPrice, eps);
@@ -416,23 +417,25 @@ public class OrderTest {
 		assertEquals(toState, actualState);
 	}
 
-	private List<Pizza> getDefaultPizzaList() {
-		List<Pizza> pizzaList = new ArrayList<>();
-		Pizza pizzaOne = new Pizza(1, "Margarita", 60d, PizzaType.MEAT);
-		Pizza pizzaTwo = new Pizza(2, "SeaPizza", 90d, PizzaType.SEA);
-		Pizza pizzaThree = new Pizza(3, "Ayurveda", 80d, PizzaType.VEGETERIAN);
+	private Map<Pizza, Integer> getDefaultPizzaMap() {
+		Map<Pizza, Integer> pizzaMap = new HashMap<Pizza, Integer>() {
+			static final long serialVersionUID = 920564268758649188L;
 
-		pizzaList.add(pizzaOne);
-		pizzaList.add(pizzaTwo);
-		pizzaList.add(pizzaThree);
-
-		return pizzaList;
+			{
+				put(new Pizza(1, "Margarita", 60d, PizzaType.MEAT), 1);
+				put(new Pizza(2, "SeaPizza", 90d, PizzaType.SEA), 1);
+				put(new Pizza(3, "Ayurveda", 80d, PizzaType.VEGETERIAN), 1);
+			}
+		};
+		return pizzaMap;
 	}
 
-	private Double calculateTotalPrice(List<Pizza> pizzas) {
+	private Double calculateTotalPrice(Map<Pizza, Integer> pizzas) {
 		double result = 0d;
-		for (Pizza pizza : pizzas) {
-			result += pizza.getPrice();
+		for (Entry<Pizza, Integer> entry : pizzas.entrySet()) {
+			double price = entry.getKey().getPrice();
+			Integer count = entry.getValue();
+			result += price * count;
 		}
 		return result;
 	}
