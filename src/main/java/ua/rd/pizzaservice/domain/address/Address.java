@@ -1,13 +1,39 @@
 package ua.rd.pizzaservice.domain.address;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "address")
 public class Address {
 
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ADDR_SEQ_GEN")
+	@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "ADDR_SEQ_GEN", sequenceName = "address_sequence")
 	private Integer id;
+	
+	@Column(name = "country")
 	private String country;
+	
+	@Column(name = "city")
 	private String city;
+	
+	@Column(name = "street")
 	private String street;
+	
+	@Column(name = "building")
 	private String building;
+	
+	@Column(name = "flatNumber")
 	private String flatNumber;
+	
+	@Column(name = "zipCode")
 	private String zipCode;
 
 	public Address(Integer id, String country, String city, String street, String building, String flatNumber,
