@@ -5,6 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import ua.rd.pizzaservice.domain.address.Address;
+import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 
@@ -12,12 +13,14 @@ public class JPAWithoutSpringPizzaApp {
 
 	public static void main(String[] args) {
 		Pizza pizza = createPizza();
-		Address address = createAddress();
+		Address address = createAddressOne();
+		Customer customer = createCustomer();
 		testPersisting(pizza);
 		testPersisting(address);
+		testPersisting(customer);
 	}
 
-	private static Address createAddress() {
+	private static Address createAddressOne() {
 		Address address = new Address();
 		address.setZipCode("zipCode12345");
 		address.setCountry("Ukraine");
@@ -26,6 +29,25 @@ public class JPAWithoutSpringPizzaApp {
 		address.setBuilding("321");
 		address.setFlatNumber("23");
 		return address;
+	}
+	
+	private static Address createAddressTwo() {
+		Address address = new Address();
+		address.setZipCode("zipCode1533");
+		address.setCountry("Ukraine");
+		address.setCity("Kyiv");
+		address.setStreet("Medova");
+		address.setBuilding("12");
+		address.setFlatNumber("14");
+		return address;
+	}
+	
+	private static Customer createCustomer() {
+		Customer customer = new Customer();
+		customer.setName("Ivan");
+		customer.addAddress(createAddressOne());
+		customer.addAddress(createAddressTwo());
+		return customer;
 	}
 	
 	private static Pizza createPizza() {

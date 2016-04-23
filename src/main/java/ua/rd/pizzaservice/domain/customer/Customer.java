@@ -3,6 +3,18 @@ package ua.rd.pizzaservice.domain.customer;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -10,12 +22,21 @@ import ua.rd.pizzaservice.domain.address.Address;
 
 @Component
 @Scope("prototype")
+@Entity
+@Table(name = "customer")
 public class Customer {
 
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUST_SEQ_GEN")
+	@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "CUST_SEQ_GEN", sequenceName = "customer_sequence")
 	private Integer id;
 
+	@Column(name = "name")
 	private String name;
 
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	@JoinTable(name = "customer_address", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "address_id"))
 	private Set<Address> addresses;
 
 	public Customer() {
@@ -54,7 +75,7 @@ public class Customer {
 	public Boolean addAddress(Address address) {
 		return addresses.add(address);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", name=" + name + ", addresses=" + addresses + "]";
