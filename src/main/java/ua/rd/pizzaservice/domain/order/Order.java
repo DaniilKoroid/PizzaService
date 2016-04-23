@@ -13,23 +13,12 @@ import ua.rd.pizzaservice.domain.pizza.Pizza;
 @Scope("prototype")
 public class Order {
 
-	private static Long idCounter = 0L;
-
 	private Long id;
 	private OrderState state;
 	private Customer customer;
 	private Map<Pizza, Integer> pizzas;
 
 	public Order() {
-		id = ++idCounter;
-	}
-
-	public Order(Customer customer, Map<Pizza, Integer> pizzas) {
-		this(++idCounter, OrderState.NEW, customer, pizzas);
-	}
-
-	public Order(Long id, Customer customer, Map<Pizza, Integer> pizzas) {
-		this(id, OrderState.NEW, customer, pizzas);
 	}
 
 	public Order(Long id, OrderState state, Customer customer, Map<Pizza, Integer> pizzas) {
