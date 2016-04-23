@@ -1,5 +1,15 @@
 package ua.rd.pizzaservice.domain.accumulationcard;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "accumulation_card")
 public class AccumulationCard {
 
 	private static final double DISCOUNT_PRECENTAGE = 0.1d;
@@ -7,14 +17,19 @@ public class AccumulationCard {
 	private static final double DEFAULT_AMOUNT = 0d;
 	private static final boolean DEFAULT_IS_ACTIVATED = false;
 
-	private static int idCounter = 0;
-
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACC_CARD_SEQ_GEN")
+	@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "ACC_CARD_SEQ_GEN", sequenceName = "accumulation_card_sequence")
 	private Integer id;
+	
+	@Column(name = "amount")
 	private Double amount;
+	
+	@Column(name = "is_activated")
 	private Boolean isActivated;
 
 	public AccumulationCard() {
-		id = ++idCounter;
 		amount = DEFAULT_AMOUNT;
 		isActivated = DEFAULT_IS_ACTIVATED;
 	}

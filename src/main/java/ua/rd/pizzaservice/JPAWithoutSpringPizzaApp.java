@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
@@ -12,14 +13,35 @@ import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 public class JPAWithoutSpringPizzaApp {
 
 	public static void main(String[] args) {
+		persistActivatedAccumulationCard();
+		persistNotActivatedAccumulationCard();
+	}
+	
+	private static void persistPizza() {
 		Pizza pizza = createPizza();
-		Address address = createAddressOne();
-		Customer customer = createCustomer();
 		testPersisting(pizza);
+	}
+	
+	private static void persistAddress() {
+		Address address = createAddressOne();
 		testPersisting(address);
-		testPersisting(customer);
 	}
 
+	private static void persistCustomer() {
+		Customer customer = createCustomer();
+		testPersisting(customer);
+	}
+	
+	private static void persistActivatedAccumulationCard() {
+		AccumulationCard card = createActivatedAccumulationCard();
+		testPersisting(card);
+	}
+	
+	private static void persistNotActivatedAccumulationCard() {
+		AccumulationCard card = createNotActivatedAccumulationCard();
+		testPersisting(card);
+	}
+	
 	private static Address createAddressOne() {
 		Address address = new Address();
 		address.setZipCode("zipCode12345");
@@ -56,6 +78,20 @@ public class JPAWithoutSpringPizzaApp {
 		pizza.setPrice(60.0d);
 		pizza.setType(PizzaType.VEGETERIAN);
 		return pizza;
+	}
+	
+	private static AccumulationCard createActivatedAccumulationCard() {
+		AccumulationCard card = new AccumulationCard();
+		card.setAmount(111.1d);
+		card.setIsActivated(true);
+		return card;
+	}
+	
+	private static AccumulationCard createNotActivatedAccumulationCard() {
+		AccumulationCard card = new AccumulationCard();
+		card.setAmount(0d);
+		card.setIsActivated(false);
+		return card;
 	}
 	
 	private static void testPersisting(Object obj) {
