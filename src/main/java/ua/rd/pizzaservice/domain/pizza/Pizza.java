@@ -1,5 +1,17 @@
 package ua.rd.pizzaservice.domain.pizza;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "pizza")
 public class Pizza {
 
 	public enum PizzaType {
@@ -9,9 +21,20 @@ public class Pizza {
 		;
 	}
 
+	@Id
+	@Column(name = "id")
+	@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "PIZZA_SEQ_GEN", sequenceName = "pizza_sequence")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PIZZA_SEQ_GEN")
 	private Integer id;
+	
+	@Column(name = "name")
 	private String name;
+	
+	@Column(name = "price")
 	private Double price;
+	
+	@Column(name = "type")
+	@Enumerated(EnumType.ORDINAL)
 	private PizzaType type;
 
 	public Pizza() {
