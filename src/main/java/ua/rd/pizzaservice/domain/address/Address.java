@@ -2,6 +2,7 @@ package ua.rd.pizzaservice.domain.address;
 
 public class Address {
 
+	private Integer id;
 	private String country;
 	private String city;
 	private String street;
@@ -9,8 +10,9 @@ public class Address {
 	private String flatNumber;
 	private String zipCode;
 
-	public Address(String country, String city, String street, String building, String flatNumber, String zipCode) {
-		super();
+	public Address(Integer id, String country, String city, String street, String building, String flatNumber,
+			String zipCode) {
+		this.id = id;
 		this.country = country;
 		this.city = city;
 		this.street = street;
@@ -20,7 +22,14 @@ public class Address {
 	}
 
 	public Address() {
-		super();
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getCountry() {
@@ -70,11 +79,11 @@ public class Address {
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Address [country=" + country + ", city=" + city + ", street=" + street + ", building=" + building
-				+ ", flatNumber=" + flatNumber + ", zipCode=" + zipCode + "]";
+		return "Address [id=" + id + ", country=" + country + ", city=" + city + ", street=" + street + ", building="
+				+ building + ", flatNumber=" + flatNumber + ", zipCode=" + zipCode + "]";
 	}
 
 	@Override
@@ -85,6 +94,7 @@ public class Address {
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + ((country == null) ? 0 : country.hashCode());
 		result = prime * result + ((flatNumber == null) ? 0 : flatNumber.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((street == null) ? 0 : street.hashCode());
 		result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
 		return result;
@@ -130,6 +140,13 @@ public class Address {
 		} else if (!flatNumber.equals(other.flatNumber)) {
 			return false;
 		}
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
+			return false;
+		}
 		if (street == null) {
 			if (other.street != null) {
 				return false;
@@ -146,5 +163,4 @@ public class Address {
 		}
 		return true;
 	}
-
 }
