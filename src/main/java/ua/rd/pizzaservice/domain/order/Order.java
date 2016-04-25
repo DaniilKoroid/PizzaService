@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -92,10 +91,10 @@ public class Order {
 	public void setState(OrderState state) {
 		this.state = state;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", customer=" + customer + ", pizzas=" + pizzas + "]";
+		return "Order [id=" + id + ", state=" + state + ", customer=" + customer + ", pizzas=" + pizzas + "]";
 	}
 
 	public Boolean canChange() {
