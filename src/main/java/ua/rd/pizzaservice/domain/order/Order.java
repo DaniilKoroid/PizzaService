@@ -3,6 +3,23 @@ package ua.rd.pizzaservice.domain.order;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +28,28 @@ import ua.rd.pizzaservice.domain.pizza.Pizza;
 
 @Component
 @Scope("prototype")
+@Entity
+@Table(name = "order_table")
 public class Order {
 
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDER_SEQ_GEN")
+	@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "ORDER_SEQ_GEN", sequenceName = "order_sequence")
 	private Long id;
+	
+	@Column(name = "order_state")
+	@Enumerated(EnumType.ORDINAL)
 	private OrderState state;
+	
+	@ManyToOne(cascade = {CascadeType.PERSIST}, targetEntity = Customer.class)
+	@JoinColumn(name = "customer_id", insertable = false, updatable = false)
 	private Customer customer;
+	
+	@OneToMany(targetEntity = Pizza.class, cascade = {CascadeType.MERGE})
+	@ElementCollection
+	@CollectionTable(name = "orders_pizzas")
+	@MapKeyJoinColumn(name = "count_pizzas")
 	private Map<Pizza, Integer> pizzas;
 
 	public Order() {
