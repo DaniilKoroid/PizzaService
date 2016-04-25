@@ -34,4 +34,28 @@ public class InMemPizzaRepository implements PizzaRepository {
         return result;
     }
 
+	@Override
+	public void add(Pizza pizza) {
+		if (pizza != null) {
+			pizzas.add(pizza);
+		}
+	}
+
+	@Override
+	public List<Pizza> getAllPizzas() {
+		return new ArrayList<>(pizzas);
+	}
+
+	@Override
+	public void update(Pizza pizza) {
+		Pizza pizzaToUpdate = getPizzaByID(pizza.getId());
+		delete(pizzaToUpdate);
+		add(pizza);
+	}
+
+	@Override
+	public void delete(Pizza pizza) {
+		pizzas.remove(pizza);
+	}
+
 }
