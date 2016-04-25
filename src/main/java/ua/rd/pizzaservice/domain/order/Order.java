@@ -46,7 +46,6 @@ public class Order {
 	@JoinColumn(name = "customer_id", insertable = false, updatable = false)
 	private Customer customer;
 	
-	@OneToMany(targetEntity = Pizza.class, cascade = {CascadeType.MERGE})
 	@ElementCollection
 	@CollectionTable(name = "orders_pizzas")
 	@MapKeyJoinColumn(name = "count_pizzas")
