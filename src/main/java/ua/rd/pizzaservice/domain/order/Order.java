@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 
@@ -48,6 +49,10 @@ public class Order {
 	@Column(name = "delivery_date")
 	private LocalDateTime deliveryDate;
 	
+	@ManyToOne(cascade = {CascadeType.PERSIST}, targetEntity = Address.class)
+	@JoinColumn(name = "address_id")
+	private Address address;
+	
 	@ManyToOne(cascade = {CascadeType.PERSIST}, targetEntity = Customer.class)
 	@JoinColumn(name = "customer_id", insertable = false, updatable = false)
 	private Customer customer;
@@ -60,12 +65,13 @@ public class Order {
 	public Order() {
 	}
 
-	public Order(Long id, OrderState state, LocalDateTime creationDate, LocalDateTime deliveryDate, Customer customer,
-			Map<Pizza, Integer> pizzas) {
+	public Order(Long id, OrderState state, LocalDateTime creationDate, LocalDateTime deliveryDate, Address address,
+			Customer customer, Map<Pizza, Integer> pizzas) {
 		this.id = id;
 		this.state = state;
 		this.creationDate = creationDate;
 		this.deliveryDate = deliveryDate;
+		this.address = address;
 		this.customer = customer;
 		this.pizzas = pizzas;
 	}
@@ -118,10 +124,18 @@ public class Order {
 		this.deliveryDate = deliveryDate;
 	}
 
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
 	@Override
 	public String toString() {
 		return "Order [id=" + id + ", state=" + state + ", creationDate=" + creationDate + ", deliveryDate="
-				+ deliveryDate + ", customer=" + customer + ", pizzas=" + pizzas + "]";
+				+ deliveryDate + ", address=" + address + ", customer=" + customer + ", pizzas=" + pizzas + "]";
 	}
 
 	public Boolean canChange() {

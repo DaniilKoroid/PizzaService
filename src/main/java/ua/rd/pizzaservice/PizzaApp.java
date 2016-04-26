@@ -32,6 +32,7 @@ public class PizzaApp {
 		OrderService orderService = appContext.getBean(OrderService.class);
 		Integer[] pizzasId = new Integer[] { 1, 2, 3 };
 		order = orderService.placeNewOrder(customer, pizzasId);
+		order.setAddress(customer.getAddresses().iterator().next());
 		System.out.println("Order: " + order);
 
 		try {
