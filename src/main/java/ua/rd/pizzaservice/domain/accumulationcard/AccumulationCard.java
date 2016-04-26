@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Table(name = "accumulation_card")
 public class AccumulationCard {
 
-	private static final double DISCOUNT_PRECENTAGE = 0.1d;
+	private static final double DISCOUNT_PERCENTAGE = 0.1d;
 	private static final double MAX_TOTAL_PRICE_DISCOUNTED_PERCENT = 0.3d;
 	private static final double DEFAULT_AMOUNT = 0d;
 	private static final boolean DEFAULT_IS_ACTIVATED = false;
@@ -67,7 +67,7 @@ public class AccumulationCard {
 	public Double calculateDiscount(Double totalPrice) {
 		double discountAmount = 0d;
 		discountAmount = Math.min(
-				amount * DISCOUNT_PRECENTAGE,
+				amount * DISCOUNT_PERCENTAGE,
 				totalPrice * MAX_TOTAL_PRICE_DISCOUNTED_PERCENT);
 		return discountAmount;
 	}
