@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.repository.pizza.mysql;
+package ua.rd.pizzaservice.repository.pizza;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
-import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 
 @Repository
 public class MySQLPizzaRepository implements PizzaRepository {
