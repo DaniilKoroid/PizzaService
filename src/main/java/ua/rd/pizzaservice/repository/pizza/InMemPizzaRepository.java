@@ -35,7 +35,7 @@ public class InMemPizzaRepository implements PizzaRepository {
     }
 
 	@Override
-	public void add(Pizza pizza) {
+	public void create(Pizza pizza) {
 		if (pizza != null) {
 			pizzas.add(pizza);
 		}
@@ -50,7 +50,7 @@ public class InMemPizzaRepository implements PizzaRepository {
 	public void update(Pizza pizza) {
 		Pizza pizzaToUpdate = getPizzaByID(pizza.getId());
 		delete(pizzaToUpdate);
-		add(pizza);
+		create(pizza);
 	}
 
 	@Override

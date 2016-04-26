@@ -28,7 +28,7 @@ public class MySQLPizzaRepository implements PizzaRepository {
 	}
 	
 	@Override
-	public void add(Pizza pizza) {
+	public void create(Pizza pizza) {
 		String sqlAdd = "INSERT INTO pizza (name, price, type) VALUES (?, ?, ?);";
 		jdbcTemplate.update(sqlAdd, pizza.getName(), pizza.getPrice(), pizza.getType().ordinal());
 	}

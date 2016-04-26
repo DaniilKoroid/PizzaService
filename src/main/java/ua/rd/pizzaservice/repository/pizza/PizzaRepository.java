@@ -6,7 +6,7 @@ import ua.rd.pizzaservice.domain.pizza.Pizza;
 
 public interface PizzaRepository {
 
-	void add(Pizza pizza);
+	void create(Pizza pizza);
 
 	Pizza getPizzaByID(Integer id);
 
