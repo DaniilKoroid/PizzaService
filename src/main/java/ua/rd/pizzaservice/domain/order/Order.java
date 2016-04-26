@@ -1,5 +1,6 @@
 package ua.rd.pizzaservice.domain.order;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -41,6 +42,12 @@ public class Order {
 	@Enumerated(EnumType.ORDINAL)
 	private OrderState state;
 	
+	@Column(name = "creation_date")
+	private LocalDateTime creationDate;
+	
+	@Column(name = "delivery_date")
+	private LocalDateTime deliveryDate;
+	
 	@ManyToOne(cascade = {CascadeType.PERSIST}, targetEntity = Customer.class)
 	@JoinColumn(name = "customer_id", insertable = false, updatable = false)
 	private Customer customer;
@@ -53,9 +60,12 @@ public class Order {
 	public Order() {
 	}
 
-	public Order(Long id, OrderState state, Customer customer, Map<Pizza, Integer> pizzas) {
+	public Order(Long id, OrderState state, LocalDateTime creationDate, LocalDateTime deliveryDate, Customer customer,
+			Map<Pizza, Integer> pizzas) {
 		this.id = id;
 		this.state = state;
+		this.creationDate = creationDate;
+		this.deliveryDate = deliveryDate;
 		this.customer = customer;
 		this.pizzas = pizzas;
 	}
@@ -92,9 +102,26 @@ public class Order {
 		this.state = state;
 	}
 	
+	public LocalDateTime getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(LocalDateTime creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public LocalDateTime getDeliveryDate() {
+		return deliveryDate;
+	}
+
+	public void setDeliveryDate(LocalDateTime deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
+
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", state=" + state + ", customer=" + customer + ", pizzas=" + pizzas + "]";
+		return "Order [id=" + id + ", state=" + state + ", creationDate=" + creationDate + ", deliveryDate="
+				+ deliveryDate + ", customer=" + customer + ", pizzas=" + pizzas + "]";
 	}
 
 	public Boolean canChange() {

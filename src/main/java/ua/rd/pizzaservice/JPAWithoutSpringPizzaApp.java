@@ -21,12 +21,12 @@ import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 public class JPAWithoutSpringPizzaApp {
 
 	public static void main(String[] args) {
-		// persistPizzaMargarita();
-		// persistPizzaPepperoni();
-		// persistAddress();
-		// persistCustomer();
-		// persistActivatedAccumulationCard();
-		// persistNotActivatedAccumulationCard();
+//		persistPizzaMargarita();
+//		persistPizzaPepperoni();
+//		persistAddress();
+//		persistCustomer();
+//		persistActivatedAccumulationCard();
+//		persistNotActivatedAccumulationCard();
 //		persistOrder();
 //		persistPizzas();
 //		persistAddresses();
@@ -40,7 +40,7 @@ public class JPAWithoutSpringPizzaApp {
 
 		Customer customerOne = createCustomerOne();
 		Customer customerTwo = createCustomerTwo();
-		
+
 		try {
 			emf = Persistence.createEntityManagerFactory(persistenceUnitName);
 			em = emf.createEntityManager();
@@ -54,7 +54,7 @@ public class JPAWithoutSpringPizzaApp {
 					add(addr2);
 				}
 			});
-//			System.out.println(customerOne.getAddresses());
+			// System.out.println(customerOne.getAddresses());
 			customerTwo.setAddresses(new HashSet<Address>() {
 				{
 					add(addr2);
@@ -71,24 +71,24 @@ public class JPAWithoutSpringPizzaApp {
 			}
 		}
 	}
-	
+
 	private static void persistPizzas() {
 		List<Pizza> pizzas = new ArrayList<>();
 		pizzas.add(new Pizza(1, "Margarita", 60d, PizzaType.MEAT));
-        pizzas.add(new Pizza(2, "SeaPizza", 90d, PizzaType.SEA));
-        pizzas.add(new Pizza(3, "Ayurveda", 80d, PizzaType.VEGETERIAN));
-        
-        for (Pizza pizza : pizzas) {
-        	pizza.setId(null);
+		pizzas.add(new Pizza(2, "SeaPizza", 90d, PizzaType.SEA));
+		pizzas.add(new Pizza(3, "Ayurveda", 80d, PizzaType.VEGETERIAN));
+
+		for (Pizza pizza : pizzas) {
+			pizza.setId(null);
 			testPersisting(pizza);
 		}
 	}
-	
+
 	private static void persistAddresses() {
 		testPersisting(createAddressOne());
 		testPersisting(createAddressTwo());
 	}
-	
+
 	private static void persistPizzaMargarita() {
 		Pizza pizza = createPizzaMargarita();
 		testPersisting(pizza);
@@ -153,7 +153,7 @@ public class JPAWithoutSpringPizzaApp {
 		customer.addAddress(createAddressTwo());
 		return customer;
 	}
-	
+
 	private static Customer createCustomerTwo() {
 		Customer customer = new Customer();
 		customer.setName("Vasyl");
@@ -243,15 +243,15 @@ public class JPAWithoutSpringPizzaApp {
 	private static void persistObject(EntityManager em, Object obj) {
 		try {
 			em.getTransaction().begin();
-//			if (obj instanceof Order) {
-//				Order order = (Order) obj;
-//				for (Pizza pizza : order.getPizzas().keySet()) {
-//					em.persist(pizza);
-//				}
-//				em.persist(order);
-//			} else {
-//				em.persist(obj);
-//			}
+			// if (obj instanceof Order) {
+			// Order order = (Order) obj;
+			// for (Pizza pizza : order.getPizzas().keySet()) {
+			// em.persist(pizza);
+			// }
+			// em.persist(order);
+			// } else {
+			// em.persist(obj);
+			// }
 			em.persist(obj);
 			em.getTransaction().commit();
 		} catch (Throwable e) {

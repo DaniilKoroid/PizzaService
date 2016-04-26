@@ -36,6 +36,8 @@ public class PizzaApp {
 
 		try {
 			em.persist(order);
+			Order foundOrder = em.find(Order.class, order.getId());
+			System.out.println("Found order: " + foundOrder);
 		} catch (Throwable e) {
 			System.out.println(e.toString());
 		} finally {

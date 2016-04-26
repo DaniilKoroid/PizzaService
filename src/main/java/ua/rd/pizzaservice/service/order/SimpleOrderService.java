@@ -1,5 +1,6 @@
 package ua.rd.pizzaservice.service.order;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,8 +55,11 @@ public class SimpleOrderService implements OrderService {
 
 	private Order createOrder(Customer customer, Map<Pizza, Integer> pizzas) {
 		Order newOrder = createOrder();
+		newOrder.setState(OrderState.NEW);
 		newOrder.setCustomer(customer);
 		newOrder.setPizzas(pizzas);
+		newOrder.setCreationDate(LocalDateTime.now());
+		newOrder.setDeliveryDate(LocalDateTime.now().plusMinutes(30));
 		return newOrder;
 	}
 
