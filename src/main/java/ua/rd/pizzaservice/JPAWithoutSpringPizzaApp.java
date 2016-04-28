@@ -1,10 +1,9 @@
 package ua.rd.pizzaservice;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -17,278 +16,288 @@ import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.order.OrderState;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
+import ua.rd.pizzaservice.repository.accumulationcard.AccumulationCardRepository;
+import ua.rd.pizzaservice.repository.accumulationcard.GenericDaoJPAAccumulationCardRepository;
+import ua.rd.pizzaservice.repository.address.AddressRepository;
+import ua.rd.pizzaservice.repository.address.GenericDaoJPAAddressRepository;
+import ua.rd.pizzaservice.repository.customer.CustomerRepository;
+import ua.rd.pizzaservice.repository.customer.GenericDaoJPACustomerRepository;
+import ua.rd.pizzaservice.repository.order.GenericDaoJPAOrderRepository;
+import ua.rd.pizzaservice.repository.order.OrderRepository;
+import ua.rd.pizzaservice.repository.pizza.GenericDaoJPAPizzaRepository;
+import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 
 public class JPAWithoutSpringPizzaApp {
 
 	public static void main(String[] args) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa_mysql");
+		testPizzaRepository(emf);
+		testAddressRepository(emf);
+		testCustomerRepository(emf);
+		testAccumulationCardRepository(emf);
+		testOrderRepository(emf);
+		emf.close();
+	}
 
-		EntityManagerFactory emf = null;
+	private static void testPizzaRepository(EntityManagerFactory emf) {
+		PizzaRepository pizzaRep = new GenericDaoJPAPizzaRepository();
+
+		Pizza pizza = new Pizza();
+		pizza.setName("Allegro");
+		pizza.setPrice(142.2d);
+		pizza.setType(PizzaType.MEAT);
+		System.out.println("Pizza before persisting: " + pizza);
+		Pizza createdPizza = pizzaRep.create(pizza);
+		Integer createdPizzaId = createdPizza.getId();
+		System.out.println("Created pizza: " + createdPizza);
+
 		EntityManager em = null;
+		em = emf.createEntityManager();
+		Pizza findCreatedPizza = em.find(Pizza.class, createdPizzaId);
+		System.out.println("Found created pizza by EntityManager: " + findCreatedPizza);
+		em.close();
 
-		try {
+		Pizza pizzaByID = pizzaRep.getPizzaByID(createdPizzaId);
+		System.out.println("Found created pizza by rep: " + pizzaByID);
 
-			emf = Persistence.createEntityManagerFactory("jpa_mysql");
-			em = emf.createEntityManager();
+		pizza.setName("New pizza name123777");
+		System.out.println("Pizza before update: " + pizza);
+		Pizza updatedPizza = pizzaRep.update(pizza);
+		System.out.println("Updated pizza by repository: " + updatedPizza);
 
-			Pizza pizza = new Pizza();
-			pizza.setName("Newzza");
-			pizza.setPrice(123.1d);
-			pizza.setType(PizzaType.SEA);
+		em = emf.createEntityManager();
+		Pizza findUpdatedPizza = em.find(Pizza.class, createdPizzaId);
+		System.out.println("Found updated pizza by EntityManager: " + findUpdatedPizza);
+		em.close();
 
-			em.getTransaction().begin();
-			em.persist(pizza);
-			em.getTransaction().commit();
-			
-			Order find = em.find(Order.class, 1L);
-			System.out.println("order found: " + find);
-		} finally {
-			if (em != null) {
-				em.close();
-			}
-			if (emf != null) {
-				emf.close();
-			}
-		}
-
-		// persistPizzaMargarita();
-		// persistPizzaPepperoni();
-		// persistAddress();
-		// persistCustomer();
-		// persistActivatedAccumulationCard();
-		// persistNotActivatedAccumulationCard();
-//		 persistOrder();
-		// persistPizzas();
-		// persistAddresses();
-		// persistCustomers();
+		pizzaRep.delete(pizza);
+		System.out.println("Pizza after deleting by repository: " + pizza);
+		em = emf.createEntityManager();
+		Pizza findDeletedPizza = em.find(Pizza.class, createdPizzaId);
+		System.out.println("Found deleted pizza by EntityManager: " + findDeletedPizza);
+		em.close();
 	}
 
-	private static void persistCustomers() {
-		String persistenceUnitName = "jpa_mysql";
-		EntityManagerFactory emf = null;
+	private static void testAddressRepository(EntityManagerFactory emf) {
+		AddressRepository addrRep = new GenericDaoJPAAddressRepository();
+
+		Address addr = new Address();
+		addr.setCountry("Ukraine");
+		addr.setCity("Kyiv");
+		addr.setStreet("Polyova");
+		addr.setBuilding("14");
+		addr.setFlatNumber("5");
+		addr.setZipCode("1000");
+
+		System.out.println("Address before persisting: " + addr);
+		Address createdAddr = addrRep.create(addr);
+		Integer createdAddressId = createdAddr.getId();
+		System.out.println("Created address: " + createdAddr);
+
 		EntityManager em = null;
+		em = emf.createEntityManager();
+		Address findCreatedAddress = em.find(Address.class, createdAddressId);
+		System.out.println("Found created address by EntityManager: " + findCreatedAddress);
+		em.close();
 
-		Customer customerOne = createCustomerOne();
-		Customer customerTwo = createCustomerTwo();
+		Address addrByID = addrRep.read(createdAddressId);
+		System.out.println("Found created address by addrRep: " + addrByID);
 
-		try {
-			emf = Persistence.createEntityManagerFactory(persistenceUnitName);
-			em = emf.createEntityManager();
-			Address addr1 = em.find(Address.class, 1);
-			Address addr2 = em.find(Address.class, 2);
-			System.out.println("1: " + addr1);
-			System.out.println("2: " + addr2);
-			customerOne.setAddresses(new HashSet<Address>() {
-				{
-					add(addr1);
-					add(addr2);
-				}
-			});
-			// System.out.println(customerOne.getAddresses());
-			customerTwo.setAddresses(new HashSet<Address>() {
-				{
-					add(addr2);
-				}
-			});
-			persistObject(em, customerOne);
-			persistObject(em, customerTwo);
-		} finally {
-			if (em != null) {
-				em.close();
-			}
-			if (emf != null) {
-				emf.close();
-			}
-		}
+		addr.setCity("Kharkiv");
+		System.out.println("Address before update: " + addr);
+		Address updatedAddress = addrRep.update(addr);
+		System.out.println("Updated address by repository: " + updatedAddress);
+
+		em = emf.createEntityManager();
+		Address findUpdatedAddress = em.find(Address.class, createdAddressId);
+		System.out.println("Found updated address by EntityManager: " + findUpdatedAddress);
+		em.close();
+
+		addrRep.delete(addr);
+		System.out.println("Address after deleting by repository: " + addr);
+		em = emf.createEntityManager();
+		Address findDeletedAddress = em.find(Address.class, createdAddressId);
+		System.out.println("Found deleted address by EntityManager: " + findDeletedAddress);
+		em.close();
 	}
 
-	private static void persistPizzas() {
-		List<Pizza> pizzas = new ArrayList<>();
-		pizzas.add(new Pizza(1, "Margarita", 60d, PizzaType.MEAT));
-		pizzas.add(new Pizza(2, "SeaPizza", 90d, PizzaType.SEA));
-		pizzas.add(new Pizza(3, "Ayurveda", 80d, PizzaType.VEGETERIAN));
+	private static void testCustomerRepository(EntityManagerFactory emf) {
+		Class<Customer> clazz = Customer.class;
+		String entityName = "customer";
+		CustomerRepository custRep = new GenericDaoJPACustomerRepository();
 
-		for (Pizza pizza : pizzas) {
-			pizza.setId(null);
-			testPersisting(pizza);
-		}
-	}
-
-	private static void persistAddresses() {
-		testPersisting(createAddressOne());
-		testPersisting(createAddressTwo());
-	}
-
-	private static void persistPizzaMargarita() {
-		Pizza pizza = createPizzaMargarita();
-		testPersisting(pizza);
-	}
-
-	private static void persistPizzaPepperoni() {
-		Pizza pizza = createPizzaPepperoni();
-		testPersisting(pizza);
-	}
-
-	private static void persistAddress() {
-		Address address = createAddressOne();
-		testPersisting(address);
-	}
-
-	private static void persistCustomer() {
-		Customer customer = createCustomerOne();
-		testPersisting(customer);
-	}
-
-	private static void persistActivatedAccumulationCard() {
-		AccumulationCard card = createActivatedAccumulationCard();
-		testPersisting(card);
-	}
-
-	private static void persistNotActivatedAccumulationCard() {
-		AccumulationCard card = createNotActivatedAccumulationCard();
-		testPersisting(card);
-	}
-
-	private static void persistOrder() {
-		Order order = createOrder();
-		testPersisting(order);
-	}
-
-	private static Address createAddressOne() {
-		Address address = new Address();
-		address.setZipCode("zipCode12345");
-		address.setCountry("Ukraine");
-		address.setCity("Kyiv");
-		address.setStreet("Lypova");
-		address.setBuilding("321");
-		address.setFlatNumber("23");
-		return address;
-	}
-
-	private static Address createAddressTwo() {
-		Address address = new Address();
-		address.setZipCode("zipCode1533");
-		address.setCountry("Ukraine");
-		address.setCity("Kyiv");
-		address.setStreet("Medova");
-		address.setBuilding("12");
-		address.setFlatNumber("14");
-		return address;
-	}
-
-	private static Customer createCustomerOne() {
 		Customer customer = new Customer();
 		customer.setName("Ivan");
-		customer.addAddress(createAddressOne());
-		customer.addAddress(createAddressTwo());
-		return customer;
-	}
+		Address address = new Address();
+		address.setCountry("Ukraine");
+		customer.addAddress(address);
+		System.out.println(entityName + " before persisting: " + customer);
+		Customer createdCust = custRep.create(customer);
+		Integer createdCustomerId = createdCust.getId();
+		System.out.println("Created " + entityName + ": " + createdCust);
 
-	private static Customer createCustomerTwo() {
-		Customer customer = new Customer();
-		customer.setName("Vasyl");
-		customer.addAddress(createAddressTwo());
-		return customer;
-	}
-
-	private static Pizza createPizzaMargarita() {
-		Pizza pizza = new Pizza();
-		pizza.setName("Margarita");
-		pizza.setPrice(60.0d);
-		pizza.setType(PizzaType.VEGETERIAN);
-		return pizza;
-	}
-
-	private static Pizza createPizzaPepperoni() {
-		Pizza pizza = new Pizza();
-		pizza.setName("Pepperoni");
-		pizza.setPrice(75.0d);
-		pizza.setType(PizzaType.MEAT);
-		return pizza;
-	}
-
-	private static AccumulationCard createActivatedAccumulationCard() {
-		AccumulationCard card = new AccumulationCard();
-		card.setAmount(111.1d);
-		card.setIsActivated(true);
-		return card;
-	}
-
-	private static AccumulationCard createNotActivatedAccumulationCard() {
-		AccumulationCard card = new AccumulationCard();
-		card.setAmount(0d);
-		card.setIsActivated(false);
-		return card;
-	}
-
-	private static Order createOrder() {
-		Order order = new Order();
-		order.setCustomer(createCustomerOne());
-		order.setState(OrderState.IN_PROGRESS);
-		Map<Pizza, Integer> pizzaMap = new HashMap<Pizza, Integer>() {
-			private static final long serialVersionUID = -4235002947737145084L;
-			{
-				put(createPizzaMargarita(), Integer.valueOf(3));
-				put(createPizzaPepperoni(), Integer.valueOf(2));
-			}
-		};
-		order.setPizzas(pizzaMap);
-		return order;
-	}
-
-	private static void testPersisting(Object obj) {
-		String persistenceUnitName = "jpa_mysql";
-		EntityManagerFactory emf = null;
 		EntityManager em = null;
+		em = emf.createEntityManager();
+		Customer findCreatedCustomer = em.find(clazz, createdCustomerId);
+		System.out.println("Found created " + entityName + " by EntityManager: " + findCreatedCustomer);
+		em.close();
 
-		try {
-			emf = Persistence.createEntityManagerFactory(persistenceUnitName);
-			em = emf.createEntityManager();
-			persistObject(em, obj);
-		} catch (Throwable e) {
-			while (e != null) {
-				System.out.println("Exception: " + e.getClass().getName());
-				System.out.println("Msg: " + e.getLocalizedMessage());
-				System.out.print("Stacktrace: ");
-				for (StackTraceElement el : e.getStackTrace()) {
-					System.out.println("-> " + el);
-				}
-				if (e.getCause() != null) {
-					System.out.println("Caused by: " + e.getCause().getClass().getName());
-					e = e.getCause();
-				} else {
-					e = null;
-				}
-			}
-		} finally {
-			if (em != null) {
-				em.close();
-			}
-			if (emf != null) {
-				emf.close();
-			}
-		}
+		Customer customerByID = custRep.read(createdCustomerId);
+		System.out.println("Found created " + entityName + " by customerRep: " + customerByID);
+
+		customer.setName("Newvan");
+		System.out.println(entityName + " before update: " + customer);
+		Customer updatedCustomer = custRep.update(customer);
+		System.out.println("Updated " + entityName + " by repository: " + updatedCustomer);
+
+		em = emf.createEntityManager();
+		Customer findUpdatedCustomer = em.find(clazz, createdCustomerId);
+		System.out.println("Found updated " + entityName + " by EntityManager: " + findUpdatedCustomer);
+		em.close();
+
+		custRep.delete(customer);
+		System.out.println(entityName + " after deleting by repository: " + customer);
+		em = emf.createEntityManager();
+		Customer findDeletedCustomer = em.find(clazz, createdCustomerId);
+		System.out.println("Found deleted " + entityName + " by EntityManager: " + findDeletedCustomer);
+		em.close();
 	}
 
-	private static void persistObject(EntityManager em, Object obj) {
-		try {
-			em.getTransaction().begin();
-			 if (obj instanceof Order) {
-			 Order order = (Order) obj;
-			 for (Pizza pizza : order.getPizzas().keySet()) {
-			 em.persist(pizza);
-			 }
-			 em.persist(order);
-			 } else {
-			 em.persist(obj);
-			 }
-//			em.persist(obj);
-			em.getTransaction().commit();
-		} catch (Throwable e) {
-			if (em.getTransaction().isActive()) {
-				em.getTransaction().rollback();
-			}
-			throw new RuntimeException(e);
-		}
+	private static void testAccumulationCardRepository(EntityManagerFactory emf) {
+		Class<AccumulationCard> clazz = AccumulationCard.class;
+		String entityName = "accumulation card";
+		AccumulationCardRepository cardRep = new GenericDaoJPAAccumulationCardRepository();
+
+		EntityManager entityManager = emf.createEntityManager();
+		Customer customer = entityManager.find(Customer.class, 1);
+		entityManager.close();
+
+		AccumulationCard card = new AccumulationCard();
+		card.setAmount(100.0d);
+		card.setIsActivated(true);
+		card.setOwner(customer);
+		System.out.println(entityName + " before persisting: " + card);
+		AccumulationCard createdCard = cardRep.create(card);
+		Integer createdAccumulationCardId = createdCard.getId();
+		System.out.println("Created " + entityName + ": " + createdCard);
+
+		EntityManager em = null;
+		em = emf.createEntityManager();
+		AccumulationCard findCreatedAccumulationCard = em.find(clazz, createdAccumulationCardId);
+		System.out.println("Found created " + entityName + " by EntityManager: " + findCreatedAccumulationCard);
+		em.close();
+
+		AccumulationCard accumulationCardByID = cardRep.read(createdAccumulationCardId);
+		System.out.println("Found created " + entityName + " by rep: " + accumulationCardByID);
+
+		card.setAmount(1789d);
+		System.out.println(entityName + " before update: " + card);
+		AccumulationCard updatedAccumulationCard = cardRep.update(card);
+		System.out.println("Updated " + entityName + " by repository: " + updatedAccumulationCard);
+
+		em = emf.createEntityManager();
+		AccumulationCard findUpdatedAccumulationCard = em.find(clazz, createdAccumulationCardId);
+		System.out.println("Found updated " + entityName + " by EntityManager: " + findUpdatedAccumulationCard);
+		em.close();
+
+		Optional<Customer> owner = cardRep.getOwner(card);
+		System.out.println("Owner by rep: " + owner);
+
+		cardRep.delete(card);
+		System.out.println(entityName + " after deleting by repository: " + card);
+		em = emf.createEntityManager();
+		AccumulationCard findDeletedAccumulationCard = em.find(clazz, createdAccumulationCardId);
+		System.out.println("Found deleted " + entityName + " by EntityManager: " + findDeletedAccumulationCard);
+		em.close();
+	}
+
+	private static void testOrderRepository(EntityManagerFactory emf) {
+		Class<Order> clazz = Order.class;
+		String entityName = "order";
+		OrderRepository orderRep = new GenericDaoJPAOrderRepository();
+
+		EntityManager entityManager = emf.createEntityManager();
+
+		Address addr = new Address();
+		addr.setCountry("Ukraine");
+		addr.setCity("Kyiv");
+		addr.setStreet("Polyova");
+		addr.setBuilding("14");
+		addr.setFlatNumber("5");
+		addr.setZipCode("1000");
+
+		Pizza pizza1 = new Pizza(null, "pizza1", 101.0d, PizzaType.MEAT);
+		Pizza pizza2 = new Pizza(null, "pizza2", 102.0d, PizzaType.MEAT);
+		Pizza pizza3 = new Pizza(null, "pizza3", 103.0d, PizzaType.MEAT);
+
+		entityManager.getTransaction().begin();
+		entityManager.persist(addr);
+		entityManager.persist(pizza1);
+		entityManager.persist(pizza2);
+		entityManager.persist(pizza3);
+		entityManager.getTransaction().commit();
+
+		addr = entityManager.find(Address.class, addr.getId());
+		Customer customer = new Customer();
+		customer.setName("Ivan");
+		customer.addAddress(addr);
+
+		entityManager.getTransaction().begin();
+		entityManager.persist(customer);
+		entityManager.getTransaction().commit();
+
+		pizza1 = entityManager.find(Pizza.class, pizza1.getId());
+		pizza2 = entityManager.find(Pizza.class, pizza2.getId());
+		pizza3 = entityManager.find(Pizza.class, pizza3.getId());
+		customer = entityManager.find(Customer.class, customer.getId());
+
+		entityManager.close();
+
+		Map<Pizza, Integer> pizzas = new HashMap<>();
+		pizzas.put(pizza1, 1);
+		pizzas.put(pizza2, 2);
+		pizzas.put(pizza3, 5);
+
+		Order order = new Order();
+		order.setAddress(addr);
+		order.setCreationDate(LocalDateTime.now());
+		order.setDeliveryDate(LocalDateTime.now().plusMinutes(30));
+		order.setCustomer(customer);
+		order.setPizzas(pizzas);
+		order.setState(OrderState.NEW);
+
+		System.out.println(entityName + " before persisting: " + order);
+
+		Order createdOrder = orderRep.create(order);
+		Long createdOrderId = createdOrder.getId();
+		System.out.println("Created " + entityName + ": " + createdOrder);
+
+		EntityManager em = null;
+		em = emf.createEntityManager();
+		Order findCreatedOrder = em.find(clazz, createdOrderId);
+		System.out.println("Found created " + entityName + " by EntityManager: " + findCreatedOrder);
+		em.close();
+
+		Order orderByID = orderRep.read(createdOrderId);
+		System.out.println("Found created " + entityName + " by rep: " + orderByID);
+
+		order.setState(OrderState.IN_PROGRESS);
+		System.out.println(entityName + " before update: " + order);
+		Order updatedOrder = orderRep.update(order);
+		System.out.println("Updated " + entityName + " by repository: " + updatedOrder);
+
+		em = emf.createEntityManager();
+		createdOrderId = updatedOrder.getId();
+		Order findUpdatedOrder = em.find(clazz, createdOrderId);
+		System.out.println("Found updated " + entityName + " by EntityManager: " + findUpdatedOrder);
+		em.close();
+
+		orderRep.delete(order);
+		System.out.println(entityName + " after deleting by repository: " + order);
+		em = emf.createEntityManager();
+		Order findDeletedOrder = em.find(clazz, createdOrderId);
+		System.out.println("Found deleted " + entityName + " by EntityManager: " + findDeletedOrder);
+		em.close();
 	}
 
 }

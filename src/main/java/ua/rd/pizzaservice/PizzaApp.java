@@ -10,8 +10,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
-import ua.rd.pizzaservice.domain.pizza.Pizza;
-import ua.rd.pizzaservice.repository.pizza.GenericDaoJPAPizzaRepository;
 import ua.rd.pizzaservice.service.order.OrderService;
 
 public class PizzaApp {
@@ -50,19 +48,6 @@ public class PizzaApp {
 		orderService.doneOrder(order);
 		System.out.println("Done order in java: " + order);
 		System.out.println("Done order in db: " + em.find(Order.class, orderId));
-
-//		try {
-//			em.persist(order);
-//			Order foundOrder = em.find(Order.class, order.getId());
-//			System.out.println("Found order: " + foundOrder);
-//		} catch (Throwable e) {
-//			System.out.println(e.toString());
-//		} finally {
-//			em.close();
-//			emf.close();
-//		}
-
-//		System.out.println(order);
 
 		appContext.close();
 	}

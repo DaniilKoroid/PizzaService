@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,15 +49,15 @@ public class Order {
 	@Column(name = "delivery_date")
 	private LocalDateTime deliveryDate;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST}, targetEntity = Address.class)
-	@JoinColumn(name = "address_id")
+	@ManyToOne(targetEntity = Address.class)
+	@JoinColumn(name = "address_id", insertable = false, updatable = false)
 	private Address address;
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST}, targetEntity = Customer.class)
+	@ManyToOne(targetEntity = Customer.class)
 	@JoinColumn(name = "customer_id", insertable = false, updatable = false)
 	private Customer customer;
 	
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "orders_pizzas")
 	@MapKeyJoinColumn(name = "count_pizzas")
 	private Map<Pizza, Integer> pizzas;

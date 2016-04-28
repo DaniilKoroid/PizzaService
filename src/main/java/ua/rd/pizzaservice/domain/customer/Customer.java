@@ -36,7 +36,7 @@ public class Customer {
 	@Column(name = "name")
 	private String name;
 
-	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
 	@JoinTable(name = "customer_address", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "address_id"))
 	private Set<Address> addresses;
 
