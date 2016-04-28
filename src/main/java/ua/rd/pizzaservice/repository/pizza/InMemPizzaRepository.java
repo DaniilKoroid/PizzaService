@@ -5,12 +5,9 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.stereotype.Repository;
-
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 
-@Repository
 public class InMemPizzaRepository implements PizzaRepository {
 
     List<Pizza> pizzas = new ArrayList<>();
@@ -35,10 +32,11 @@ public class InMemPizzaRepository implements PizzaRepository {
     }
 
 	@Override
-	public void create(Pizza pizza) {
+	public Pizza create(Pizza pizza) {
 		if (pizza != null) {
 			pizzas.add(pizza);
 		}
+		return pizza;
 	}
 
 	@Override
@@ -47,10 +45,11 @@ public class InMemPizzaRepository implements PizzaRepository {
 	}
 
 	@Override
-	public void update(Pizza pizza) {
+	public Pizza update(Pizza pizza) {
 		Pizza pizzaToUpdate = getPizzaByID(pizza.getId());
 		delete(pizzaToUpdate);
 		create(pizza);
+		return pizza;
 	}
 
 	@Override

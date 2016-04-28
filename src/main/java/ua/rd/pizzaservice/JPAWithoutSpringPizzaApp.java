@@ -21,16 +21,45 @@ import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 public class JPAWithoutSpringPizzaApp {
 
 	public static void main(String[] args) {
-//		persistPizzaMargarita();
-//		persistPizzaPepperoni();
-//		persistAddress();
-//		persistCustomer();
-//		persistActivatedAccumulationCard();
-//		persistNotActivatedAccumulationCard();
-//		persistOrder();
-//		persistPizzas();
-//		persistAddresses();
-//		persistCustomers();
+
+		EntityManagerFactory emf = null;
+		EntityManager em = null;
+
+		try {
+
+			emf = Persistence.createEntityManagerFactory("jpa_mysql");
+			em = emf.createEntityManager();
+
+			Pizza pizza = new Pizza();
+			pizza.setName("Newzza");
+			pizza.setPrice(123.1d);
+			pizza.setType(PizzaType.SEA);
+
+			em.getTransaction().begin();
+			em.persist(pizza);
+			em.getTransaction().commit();
+			
+			Order find = em.find(Order.class, 1L);
+			System.out.println("order found: " + find);
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+			if (emf != null) {
+				emf.close();
+			}
+		}
+
+		// persistPizzaMargarita();
+		// persistPizzaPepperoni();
+		// persistAddress();
+		// persistCustomer();
+		// persistActivatedAccumulationCard();
+		// persistNotActivatedAccumulationCard();
+//		 persistOrder();
+		// persistPizzas();
+		// persistAddresses();
+		// persistCustomers();
 	}
 
 	private static void persistCustomers() {
@@ -243,16 +272,16 @@ public class JPAWithoutSpringPizzaApp {
 	private static void persistObject(EntityManager em, Object obj) {
 		try {
 			em.getTransaction().begin();
-			// if (obj instanceof Order) {
-			// Order order = (Order) obj;
-			// for (Pizza pizza : order.getPizzas().keySet()) {
-			// em.persist(pizza);
-			// }
-			// em.persist(order);
-			// } else {
-			// em.persist(obj);
-			// }
-			em.persist(obj);
+			 if (obj instanceof Order) {
+			 Order order = (Order) obj;
+			 for (Pizza pizza : order.getPizzas().keySet()) {
+			 em.persist(pizza);
+			 }
+			 em.persist(order);
+			 } else {
+			 em.persist(obj);
+			 }
+//			em.persist(obj);
 			em.getTransaction().commit();
 		} catch (Throwable e) {
 			if (em.getTransaction().isActive()) {

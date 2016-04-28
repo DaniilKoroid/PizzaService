@@ -6,13 +6,13 @@ import ua.rd.pizzaservice.domain.customer.Customer;
 
 public interface CustomerRepository {
 
-	void create(Customer customer);
+	Customer create(Customer customer);
 	
 	Customer read(Integer id);
 	
 	List<Customer> getAllCustomers();
 	
-	void update(Customer customer);
+	Customer update(Customer customer);
 	
 	void delete(Customer customer);
 }

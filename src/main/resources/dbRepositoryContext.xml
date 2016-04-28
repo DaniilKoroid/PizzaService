@@ -11,7 +11,7 @@
 
 	<context:annotation-config />
 	<context:component-scan base-package="ua.rd.pizzaservice.repository.order" />
-	<context:component-scan base-package="ua.rd.pizzaservice.repository.pizza.mysql" />
+	<context:component-scan base-package="ua.rd.pizzaservice.repository.pizza" />
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">

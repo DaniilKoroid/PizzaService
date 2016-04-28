@@ -6,13 +6,13 @@ import ua.rd.pizzaservice.domain.pizza.Pizza;
 
 public interface PizzaRepository {
 
-	void create(Pizza pizza);
+	Pizza create(Pizza pizza);
 
 	Pizza getPizzaByID(Integer id);
 
 	List<Pizza> getAllPizzas();
 
-	void update(Pizza pizza);
+	Pizza update(Pizza pizza);
 
 	void delete(Pizza pizza);
 }

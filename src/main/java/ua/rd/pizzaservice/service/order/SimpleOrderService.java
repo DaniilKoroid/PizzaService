@@ -121,13 +121,18 @@ public class SimpleOrderService implements OrderService {
 		Boolean canProceedToState = order.canProceedToState(OrderState.IN_PROGRESS);
 		if (canProceedToState) {
 			result = order.nextState();
+			orderRepository.saveOrder(order);
 		}
 		return result;
 	}
 
 	@Override
 	public Boolean cancelOrder(Order order) {
-		return order.cancel();
+		Boolean isCancelled = order.cancel();
+		if (isCancelled) {
+			orderRepository.saveOrder(order);
+		}
+		return isCancelled;
 	}
 
 	@Override
@@ -137,6 +142,7 @@ public class SimpleOrderService implements OrderService {
 		if (canProceedToState) {
 			result = order.nextState();
 			processPayment(order);
+			orderRepository.saveOrder(order);
 		}
 		return result;
 	}

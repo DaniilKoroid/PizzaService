@@ -11,12 +11,10 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
 
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 
-@Repository
 public class MySQLPizzaRepository implements PizzaRepository {
 
 	private JdbcTemplate jdbcTemplate;
@@ -27,9 +25,10 @@ public class MySQLPizzaRepository implements PizzaRepository {
 	}
 	
 	@Override
-	public void create(Pizza pizza) {
+	public Pizza create(Pizza pizza) {
 		String sqlAdd = "INSERT INTO pizza (name, price, type) VALUES (?, ?, ?);";
 		jdbcTemplate.update(sqlAdd, pizza.getName(), pizza.getPrice(), pizza.getType().ordinal());
+		return pizza;
 	}
 
 	@Override
@@ -71,9 +70,11 @@ public class MySQLPizzaRepository implements PizzaRepository {
 	}
 
 	@Override
-	public void update(Pizza pizza) {
+	public Pizza update(Pizza pizza) {
 		String sqlUpdate = "UPDATE pizza SET name = ?, price = ?, type = ?";
 		jdbcTemplate.update(sqlUpdate, pizza.getName(), pizza.getPrice(), pizza.getType().ordinal());
+		Pizza updatedPizza = getPizzaByID(pizza.getId());
+		return updatedPizza;
 	}
 
 	@Override
