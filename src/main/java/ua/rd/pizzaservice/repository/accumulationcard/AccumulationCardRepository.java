@@ -1,8 +1,10 @@
 package ua.rd.pizzaservice.repository.accumulationcard;
 
 import java.util.List;
+import java.util.Optional;
 
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
+import ua.rd.pizzaservice.domain.customer.Customer;
 
 public interface AccumulationCardRepository {
 
@@ -15,4 +17,6 @@ public interface AccumulationCardRepository {
 	AccumulationCard update(AccumulationCard card);
 
 	void delete(AccumulationCard card);
+	
+	Optional<Customer> getOwner(AccumulationCard card);
 }

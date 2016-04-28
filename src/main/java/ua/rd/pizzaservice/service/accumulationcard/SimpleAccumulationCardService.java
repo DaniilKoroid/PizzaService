@@ -71,4 +71,9 @@ public class SimpleAccumulationCardService implements AccumulationCardService {
         return true;
     }
 
+	@Override
+	public Customer getOwner(AccumulationCard card) {
+		throw new UnsupportedOperationException("Not implemented yet.");
+	}
+
 }

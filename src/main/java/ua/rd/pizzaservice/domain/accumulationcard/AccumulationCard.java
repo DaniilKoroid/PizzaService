@@ -5,8 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import ua.rd.pizzaservice.domain.customer.Customer;
 
 @Entity
 @Table(name = "accumulation_card")
@@ -29,6 +33,10 @@ public class AccumulationCard {
 	@Column(name = "is_activated")
 	private Boolean isActivated;
 
+	@OneToOne
+	@JoinColumn(name = "owner_id", insertable = false, updatable = false)
+	private Customer owner;
+	
 	public AccumulationCard() {
 		amount = DEFAULT_AMOUNT;
 		isActivated = DEFAULT_IS_ACTIVATED;
@@ -58,6 +66,14 @@ public class AccumulationCard {
 		this.isActivated = isActivated;
 	}
 
+	public Customer getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Customer owner) {
+		this.owner = owner;
+	}
+
 	public Double use(Double totalPrice) {
 		double discountAmount = calculateDiscount(totalPrice);
 		amount += totalPrice;
@@ -74,7 +90,8 @@ public class AccumulationCard {
 
 	@Override
 	public String toString() {
-		return "AccumulationCard [id=" + id + ", amount=" + amount
-				+ ", isActivated=" + isActivated + "]";
+		return "AccumulationCard [id=" + id + ", amount=" + amount + ", isActivated=" + isActivated + ", owner=" + owner
+				+ "]";
 	}
+
 }

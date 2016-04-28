@@ -7,6 +7,8 @@ public interface AccumulationCardService {
 
 	AccumulationCard getAccumulationCardByCustomer(Customer customer);
 
+	Customer getOwner(AccumulationCard card);
+	
 	Boolean hasAccumulationCard(Customer customer);
 
 	Boolean assignNewAccumulationCardToCustomer(Customer customer);
