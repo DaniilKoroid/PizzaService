@@ -13,6 +13,10 @@ public class GenericDaoJPAOrderRepository extends GenericDaoJPAImpl<Order, Long>
 	public GenericDaoJPAOrderRepository() {
 		emf = Persistence.createEntityManagerFactory("jpa_mysql");
 	}
+	
+	public GenericDaoJPAOrderRepository(String persistenceUnitName) {
+		emf = Persistence.createEntityManagerFactory(persistenceUnitName);
+	}
 
 	@Override
 	public Long saveOrder(Order newOrder) {

@@ -15,6 +15,10 @@ public class GenericDaoJPAPizzaRepository extends GenericDaoJPAImpl<Pizza, Integ
 	public GenericDaoJPAPizzaRepository() {
 		emf = Persistence.createEntityManagerFactory("jpa_mysql");
 	}
+	
+	public GenericDaoJPAPizzaRepository(String persistenceUnitName) {
+		emf = Persistence.createEntityManagerFactory(persistenceUnitName);
+	}
 
 	@Override
 	public Pizza getPizzaByID(Integer id) {
