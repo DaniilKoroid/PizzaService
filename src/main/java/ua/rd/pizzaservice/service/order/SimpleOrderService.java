@@ -105,6 +105,7 @@ public class SimpleOrderService implements OrderService {
 		if (canChange) {
 			Map<Pizza, Integer> pizzas = pizzasByArrOfId(pizzasID);
 			canChange = order.changeOrder(pizzas);
+			orderRepository.update(order);
 		}
 		return canChange;
 	}
@@ -121,7 +122,7 @@ public class SimpleOrderService implements OrderService {
 		Boolean canProceedToState = order.canProceedToState(OrderState.IN_PROGRESS);
 		if (canProceedToState) {
 			result = order.nextState();
-			orderRepository.saveOrder(order);
+			orderRepository.update(order);
 		}
 		return result;
 	}
@@ -130,7 +131,7 @@ public class SimpleOrderService implements OrderService {
 	public Boolean cancelOrder(Order order) {
 		Boolean isCancelled = order.cancel();
 		if (isCancelled) {
-			orderRepository.saveOrder(order);
+			orderRepository.update(order);
 		}
 		return isCancelled;
 	}
@@ -142,7 +143,7 @@ public class SimpleOrderService implements OrderService {
 		if (canProceedToState) {
 			result = order.nextState();
 			processPayment(order);
-			orderRepository.saveOrder(order);
+			orderRepository.update(order);
 		}
 		return result;
 	}

@@ -7,6 +7,7 @@ import javax.persistence.Persistence;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
@@ -27,17 +28,28 @@ public class PizzaApp {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit);
 		EntityManager em = emf.createEntityManager();
 		
-		GenericDaoJPAPizzaRepository pizzaRepository = new GenericDaoJPAPizzaRepository();
-		Pizza read = pizzaRepository.read(1);
-		System.out.println("Read: " + read);
+//		GenericDaoJPAPizzaRepository pizzaRepository = new GenericDaoJPAPizzaRepository();
+//		Pizza read = pizzaRepository.read(1);
+//		System.out.println("Read: " + read);
 		
 		Order order;
-		Customer customer = em.find(Customer.class, 1);
+		Long orderId;
+		Customer customer = new Customer();
+		customer.setName("Vanya");
+		customer.addAddress(new Address(null, "Ukraine", "Kyiv", "Velyka", "18", "Stan", "1234"));
 		OrderService orderService = appContext.getBean(OrderService.class);
 		Integer[] pizzasId = new Integer[] { 1, 2, 3 };
 		order = orderService.placeNewOrder(customer, pizzasId);
+		orderId = order.getId();
+		System.out.println("Order in java: " + order);
+		System.out.println("Order in db: " + em.find(Order.class, orderId));
 		order.setAddress(customer.getAddresses().iterator().next());
-		System.out.println("Order: " + order);
+		orderService.processOrder(order);
+		System.out.println("Processed order in java: " + order);
+		System.out.println("Processed order in db: " + em.find(Order.class, orderId));
+		orderService.doneOrder(order);
+		System.out.println("Done order in java: " + order);
+		System.out.println("Done order in db: " + em.find(Order.class, orderId));
 
 //		try {
 //			em.persist(order);

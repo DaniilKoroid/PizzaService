@@ -22,37 +22,74 @@ public class GenericDaoJPAImpl<T, PK extends Serializable> implements GenericDao
 	@Override
 	public T create(T t) {
 		EntityManager em = getEntityManager();
-		em.persist(t);
-		em = null;
+		try {
+			em.getTransaction().begin();
+			em.persist(t);
+			em.getTransaction().commit();
+		} catch (Throwable th) {
+			System.out.println(th.getLocalizedMessage());
+		} finally {
+			closeEntityManager(em);
+		}
 		return t;
 	}
 
 	@Override
 	public T read(PK id) {
 		EntityManager em = getEntityManager();
-		T find = em.find(entityClass, id);
-		em = null;
-		return find;
+		try {
+			em.getTransaction().begin();
+			T find = em.find(entityClass, id);
+			em.getTransaction().commit();
+			return find;
+		} catch (Throwable th) {
+			System.out.println(th.getLocalizedMessage());
+		} finally {
+			closeEntityManager(em);
+		}
+		throw new RuntimeException("Failed to read.");
 	}
 
 	@Override
 	public T update(T t) {
 		EntityManager em = getEntityManager();
-		T merge = em.merge(t);
-		em = null;
-		return merge;
+		try {
+			em.getTransaction().begin();
+			T merge = em.merge(t);
+			em.getTransaction().commit();
+			return merge;
+		} catch (Throwable th) {
+			System.out.println(th.getLocalizedMessage());
+		} finally {
+			closeEntityManager(em);
+		}
+		throw new RuntimeException("Failed to update.");
 	}
 
 	@Override
 	public void delete(T t) {
 		EntityManager em = getEntityManager();
-		t = em.merge(t);
-		em.remove(t);
-		em = null;
+		try {
+			em.getTransaction().begin();
+			t = em.merge(t);
+			em.remove(t);
+			em.getTransaction().commit();
+		} catch (Throwable th) {
+			System.out.println(th.getLocalizedMessage());
+		} finally {
+			closeEntityManager(em);
+		}
 	}
 	
 	protected final EntityManager getEntityManager() {
 		return emf.createEntityManager();
+	}
+	
+	protected final void closeEntityManager(EntityManager em) {
+		if (em != null) {
+			em.close();
+			em = null;
+		}
 	}
 
 }
