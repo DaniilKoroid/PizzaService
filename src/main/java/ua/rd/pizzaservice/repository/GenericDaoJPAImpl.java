@@ -88,7 +88,6 @@ public class GenericDaoJPAImpl<T, PK extends Serializable> implements GenericDao
 	protected final void closeEntityManager(EntityManager em) {
 		if (em != null) {
 			em.close();
-			em = null;
 		}
 	}
 
