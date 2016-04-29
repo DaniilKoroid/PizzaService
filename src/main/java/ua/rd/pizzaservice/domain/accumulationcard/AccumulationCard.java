@@ -6,7 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -33,8 +34,8 @@ public class AccumulationCard {
 	@Column(name = "is_activated")
 	private Boolean isActivated;
 
-	@OneToOne
-	@JoinColumn(name = "owner_id", insertable = false, updatable = false)
+	@ManyToOne
+	@JoinTable(name = "customer_card", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "customer_id"))
 	private Customer owner;
 	
 	public AccumulationCard() {

@@ -31,6 +31,7 @@ public class JPAWithoutSpringPizzaApp {
 
 	public static void main(String[] args) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa_mysql");
+		System.out.println("1");
 		testPizzaRepository(emf);
 		testAddressRepository(emf);
 		testCustomerRepository(emf);
@@ -169,7 +170,14 @@ public class JPAWithoutSpringPizzaApp {
 		AccumulationCardRepository cardRep = new GenericDaoJPAAccumulationCardRepository();
 
 		EntityManager entityManager = emf.createEntityManager();
-		Customer customer = entityManager.find(Customer.class, 1);
+		Customer customer = new Customer();
+		customer.setName("Ivanovka");
+		entityManager.getTransaction().begin();
+		entityManager.persist(customer);
+		entityManager.getTransaction().commit();
+		System.out.println("Persisted customer: " + customer);
+		customer = entityManager.find(Customer.class, customer.getId());
+		System.out.println("Found customer: " + customer);
 		entityManager.close();
 
 		AccumulationCard card = new AccumulationCard();
