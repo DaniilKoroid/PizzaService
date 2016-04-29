@@ -37,6 +37,7 @@ public class GenericDaoJPAAccumulationCardRepository extends GenericDaoJPAImpl<A
 		TypedQuery<Customer> query = em.createQuery(sql, Customer.class).setParameter("id", card.getOwner().getId());
 		Customer customer = query.getSingleResult();
 		Optional<Customer> optional = Optional.ofNullable(customer);
+		closeEntityManager(em);
 		return optional;
 	}
 
