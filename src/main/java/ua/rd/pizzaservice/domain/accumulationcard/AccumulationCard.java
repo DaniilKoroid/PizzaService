@@ -1,5 +1,7 @@
 package ua.rd.pizzaservice.domain.accumulationcard;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,8 +17,10 @@ import ua.rd.pizzaservice.domain.customer.Customer;
 
 @Entity
 @Table(name = "accumulation_card")
-public class AccumulationCard {
+public class AccumulationCard implements Serializable {
 
+	private static final long serialVersionUID = -8189597927433999347L;
+	
 	private static final double DISCOUNT_PERCENTAGE = 0.1d;
 	private static final double MAX_TOTAL_PRICE_DISCOUNTED_PERCENT = 0.3d;
 	private static final double DEFAULT_AMOUNT = 0d;

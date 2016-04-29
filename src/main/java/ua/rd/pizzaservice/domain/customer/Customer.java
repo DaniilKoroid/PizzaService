@@ -1,5 +1,6 @@
 package ua.rd.pizzaservice.domain.customer;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +26,9 @@ import ua.rd.pizzaservice.domain.address.Address;
 @Scope("prototype")
 @Entity
 @Table(name = "customer")
-public class Customer {
+public class Customer implements Serializable {
+
+	private static final long serialVersionUID = 6126537356320381287L;
 
 	@Id
 	@Column(name = "id")

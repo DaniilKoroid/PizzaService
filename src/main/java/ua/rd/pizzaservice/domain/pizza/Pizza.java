@@ -1,5 +1,7 @@
 package ua.rd.pizzaservice.domain.pizza;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,7 +14,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "pizza")
-public class Pizza {
+public class Pizza implements Serializable {
+
+	private static final long serialVersionUID = -305530345539976056L;
 
 	public enum PizzaType {
 		MEAT,

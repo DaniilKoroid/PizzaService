@@ -1,5 +1,6 @@
 package ua.rd.pizzaservice.domain.order;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,7 +32,9 @@ import ua.rd.pizzaservice.domain.pizza.Pizza;
 @Scope("prototype")
 @Entity
 @Table(name = "order_table")
-public class Order {
+public class Order implements Serializable {
+
+	private static final long serialVersionUID = -5981482506476614514L;
 
 	@Id
 	@Column(name = "id")
