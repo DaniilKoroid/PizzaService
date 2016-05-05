@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.repository.GenericDaoJPAImpl;
 
-@Repository
+//@Repository
 public class GenericDaoJPAPizzaRepository extends GenericDaoJPAImpl<Pizza, Integer> implements PizzaRepository {
 
 	public GenericDaoJPAPizzaRepository() {
