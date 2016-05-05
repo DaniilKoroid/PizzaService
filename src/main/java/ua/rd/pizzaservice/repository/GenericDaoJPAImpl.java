@@ -4,14 +4,17 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 
+import org.springframework.transaction.annotation.Transactional;
+
+@Transactional
 public class GenericDaoJPAImpl<T, PK extends Serializable> implements GenericDao<T, PK> {
 
-	private Class<T> entityClass;
+	protected Class<T> entityClass;
 
-	//TODO: make this field @Autowired
-	protected EntityManagerFactory emf;
+	@PersistenceContext
+	protected EntityManager em;
 	
 	@SuppressWarnings("unchecked")
 	public GenericDaoJPAImpl() {
@@ -21,74 +24,26 @@ public class GenericDaoJPAImpl<T, PK extends Serializable> implements GenericDao
 
 	@Override
 	public T create(T t) {
-		EntityManager em = getEntityManager();
-		try {
-			em.getTransaction().begin();
-			em.persist(t);
-			em.getTransaction().commit();
-		} catch (Throwable th) {
-			System.out.println(th.getLocalizedMessage());
-		} finally {
-			closeEntityManager(em);
-		}
+		em.persist(t);
 		return t;
 	}
 
 	@Override
 	public T read(PK id) {
-		EntityManager em = getEntityManager();
-		try {
-			em.getTransaction().begin();
-			T find = em.find(entityClass, id);
-			em.getTransaction().commit();
-			return find;
-		} catch (Throwable th) {
-			System.out.println(th.getLocalizedMessage());
-		} finally {
-			closeEntityManager(em);
-		}
-		throw new RuntimeException("Failed to read.");
+		T foundObject = em.find(entityClass, id);
+		return foundObject;
 	}
 
 	@Override
 	public T update(T t) {
-		EntityManager em = getEntityManager();
-		try {
-			em.getTransaction().begin();
-			T merge = em.merge(t);
-			em.getTransaction().commit();
-			return merge;
-		} catch (Throwable th) {
-			System.out.println(th.getLocalizedMessage());
-		} finally {
-			closeEntityManager(em);
-		}
-		throw new RuntimeException("Failed to update.");
+		T mergedEntity = em.merge(t);
+		return mergedEntity;
 	}
 
 	@Override
 	public void delete(T t) {
-		EntityManager em = getEntityManager();
-		try {
-			em.getTransaction().begin();
-			t = em.merge(t);
-			em.remove(t);
-			em.getTransaction().commit();
-		} catch (Throwable th) {
-			System.out.println(th.getLocalizedMessage());
-		} finally {
-			closeEntityManager(em);
-		}
-	}
-	
-	protected final EntityManager getEntityManager() {
-		return emf.createEntityManager();
-	}
-	
-	protected final void closeEntityManager(EntityManager em) {
-		if (em != null) {
-			em.close();
-		}
+		t = em.merge(t);
+		em.remove(t);
 	}
 
 }

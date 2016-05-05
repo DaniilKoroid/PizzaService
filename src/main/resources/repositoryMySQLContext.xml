@@ -18,23 +18,22 @@
 	<context:property-placeholder
 		system-properties-mode="OVERRIDE" location="classpath:jdbc.properties" />
 
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close">
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${driver}" />
 		<property name="url" value="${url}" />
 		<property name="username" value="${user}" />
 		<property name="password" value="${password}" />
-		<property name="initialSize" value="5" />
+<!-- 		<property name="initialSize" value="5" /> -->
 	</bean>
 
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<!-- <property name="persistenceUnitName" value="HiberantePostgreSQL" /> -->
+		<property name="persistenceUnitName" value="jpa_mysql" />
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
 		</property>
-		<property name="packagesToScan" value="ua.rd.deliveryservice.domain" />
+		<property name="packagesToScan" value="ua.rd.pizzaservice.domain" />
 		<property name="jpaProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>

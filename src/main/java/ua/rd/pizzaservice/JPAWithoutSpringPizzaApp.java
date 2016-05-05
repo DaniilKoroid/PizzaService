@@ -9,6 +9,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
@@ -30,18 +33,29 @@ import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 public class JPAWithoutSpringPizzaApp {
 
 	public static void main(String[] args) {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa_mysql");
-		System.out.println("1");
-		testPizzaRepository(emf);
-		testAddressRepository(emf);
-		testCustomerRepository(emf);
-		testAccumulationCardRepository(emf);
-		testOrderRepository(emf);
-		emf.close();
+		ConfigurableApplicationContext repContext = null;
+		ConfigurableApplicationContext appContext = null;
+
+		try {
+			repContext = new ClassPathXmlApplicationContext("repositoryMySQLContext.xml");
+			repContext.refresh();
+			appContext = new ClassPathXmlApplicationContext(new String[] { "appContext.xml" }, repContext);
+			PizzaRepository pizzaRepository = appContext.getBean(PizzaRepository.class);
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa_mysql");
+			testPizzaRepository(emf, pizzaRepository);
+			testAddressRepository(emf, appContext.getBean(AddressRepository.class));
+			testCustomerRepository(emf, appContext.getBean(CustomerRepository.class));
+			testAccumulationCardRepository(emf, appContext.getBean(AccumulationCardRepository.class));
+			testOrderRepository(emf, appContext.getBean(OrderRepository.class));
+			emf.close();
+		} finally {
+			repContext.close();
+			appContext.close();
+		}
 	}
 
-	private static void testPizzaRepository(EntityManagerFactory emf) {
-		PizzaRepository pizzaRep = new GenericDaoJPAPizzaRepository();
+	private static void testPizzaRepository(EntityManagerFactory emf, PizzaRepository pizzaRepository) {
+		PizzaRepository pizzaRep = pizzaRepository;
 
 		Pizza pizza = new Pizza();
 		pizza.setName("Allegro");
@@ -79,8 +93,9 @@ public class JPAWithoutSpringPizzaApp {
 		em.close();
 	}
 
-	private static void testAddressRepository(EntityManagerFactory emf) {
-		AddressRepository addrRep = new GenericDaoJPAAddressRepository();
+	private static void testAddressRepository(EntityManagerFactory emf, AddressRepository ar) {
+		AddressRepository addrRep = ar;
+		// AddressRepository addrRep = new GenericDaoJPAAddressRepository();
 
 		Address addr = new Address();
 		addr.setCountry("Ukraine");
@@ -122,10 +137,11 @@ public class JPAWithoutSpringPizzaApp {
 		em.close();
 	}
 
-	private static void testCustomerRepository(EntityManagerFactory emf) {
+	private static void testCustomerRepository(EntityManagerFactory emf, CustomerRepository cr) {
 		Class<Customer> clazz = Customer.class;
 		String entityName = "customer";
-		CustomerRepository custRep = new GenericDaoJPACustomerRepository();
+//		CustomerRepository custRep = new GenericDaoJPACustomerRepository();
+		CustomerRepository custRep = cr;
 
 		Customer customer = new Customer();
 		customer.setName("Ivan");
@@ -164,10 +180,11 @@ public class JPAWithoutSpringPizzaApp {
 		em.close();
 	}
 
-	private static void testAccumulationCardRepository(EntityManagerFactory emf) {
+	private static void testAccumulationCardRepository(EntityManagerFactory emf, AccumulationCardRepository acr) {
 		Class<AccumulationCard> clazz = AccumulationCard.class;
 		String entityName = "accumulation card";
-		AccumulationCardRepository cardRep = new GenericDaoJPAAccumulationCardRepository();
+//		AccumulationCardRepository cardRep = new GenericDaoJPAAccumulationCardRepository();
+		AccumulationCardRepository cardRep = acr;
 
 		EntityManager entityManager = emf.createEntityManager();
 		Customer customer = new Customer();
@@ -219,10 +236,11 @@ public class JPAWithoutSpringPizzaApp {
 		em.close();
 	}
 
-	private static void testOrderRepository(EntityManagerFactory emf) {
+	private static void testOrderRepository(EntityManagerFactory emf, OrderRepository or) {
 		Class<Order> clazz = Order.class;
 		String entityName = "order";
-		OrderRepository orderRep = new GenericDaoJPAOrderRepository();
+//		OrderRepository orderRep = new GenericDaoJPAOrderRepository();
+		OrderRepository orderRep = or;
 
 		EntityManager entityManager = emf.createEntityManager();
 
@@ -245,7 +263,7 @@ public class JPAWithoutSpringPizzaApp {
 		entityManager.persist(pizza3);
 		entityManager.getTransaction().commit();
 
-		addr = entityManager.find(Address.class, addr.getId());
+//		addr = entityManager.find(Address.class, addr.getId());
 		Customer customer = new Customer();
 		customer.setName("Ivan");
 		customer.addAddress(addr);
@@ -254,10 +272,10 @@ public class JPAWithoutSpringPizzaApp {
 		entityManager.persist(customer);
 		entityManager.getTransaction().commit();
 
-		pizza1 = entityManager.find(Pizza.class, pizza1.getId());
-		pizza2 = entityManager.find(Pizza.class, pizza2.getId());
-		pizza3 = entityManager.find(Pizza.class, pizza3.getId());
-		customer = entityManager.find(Customer.class, customer.getId());
+//		pizza1 = entityManager.find(Pizza.class, pizza1.getId());
+//		pizza2 = entityManager.find(Pizza.class, pizza2.getId());
+//		pizza3 = entityManager.find(Pizza.class, pizza3.getId());
+//		customer = entityManager.find(Customer.class, customer.getId());
 
 		entityManager.close();
 
@@ -276,7 +294,8 @@ public class JPAWithoutSpringPizzaApp {
 
 		System.out.println(entityName + " before persisting: " + order);
 
-		Order createdOrder = orderRep.create(order);
+//		Order createdOrder = orderRep.create(order);
+		Order createdOrder = orderRep.update(order);
 		Long createdOrderId = createdOrder.getId();
 		System.out.println("Created " + entityName + ": " + createdOrder);
 
@@ -291,7 +310,7 @@ public class JPAWithoutSpringPizzaApp {
 
 		order.setState(OrderState.IN_PROGRESS);
 		System.out.println(entityName + " before update: " + order);
-		Order updatedOrder = orderRep.update(order);
+		Order updatedOrder = orderRep.update(findCreatedOrder);
 		System.out.println("Updated " + entityName + " by repository: " + updatedOrder);
 
 		em = emf.createEntityManager();

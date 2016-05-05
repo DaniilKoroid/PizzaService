@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -52,17 +53,17 @@ public class Order implements Serializable {
 	@Column(name = "delivery_date")
 	private LocalDateTime deliveryDate;
 	
-	@ManyToOne(targetEntity = Address.class)
-	@JoinColumn(name = "address_id", insertable = false, updatable = false)
+	@ManyToOne(targetEntity = Address.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name = "address_id")
 	private Address address;
 	
-	@ManyToOne(targetEntity = Customer.class)
-	@JoinColumn(name = "customer_id", insertable = false, updatable = false)
+	@ManyToOne(targetEntity = Customer.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name = "customer_id")
 	private Customer customer;
 	
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "orders_pizzas")
-	@MapKeyJoinColumn(name = "count_pizzas")
+	@MapKeyJoinColumn(name = "pizza_id")
 	private Map<Pizza, Integer> pizzas;
 
 	public Order() {
