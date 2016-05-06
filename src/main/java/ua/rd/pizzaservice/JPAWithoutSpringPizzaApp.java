@@ -20,14 +20,9 @@ import ua.rd.pizzaservice.domain.order.OrderState;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 import ua.rd.pizzaservice.repository.accumulationcard.AccumulationCardRepository;
-import ua.rd.pizzaservice.repository.accumulationcard.GenericDaoJPAAccumulationCardRepository;
 import ua.rd.pizzaservice.repository.address.AddressRepository;
-import ua.rd.pizzaservice.repository.address.GenericDaoJPAAddressRepository;
 import ua.rd.pizzaservice.repository.customer.CustomerRepository;
-import ua.rd.pizzaservice.repository.customer.GenericDaoJPACustomerRepository;
-import ua.rd.pizzaservice.repository.order.GenericDaoJPAOrderRepository;
 import ua.rd.pizzaservice.repository.order.OrderRepository;
-import ua.rd.pizzaservice.repository.pizza.GenericDaoJPAPizzaRepository;
 import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 
 public class JPAWithoutSpringPizzaApp {

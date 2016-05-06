@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,6 +26,7 @@ import javax.persistence.Table;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ua.rd.pizzaservice.LocalDateTimeConverter;
 import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
@@ -48,9 +50,11 @@ public class Order implements Serializable {
 	private OrderState state;
 	
 	@Column(name = "creation_date")
+	@Convert(converter = LocalDateTimeConverter.class)
 	private LocalDateTime creationDate;
 	
 	@Column(name = "delivery_date")
+	@Convert(converter = LocalDateTimeConverter.class)
 	private LocalDateTime deliveryDate;
 	
 	@ManyToOne(targetEntity = Address.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
