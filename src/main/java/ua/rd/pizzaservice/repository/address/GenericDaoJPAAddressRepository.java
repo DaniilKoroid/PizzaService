@@ -12,7 +12,7 @@ public class GenericDaoJPAAddressRepository extends GenericDaoJPAImpl<Address, I
 
 	@Override
 	public List<Address> getAllAddresses() {
-		throw new UnsupportedOperationException("Not implemented yet.");
+		return findAll("findAllAddresses");
 	}
 
 }

@@ -13,13 +13,14 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -35,6 +36,15 @@ import ua.rd.pizzaservice.domain.pizza.Pizza;
 @Scope("prototype")
 @Entity
 @Table(name = "order_table")
+@NamedQueries({
+    @NamedQuery(name = "findAllOrders", query = "SELECT o FROM Order o"),
+    @NamedQuery(name = "findOrder",
+				query = "SELECT o FROM Order o "
+				+ "LEFT JOIN FETCH o.customer c " 
+				+ "LEFT JOIN FETCH c.addresses adr "
+				+ "LEFT JOIN FETCH o.pizzas p " 
+				+ "WHERE o.id = :id") 
+})
 public class Order implements Serializable {
 
 	private static final long serialVersionUID = -5981482506476614514L;
@@ -65,9 +75,10 @@ public class Order implements Serializable {
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 	
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "orders_pizzas")
+	@ElementCollection
+	@CollectionTable(name = "orders_pizzas", joinColumns = @JoinColumn(name = "order_id"))
 	@MapKeyJoinColumn(name = "pizza_id")
+	@Column(name = "pizza_count")
 	private Map<Pizza, Integer> pizzas;
 
 	public Order() {

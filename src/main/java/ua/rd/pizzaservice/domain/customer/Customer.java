@@ -7,13 +7,14 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -26,6 +27,10 @@ import ua.rd.pizzaservice.domain.address.Address;
 @Scope("prototype")
 @Entity
 @Table(name = "customer")
+@NamedQueries({ 
+	@NamedQuery(name = "findAllCustomers", query = "SELECT c FROM Customer c") ,
+	@NamedQuery(name = "findCustomer", query = "SELECT c FROM Customer c JOIN FETCH c.addresses a WHERE c.id = :id")
+})
 public class Customer implements Serializable {
 
 	private static final long serialVersionUID = 6126537356320381287L;
@@ -39,7 +44,7 @@ public class Customer implements Serializable {
 	@Column(name = "name")
 	private String name;
 
-	@ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "customer_address", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "address_id"))
 	private Set<Address> addresses;
 

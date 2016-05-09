@@ -14,19 +14,25 @@ import ua.rd.pizzaservice.repository.GenericDaoJPAImpl;
 @Repository
 public class GenericDaoJPAAccumulationCardRepository extends GenericDaoJPAImpl<AccumulationCard, Integer>
 		implements AccumulationCardRepository {
-	
+
 	@Override
 	public List<AccumulationCard> getAllAccumulationCards() {
-		throw new UnsupportedOperationException("Not implemented yet.");
+		return findAll("findAllAccumulationCards");
 	}
 
 	@Override
 	public Optional<Customer> getOwner(AccumulationCard card) {
-		String sql = "SELECT c from Customer c WHERE c.id = :id";
-		TypedQuery<Customer> query = em.createQuery(sql, Customer.class).setParameter("id", card.getOwner().getId());
-		Customer customer = query.getSingleResult();
-		Optional<Customer> optional = Optional.ofNullable(customer);
-		return optional;
+		return Optional.ofNullable(card.getOwner());
+	}
+
+	@Override
+	public AccumulationCard read(Integer id) {
+		System.out.println("Got id: " + id);
+		TypedQuery<AccumulationCard> query = em.createNamedQuery("findAccumulationCard", AccumulationCard.class);
+		query.setParameter("id", id);
+		AccumulationCard accumulationCard = query.getSingleResult();
+		accumulationCard.getOwner().getAddresses();
+		return accumulationCard;
 	}
 
 }

@@ -2,6 +2,7 @@ package ua.rd.pizzaservice.domain.accumulationcard;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -17,10 +20,18 @@ import ua.rd.pizzaservice.domain.customer.Customer;
 
 @Entity
 @Table(name = "accumulation_card")
+@NamedQueries({ 
+	@NamedQuery(name = "findAllAccumulationCards", query = "SELECT ac FROM AccumulationCard ac"),
+	@NamedQuery(name = "findAccumulationCard",
+				query = "SELECT ac FROM AccumulationCard ac "
+				+ "LEFT JOIN FETCH ac.owner o " 
+				+ "LEFT JOIN FETCH o.addresses adr " 
+				+ "WHERE ac.id = :id") 
+})
 public class AccumulationCard implements Serializable {
 
 	private static final long serialVersionUID = -8189597927433999347L;
-	
+
 	private static final double DISCOUNT_PERCENTAGE = 0.1d;
 	private static final double MAX_TOTAL_PRICE_DISCOUNTED_PERCENT = 0.3d;
 	private static final double DEFAULT_AMOUNT = 0d;
@@ -31,17 +42,17 @@ public class AccumulationCard implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACC_CARD_SEQ_GEN")
 	@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "ACC_CARD_SEQ_GEN", sequenceName = "accumulation_card_sequence")
 	private Integer id;
-	
+
 	@Column(name = "amount")
 	private Double amount;
-	
+
 	@Column(name = "is_activated")
 	private Boolean isActivated;
 
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "customer_card", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "customer_id"))
 	private Customer owner;
-	
+
 	public AccumulationCard() {
 		amount = DEFAULT_AMOUNT;
 		isActivated = DEFAULT_IS_ACTIVATED;
@@ -87,9 +98,7 @@ public class AccumulationCard implements Serializable {
 
 	public Double calculateDiscount(Double totalPrice) {
 		double discountAmount = 0d;
-		discountAmount = Math.min(
-				amount * DISCOUNT_PERCENTAGE,
-				totalPrice * MAX_TOTAL_PRICE_DISCOUNTED_PERCENT);
+		discountAmount = Math.min(amount * DISCOUNT_PERCENTAGE, totalPrice * MAX_TOTAL_PRICE_DISCOUNTED_PERCENT);
 		return discountAmount;
 	}
 

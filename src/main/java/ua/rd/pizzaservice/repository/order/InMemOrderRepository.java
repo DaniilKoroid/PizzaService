@@ -46,4 +46,9 @@ public class InMemOrderRepository implements OrderRepository {
 		orders.remove(order);
 	}
 
+	@Override
+	public List<Order> findAllOrders() {
+		throw new UnsupportedOperationException("Not implemented yet.");
+	}
+
 }

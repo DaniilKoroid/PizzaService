@@ -2,6 +2,7 @@ package ua.rd.pizzaservice.repository;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -44,6 +45,11 @@ public class GenericDaoJPAImpl<T, PK extends Serializable> implements GenericDao
 	public void delete(T t) {
 		t = em.merge(t);
 		em.remove(t);
+	}
+
+	@Override
+	public List<T> findAll(String queryName) {
+		return em.createNamedQuery(queryName, entityClass).getResultList();
 	}
 
 }
