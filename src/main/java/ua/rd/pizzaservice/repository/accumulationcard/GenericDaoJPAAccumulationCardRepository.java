@@ -35,4 +35,23 @@ public class GenericDaoJPAAccumulationCardRepository extends GenericDaoJPAImpl<A
 		return accumulationCard;
 	}
 
+	@Override
+	public Boolean hasAccumulationCard(Customer owner) {
+		String queryName = "findCardByOwner";
+		TypedQuery<AccumulationCard> query = em.createNamedQuery(queryName, AccumulationCard.class);
+		query.setParameter("id", owner.getId());
+		List<AccumulationCard> resultList = query.getResultList();
+		System.out.println("Result list: " + resultList);
+		return !(resultList == null || resultList.isEmpty());
+	}
+
+	@Override
+	public AccumulationCard getCardByOwner(Customer owner) {
+		String queryName = "findCardByOwner";
+		TypedQuery<AccumulationCard> query = em.createNamedQuery(queryName, AccumulationCard.class);
+		query.setParameter("id", owner.getId());
+		AccumulationCard card = query.getSingleResult();
+		return card;
+	}
+
 }

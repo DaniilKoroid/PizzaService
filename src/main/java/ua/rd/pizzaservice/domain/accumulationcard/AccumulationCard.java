@@ -21,12 +21,18 @@ import ua.rd.pizzaservice.domain.customer.Customer;
 @Entity
 @Table(name = "accumulation_card")
 @NamedQueries({ 
-	@NamedQuery(name = "findAllAccumulationCards", query = "SELECT ac FROM AccumulationCard ac"),
+	@NamedQuery(name = "findAllAccumulationCards", 
+				query = "SELECT ac FROM AccumulationCard ac"),
 	@NamedQuery(name = "findAccumulationCard",
 				query = "SELECT ac FROM AccumulationCard ac "
 				+ "LEFT JOIN FETCH ac.owner o " 
 				+ "LEFT JOIN FETCH o.addresses adr " 
-				+ "WHERE ac.id = :id") 
+				+ "WHERE ac.id = :id"),
+	@NamedQuery(name = "findCardByOwner", 
+				query = "SELECT ac FROM AccumulationCard ac "
+				+ "LEFT JOIN FETCH ac.owner o "
+				+ "LEFT JOIN FETCH o.addresses adr "
+				+ "WHERE o.id = :id")
 })
 public class AccumulationCard implements Serializable {
 
@@ -108,4 +114,58 @@ public class AccumulationCard implements Serializable {
 				+ "]";
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((isActivated == null) ? 0 : isActivated.hashCode());
+		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		AccumulationCard other = (AccumulationCard) obj;
+		if (amount == null) {
+			if (other.amount != null) {
+				return false;
+			}
+		} else if (!amount.equals(other.amount)) {
+			return false;
+		}
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
+			return false;
+		}
+		if (isActivated == null) {
+			if (other.isActivated != null) {
+				return false;
+			}
+		} else if (!isActivated.equals(other.isActivated)) {
+			return false;
+		}
+		if (owner == null) {
+			if (other.owner != null) {
+				return false;
+			}
+		} else if (!owner.equals(other.owner)) {
+			return false;
+		}
+		return true;
+	}
+	
 }

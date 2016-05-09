@@ -1,0 +1,51 @@
+package ua.rd.pizzaservice.repository.pizza;
+
+import static org.junit.Assert.assertEquals;
+
+import java.sql.Connection;
+
+import javax.sql.DataSource;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.mysql.jdbc.Statement;
+
+import ua.rd.pizzaservice.domain.pizza.Pizza;
+import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:/repositoryH2TestContext.xml"})
+public class PizzaRepositoryInMemDBTest {
+
+	@Autowired
+	private PizzaRepository pizzaRep;
+	
+	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	public void setDataSource(DataSource dataSource) {
+		jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+	
+	@Test
+	public void testGetPizzaByID() {
+		String sqlInsert = "INSERT INTO pizza (id, name, price, type) "
+				+ "VALUES (pizza_sequence.NEXTVAL, 'PizzaName', 120, 0)";
+		
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplate.update((Connection con) -> con.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS), keyHolder);
+		Integer id = keyHolder.getKey().intValue();
+		
+		Pizza expectedPizza = new Pizza(id, "PizzaName", 120d, PizzaType.MEAT);
+		Pizza actualPizza = pizzaRep.getPizzaByID(id);
+		assertEquals(expectedPizza, actualPizza);
+	}
+	
+}

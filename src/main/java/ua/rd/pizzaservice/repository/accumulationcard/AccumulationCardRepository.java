@@ -19,4 +19,8 @@ public interface AccumulationCardRepository {
 	void delete(AccumulationCard card);
 	
 	Optional<Customer> getOwner(AccumulationCard card);
+	
+	Boolean hasAccumulationCard(Customer owner);
+	
+	AccumulationCard getCardByOwner(Customer owner);
 }
