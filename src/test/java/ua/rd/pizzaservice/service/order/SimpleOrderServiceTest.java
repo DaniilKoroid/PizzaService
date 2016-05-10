@@ -23,13 +23,12 @@ import ua.rd.pizzaservice.domain.order.OrderState;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.repository.order.InMemOrderRepository;
 import ua.rd.pizzaservice.repository.order.OrderRepository;
-import ua.rd.pizzaservice.repository.pizza.InMemPizzaRepository;
-import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 import ua.rd.pizzaservice.service.discount.DiscountProvider;
 import ua.rd.pizzaservice.service.discount.DiscountService;
 import ua.rd.pizzaservice.service.discount.InMemDiscountProvider;
 import ua.rd.pizzaservice.service.discount.SimpleDiscountService;
+import ua.rd.pizzaservice.service.pizza.PizzaServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SimpleOrderServiceTest {
@@ -38,6 +37,9 @@ public class SimpleOrderServiceTest {
 	OrderService orderService;
 	DiscountService discountService;
 
+	@Mock
+	PizzaServiceImpl pizzaService;
+	
 	@Mock
 	AccumulationCardService accCardService;
 
@@ -79,13 +81,15 @@ public class SimpleOrderServiceTest {
 
 	@Before
 	public void setUpVariables() {
+		when(pizzaService.getPizzaByID(1)).thenReturn(pizzaOne);
+		when(pizzaService.getPizzaByID(2)).thenReturn(pizzaTwo);
+		when(pizzaService.getPizzaByID(3)).thenReturn(pizzaThree);
+		when(pizzaService.getPizzaByID(4)).thenReturn(pizzaFour);
 		DiscountProvider discountProvider = new InMemDiscountProvider();
 		((InMemDiscountProvider) discountProvider).determineDiscounts();
-		PizzaRepository pizzaRepository = new InMemPizzaRepository();
-		((InMemPizzaRepository) pizzaRepository).cookPizzas();
 		OrderRepository orderRepository = new InMemOrderRepository();
 		discountService = new SimpleDiscountService(accCardService, discountProvider);
-		orderService = new SimpleOrderService(discountService, accCardService, pizzaRepository, orderRepository);
+		orderService = new SimpleOrderService(discountService, accCardService, pizzaService, orderRepository);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);
 		when(accCardService.hasAccumulationCard(customerWithCard)).thenReturn(true);
@@ -170,8 +174,7 @@ public class SimpleOrderServiceTest {
 	@Test
 	public void testChangeOrderWithNewStateAndAppropriatePizzaCountReturnsTrue() {
 		System.out.println("test changeOrder with NEW state and appropriate pizza count " + "returns true");
-		int pizzaCount = 5;
-		Integer[] arr = new Integer[pizzaCount];
+		Integer[] arr = new Integer[]{1, 1, 2, 3, 3};
 		OrderState state = OrderState.NEW;
 		Order order = new Order();
 		order.setState(state);

@@ -14,9 +14,9 @@ import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.order.OrderState;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.repository.order.OrderRepository;
-import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 import ua.rd.pizzaservice.service.discount.DiscountService;
+import ua.rd.pizzaservice.service.pizza.PizzaService;
 
 @Service
 public class SimpleOrderService implements OrderService {
@@ -26,7 +26,7 @@ public class SimpleOrderService implements OrderService {
 
 	private DiscountService discountService;
 	private AccumulationCardService accCardService;
-	private PizzaRepository pizzaRepository;
+	private PizzaService pizzaService;
 	private OrderRepository orderRepository;
 
 	SimpleOrderService() {
@@ -34,10 +34,10 @@ public class SimpleOrderService implements OrderService {
 
 	@Autowired
 	public SimpleOrderService(DiscountService discountService, AccumulationCardService accCardService,
-			PizzaRepository pizzaRepository, OrderRepository orderRepository) {
+			PizzaService pizzaService, OrderRepository orderRepository) {
 		this.discountService = discountService;
 		this.accCardService = accCardService;
-		this.pizzaRepository = pizzaRepository;
+		this.pizzaService = pizzaService;
 		this.orderRepository = orderRepository;
 	}
 
@@ -72,7 +72,7 @@ public class SimpleOrderService implements OrderService {
 		Map<Pizza, Integer> pizzas = new HashMap<>();
 		int toAdd = 1;
 		for (Integer id : pizzasID) {
-			Pizza pizza = pizzaRepository.getPizzaByID(id);
+			Pizza pizza = pizzaService.getPizzaByID(id);
 
 			if (pizzas.containsKey(pizza)) {
 				Integer curValue = pizzas.get(pizza);

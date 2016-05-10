@@ -17,6 +17,10 @@ public class SimpleAccumulationCardService implements AccumulationCardService {
 	
     public SimpleAccumulationCardService() {
     }
+    
+    public SimpleAccumulationCardService(AccumulationCardRepository cardRepository) {
+    	cardRep = cardRepository;
+    }
 
     @Override
     public AccumulationCard getAccumulationCardByCustomer(Customer customer) {
@@ -48,7 +52,6 @@ public class SimpleAccumulationCardService implements AccumulationCardService {
     @Override
     public Boolean activateAccumulationCardForCustomer(Customer customer) {
         if (!hasAccumulationCard(customer)) {
-        	System.out.println("has no card");
             return false;
         }
         AccumulationCard card = getAccumulationCardByCustomer(customer);

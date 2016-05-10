@@ -6,32 +6,58 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import static org.mockito.Mockito.when;
+
 import java.util.NoSuchElementException;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
+import ua.rd.pizzaservice.repository.accumulationcard.GenericDaoJPAAccumulationCardRepository;
 
+@RunWith(MockitoJUnitRunner.class)
 public class SimpleAccumulationCardServiceTest {
 
 	private AccumulationCardService accCardService;
 
+	@Mock
+	GenericDaoJPAAccumulationCardRepository cardRep;
+	
 	private Customer customerWithActivatedCard;
 	private Customer customerWithNotActivatedCard;
 	private Customer customerWithoutCard;
 
+	private AccumulationCard activatedCard;
+	private AccumulationCard notActivatedCard;
+	
 	@Before
 	public void setUp() throws Exception {
-		accCardService = new SimpleAccumulationCardService();
 		customerWithActivatedCard = new Customer("name1");
 		customerWithNotActivatedCard = new Customer("name2");
 		customerWithoutCard = new Customer("name3");
-		accCardService.assignNewAccumulationCardToCustomer(customerWithActivatedCard);
-		accCardService.assignNewAccumulationCardToCustomer(customerWithNotActivatedCard);
-		accCardService.activateAccumulationCardForCustomer(customerWithActivatedCard);
+		activatedCard = new AccumulationCard();
+		activatedCard.setAmount(100d);
+		activatedCard.setIsActivated(true);
+		activatedCard.setOwner(customerWithActivatedCard);
+		notActivatedCard = new AccumulationCard();
+		notActivatedCard.setAmount(100d);
+		notActivatedCard.setIsActivated(false);
+		notActivatedCard.setOwner(customerWithNotActivatedCard);
+		when(cardRep.hasAccumulationCard(customerWithActivatedCard)).thenReturn(true);
+		when(cardRep.hasAccumulationCard(customerWithNotActivatedCard)).thenReturn(true);
+		when(cardRep.hasAccumulationCard(customerWithoutCard)).thenReturn(false);
+		when(cardRep.getCardByOwner(customerWithActivatedCard)).thenReturn(activatedCard);
+		when(cardRep.getCardByOwner(customerWithNotActivatedCard)).thenReturn(notActivatedCard);
+		accCardService = new SimpleAccumulationCardService(cardRep);
+//		accCardService.assignNewAccumulationCardToCustomer(customerWithActivatedCard);
+//		accCardService.assignNewAccumulationCardToCustomer(customerWithNotActivatedCard);
+//		accCardService.activateAccumulationCardForCustomer(customerWithActivatedCard);
 	}
 
 	@After
@@ -134,6 +160,8 @@ public class SimpleAccumulationCardServiceTest {
 	public void testAssignNewAccumulationCardToCustomerWithoutCardCreatesCard() {
 		System.out.println("test assignNewAccumulationCardToCustomer without card created card");
 		assertFalse(accCardService.hasAccumulationCard(customerWithoutCard));
+		when(cardRep.hasAccumulationCard(customerWithoutCard)).thenReturn(true);
+		when(cardRep.getCardByOwner(customerWithoutCard)).thenReturn(new AccumulationCard());
 		accCardService.assignNewAccumulationCardToCustomer(customerWithoutCard);
 		assertTrue(accCardService.hasAccumulationCard(customerWithoutCard));
 		assertNotNull(accCardService.getAccumulationCardByCustomer(customerWithoutCard));

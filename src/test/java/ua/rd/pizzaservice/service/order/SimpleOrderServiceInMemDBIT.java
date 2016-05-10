@@ -76,6 +76,12 @@ public class SimpleOrderServiceInMemDBIT {
 		assertOrderStateEqualsToGivenState(order, OrderState.NEW);
 	}
 	
+	@Test(expected = Exception.class)
+	public void testPlaceNewOrderThrowsExceptionWhenPizzasWithGivenIdsDontExist() {
+		Integer[] pizzasID = getDefectedInsertedPizzasToOrderIds();
+		service.placeNewOrder(customer, pizzasID);
+	}
+	
 	@Test
 	public void testCancelOrderReturnsTrueOnOrderWithNewState() {
 		Order order = getOrderFromServiceWithNewState();
@@ -296,6 +302,15 @@ public class SimpleOrderServiceInMemDBIT {
 		Integer pizza1Id = threePizzas[0];
 		Integer pizza2Id = threePizzas[1];
 		Integer pizza3Id = threePizzas[2];
+		Integer[] pizzasID = new Integer[] {pizza1Id, pizza1Id, pizza2Id, pizza3Id, pizza3Id};
+		return pizzasID;
+	}
+	
+	private Integer[] getDefectedInsertedPizzasToOrderIds() {
+		Integer[] threePizzas = insertThreePizzas();
+		Integer pizza1Id = threePizzas[0] + 1;
+		Integer pizza2Id = threePizzas[1] + 1;
+		Integer pizza3Id = threePizzas[2] + 1;
 		Integer[] pizzasID = new Integer[] {pizza1Id, pizza1Id, pizza2Id, pizza3Id, pizza3Id};
 		return pizzasID;
 	}
