@@ -3,10 +3,12 @@ package ua.rd.pizzaservice.service.customer;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.repository.customer.CustomerRepository;
 
+@Service
 public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
