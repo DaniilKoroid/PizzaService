@@ -3,6 +3,7 @@ package ua.rd.pizzaservice.repository.pizza;
 import static org.junit.Assert.assertEquals;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 import javax.sql.DataSource;
 
@@ -14,8 +15,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.mysql.jdbc.Statement;
 
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
@@ -36,16 +35,28 @@ public class PizzaRepositoryInMemDBTest {
 	
 	@Test
 	public void testGetPizzaByID() {
-		String sqlInsert = "INSERT INTO pizza (id, name, price, type) "
-				+ "VALUES (pizza_sequence.NEXTVAL, 'PizzaName', 120, 0)";
+		String name = "PizzaName";
+		Double price = 120d;
+		PizzaType type = PizzaType.SEA;
+		Integer id = insertPizza(name, price, type);
 		
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		jdbcTemplate.update((Connection con) -> con.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS), keyHolder);
-		Integer id = keyHolder.getKey().intValue();
-		
-		Pizza expectedPizza = new Pizza(id, "PizzaName", 120d, PizzaType.MEAT);
+		Pizza expectedPizza = new Pizza(id, name, price, type);
 		Pizza actualPizza = pizzaRep.getPizzaByID(id);
 		assertEquals(expectedPizza, actualPizza);
+	}
+	
+	private Integer insertPizza(String name, Double price, PizzaType type) {
+		String sqlInsert = "INSERT INTO pizza (name, price, type, id) VALUES (?, ?, ?, pizza_sequence.NEXTVAL)";
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		jdbcTemplate.update(
+				(Connection con) -> {
+			PreparedStatement ps = con.prepareStatement(sqlInsert, new String[]{"id"});
+			ps.setString(1, name);
+			ps.setDouble(2, price);
+			ps.setInt(3, type.ordinal());
+			return ps;
+		}, keyHolder);
+		return keyHolder.getKey().intValue();
 	}
 	
 }
