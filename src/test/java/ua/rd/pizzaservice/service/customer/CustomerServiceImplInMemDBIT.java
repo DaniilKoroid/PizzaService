@@ -113,7 +113,5 @@ public class CustomerServiceImplInMemDBIT {
 		Integer customerId = keyHolder.getKey().intValue();
 		return customerId;
 	}
-	
-	
 
 }
