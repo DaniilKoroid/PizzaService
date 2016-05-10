@@ -29,7 +29,7 @@ import ua.rd.pizzaservice.domain.address.Address;
 @Table(name = "customer")
 @NamedQueries({ 
 	@NamedQuery(name = "findAllCustomers", query = "SELECT c FROM Customer c") ,
-	@NamedQuery(name = "findCustomer", query = "SELECT c FROM Customer c JOIN FETCH c.addresses a WHERE c.id = :id")
+	@NamedQuery(name = "findCustomer", query = "SELECT c FROM Customer c LEFT JOIN FETCH c.addresses a WHERE c.id = :id")
 })
 public class Customer implements Serializable {
 
