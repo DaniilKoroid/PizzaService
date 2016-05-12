@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class GenericDaoJPAImpl<T, PK extends Serializable> implements GenericDao<T, PK> {
+public abstract class GenericDaoJPAImpl<T, PK extends Serializable> implements GenericDao<T, PK> {
 
 	protected Class<T> entityClass;
 
@@ -30,6 +30,7 @@ public class GenericDaoJPAImpl<T, PK extends Serializable> implements GenericDao
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public T read(PK id) {
 		T foundObject = em.find(entityClass, id);
 		return foundObject;
