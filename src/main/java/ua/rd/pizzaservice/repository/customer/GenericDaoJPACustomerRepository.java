@@ -2,7 +2,7 @@ package ua.rd.pizzaservice.repository.customer;
 
 import java.util.List;
 
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
@@ -19,10 +19,9 @@ public class GenericDaoJPACustomerRepository extends GenericDaoJPAImpl<Customer,
 
 	@Override
 	public Customer read(Integer id) {
-		Query namedQuery = em.createNamedQuery("findCustomer");
-		namedQuery.setParameter("id", id);
-		Object result = namedQuery.getSingleResult();
-		Customer customer = (Customer) result;
+		TypedQuery<Customer> query = em.createNamedQuery("findCustomer", Customer.class);
+		query.setParameter("id", id);
+		Customer customer = query.getSingleResult();
 		return customer;
 	}
 
