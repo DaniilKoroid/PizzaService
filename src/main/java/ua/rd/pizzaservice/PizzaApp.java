@@ -32,12 +32,13 @@ public class PizzaApp {
 		
 		Order order;
 		Long orderId;
+		Address address = new Address(null, "Ukraine", "Kyiv", "Velyka", "18", "Stan", "1234");
 		Customer customer = new Customer();
 		customer.setName("Vanya");
-		customer.addAddress(new Address(null, "Ukraine", "Kyiv", "Velyka", "18", "Stan", "1234"));
+		customer.addAddress(address);
 		OrderService orderService = appContext.getBean(OrderService.class);
 		Integer[] pizzasId = new Integer[] { 1, 2, 3 };
-		order = orderService.placeNewOrder(customer, pizzasId);
+		order = orderService.placeNewOrder(customer, address, pizzasId);
 		orderId = order.getId();
 		System.out.println("Order in java: " + order);
 		System.out.println("Order in db: " + em.find(Order.class, orderId));

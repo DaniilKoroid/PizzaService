@@ -28,7 +28,7 @@ public class JPAWithSpringApp {
 			
 			Integer[] pizzasID = new Integer[]{2, 2};
 			
-			Order newOrder = orderService.placeNewOrder(customer, pizzasID);
+			Order newOrder = orderService.placeNewOrder(customer, address, pizzasID);
 			System.out.println("New order: " + newOrder);
 		} finally {
 			repContext.close();

@@ -2,6 +2,7 @@ package ua.rd.pizzaservice.service.order;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
+import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.order.OrderState;
@@ -21,18 +23,26 @@ import ua.rd.pizzaservice.service.pizza.PizzaService;
 @Service
 public class SimpleOrderService implements OrderService {
 
+	//TODO: tests for repos methods
+	
 	private static final int MIN_PIZZA_IN_ORDER_COUNT = 1;
 	private static final int MAX_PIZZA_IN_ORDER_COUNT = 10;
 
+	@Autowired
 	private DiscountService discountService;
+	
+	@Autowired
 	private AccumulationCardService accCardService;
+	
+	@Autowired
 	private PizzaService pizzaService;
+	
+	@Autowired
 	private OrderRepository orderRepository;
 
 	SimpleOrderService() {
 	}
 
-	@Autowired
 	public SimpleOrderService(DiscountService discountService, AccumulationCardService accCardService,
 			PizzaService pizzaService, OrderRepository orderRepository) {
 		this.discountService = discountService;
@@ -40,23 +50,13 @@ public class SimpleOrderService implements OrderService {
 		this.pizzaService = pizzaService;
 		this.orderRepository = orderRepository;
 	}
-
-	@Override
-	public Order placeNewOrder(Customer customer, Integer... pizzasID) {
-		checkOrderedPizzasNumber(pizzasID);
-		checkCustomerExistance(customer);
-
-		Map<Pizza, Integer> pizzas = pizzasByArrOfId(pizzasID);
-		Order newOrder = createOrder(customer, pizzas);
-
-		orderRepository.saveOrder(newOrder);
-		return newOrder;
-	}
-
-	private Order createOrder(Customer customer, Map<Pizza, Integer> pizzas) {
+	
+	private Order createOrder(Customer customer, Map<Pizza, Integer> pizzas, Address deliveryAddress) {
+		//TODO: add adding address to customers addresses
 		Order newOrder = createOrder();
 		newOrder.setState(OrderState.NEW);
 		newOrder.setCustomer(customer);
+		newOrder.setAddress(deliveryAddress);
 		newOrder.setPizzas(pizzas);
 		newOrder.setCreationDate(LocalDateTime.now());
 		newOrder.setDeliveryDate(LocalDateTime.now().plusMinutes(30));
@@ -172,5 +172,37 @@ public class SimpleOrderService implements OrderService {
 	public Double getFinalPrice(Order order) {
 		Double finalPrice = getFullPrice(order) - getDiscountAmount(order);
 		return finalPrice;
+	}
+
+	@Override
+	public Order placeNewOrder(Customer customer, Address deliveryAddress, Integer... pizzasID) {
+		checkOrderedPizzasNumber(pizzasID);
+		checkCustomerExistance(customer);
+
+		Map<Pizza, Integer> pizzas = pizzasByArrOfId(pizzasID);
+		Order newOrder = createOrder(customer, pizzas, deliveryAddress);
+
+		orderRepository.saveOrder(newOrder);
+		return newOrder;
+	}
+
+	@Override
+	public Order create(Order order) {
+		return orderRepository.create(order);
+	}
+
+	@Override
+	public Order findById(Long id) {
+		return orderRepository.read(id);
+	}
+
+	@Override
+	public List<Order> findAllOrders() {
+		return orderRepository.findAllOrders();
+	}
+
+	@Override
+	public Long saveOrder(Order newOrder) {
+		return orderRepository.saveOrder(newOrder);
 	}
 }

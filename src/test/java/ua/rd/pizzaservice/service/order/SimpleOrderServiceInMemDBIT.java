@@ -22,6 +22,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.order.OrderState;
@@ -39,9 +40,16 @@ public class SimpleOrderServiceInMemDBIT {
 	
 	private Customer customer;
 	
+	private Address address;
+	
 	@Before
 	public void setCustomer() {
 		customer = new Customer("Ivan");
+	}
+	
+	@Before
+	public void setAddress() {
+		address = new Address(null, "Ukraine", "Kyiv", "Velyka", "11", "40", "1000");
 	}
 	
 	@Autowired
@@ -52,14 +60,14 @@ public class SimpleOrderServiceInMemDBIT {
 	@Test
 	public void testPlaceNewOrderReturnsNotNullOrder() {
 		Integer[] pizzasID = getInsertedPizzasToOrderIds();
-		Order order = service.placeNewOrder(customer, pizzasID);
+		Order order = service.placeNewOrder(customer, address, pizzasID);
 		assertNotNull(order);
 	}
 	
 	@Test
 	public void testPlaceNewOrderReturnsOrderWithAppropriatePizzaCount() {
 		Integer[] pizzasID = getInsertedPizzasToOrderIds();
-		Order order = service.placeNewOrder(customer, pizzasID);
+		Order order = service.placeNewOrder(customer, address, pizzasID);
 		Map<Pizza, Integer> pizzas = order.getPizzas();
 		for (Entry<Pizza, Integer> entry : pizzas.entrySet()) {
 			Integer pizzaId = entry.getKey().getId();
@@ -72,14 +80,14 @@ public class SimpleOrderServiceInMemDBIT {
 	@Test
 	public void testPlaceNewOrderReturnsOrderWithNewState() {
 		Integer[] pizzasID = getInsertedPizzasToOrderIds();
-		Order order = service.placeNewOrder(customer, pizzasID);
+		Order order = service.placeNewOrder(customer, address, pizzasID);
 		assertOrderStateEqualsToGivenState(order, OrderState.NEW);
 	}
 	
 	@Test(expected = Exception.class)
 	public void testPlaceNewOrderThrowsExceptionWhenPizzasWithGivenIdsDontExist() {
 		Integer[] pizzasID = getDefectedInsertedPizzasToOrderIds();
-		service.placeNewOrder(customer, pizzasID);
+		service.placeNewOrder(customer, address, pizzasID);
 	}
 	
 	@Test
@@ -336,7 +344,7 @@ public class SimpleOrderServiceInMemDBIT {
 
 	private Order getOrderFromServiceWithNewState() {
 		Integer[] pizzasID = getInsertedPizzasToOrderIds();
-		Order order = service.placeNewOrder(customer, pizzasID);
+		Order order = service.placeNewOrder(customer, address, pizzasID);
 		return order;
 	}
 	

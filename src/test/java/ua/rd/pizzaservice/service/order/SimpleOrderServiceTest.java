@@ -17,6 +17,7 @@ import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
+import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.domain.order.OrderState;
@@ -34,6 +35,7 @@ import ua.rd.pizzaservice.service.pizza.PizzaServiceImpl;
 public class SimpleOrderServiceTest {
 
 	Customer customer;
+	Address address;
 	OrderService orderService;
 	DiscountService discountService;
 
@@ -97,6 +99,8 @@ public class SimpleOrderServiceTest {
 		when(accCardService.getAccumulationCardByCustomer(customerWithCard)).thenReturn(activatedCard);
 		String name = "";
 		customer = new Customer(name);
+		address = new Address();
+		address.setCountry("Ukraine");
 		when(pizzaOne.getPrice()).thenReturn(60d);
 		when(pizzaTwo.getPrice()).thenReturn(70d);
 		when(pizzaThree.getPrice()).thenReturn(75d);
@@ -115,7 +119,7 @@ public class SimpleOrderServiceTest {
 		System.out.println("test placeNewOrder with too much pizzas throws IllegalArgumentException");
 		int length = 11;
 		Integer[] arr = new Integer[length];
-		orderService.placeNewOrder(customer, arr);
+		orderService.placeNewOrder(customer, address, arr);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -123,7 +127,7 @@ public class SimpleOrderServiceTest {
 		System.out.println("test placeNewOrder with zero pizzas throws IllegalArgumentException");
 		int length = 0;
 		Integer[] arr = new Integer[length];
-		orderService.placeNewOrder(customer, arr);
+		orderService.placeNewOrder(customer, address, arr);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -132,7 +136,7 @@ public class SimpleOrderServiceTest {
 		int pizzaCount = 5;
 		Integer[] arr = new Integer[pizzaCount];
 		Customer nullCustomer = null;
-		orderService.placeNewOrder(nullCustomer, arr);
+		orderService.placeNewOrder(nullCustomer, address, arr);
 	}
 
 	@Test

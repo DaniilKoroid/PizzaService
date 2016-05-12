@@ -5,7 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.NoSuchElementException;
@@ -19,7 +19,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
-import ua.rd.pizzaservice.repository.accumulationcard.GenericDaoJPAAccumulationCardRepository;
+import ua.rd.pizzaservice.repository.accumulationcard.AccumulationCardRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SimpleAccumulationCardServiceTest {
@@ -27,7 +27,7 @@ public class SimpleAccumulationCardServiceTest {
 	private AccumulationCardService accCardService;
 
 	@Mock
-	GenericDaoJPAAccumulationCardRepository cardRep;
+	AccumulationCardRepository cardRep;
 	
 	private Customer customerWithActivatedCard;
 	private Customer customerWithNotActivatedCard;
@@ -54,10 +54,10 @@ public class SimpleAccumulationCardServiceTest {
 		when(cardRep.hasAccumulationCard(customerWithoutCard)).thenReturn(false);
 		when(cardRep.getCardByOwner(customerWithActivatedCard)).thenReturn(activatedCard);
 		when(cardRep.getCardByOwner(customerWithNotActivatedCard)).thenReturn(notActivatedCard);
+		when(cardRep.update(notActivatedCard)).thenReturn(notActivatedCard);
+		when(cardRep.update(activatedCard)).thenReturn(activatedCard);
+		when(cardRep.create(any(AccumulationCard.class))).thenReturn(notActivatedCard);
 		accCardService = new SimpleAccumulationCardService(cardRep);
-//		accCardService.assignNewAccumulationCardToCustomer(customerWithActivatedCard);
-//		accCardService.assignNewAccumulationCardToCustomer(customerWithNotActivatedCard);
-//		accCardService.activateAccumulationCardForCustomer(customerWithActivatedCard);
 	}
 
 	@After
@@ -153,6 +153,7 @@ public class SimpleAccumulationCardServiceTest {
 	@Test
 	public void testAssignNewAccumulationCardToCustomerWithoutCardReturnsTrue() {
 		System.out.println("test assignNewAccumulationCardToCustomer without card returns true");
+//		when(cardRep.create(any(AccumulationCard.class))).thenReturn(notActivatedCard);
 		assertTrue(accCardService.assignNewAccumulationCardToCustomer(customerWithoutCard));
 	}
 
@@ -197,6 +198,8 @@ public class SimpleAccumulationCardServiceTest {
 				+ "changes card state");
 		AccumulationCard cardBefore = accCardService.getAccumulationCardByCustomer(customerWithNotActivatedCard);
 		boolean before = cardBefore.getIsActivated();
+		when(cardRep.update(notActivatedCard)).thenReturn(notActivatedCard);
+		notActivatedCard.setIsActivated(true);
 		accCardService.activateAccumulationCardForCustomer(customerWithNotActivatedCard);
 		AccumulationCard cardAfter = accCardService.getAccumulationCardByCustomer(customerWithNotActivatedCard);
 		boolean after = cardAfter.getIsActivated();
@@ -212,6 +215,7 @@ public class SimpleAccumulationCardServiceTest {
 	@Test
 	public void testDeactivateAccumulationCardForCustomerWithActivatedCardReturnsTrue() {
 		System.out.println("test deactivateAccumulationCardForCustomer with activated card returns true");
+//		when(cardRep.update(any(AccumulationCard.class))).thenReturn(activatedCard);
 		assertTrue(accCardService.deactivateAccumulationCardForCustomer(customerWithActivatedCard));
 	}
 
@@ -221,6 +225,8 @@ public class SimpleAccumulationCardServiceTest {
 				+ "changes card state");
 		AccumulationCard cardBefore = accCardService.getAccumulationCardByCustomer(customerWithActivatedCard);
 		boolean before = cardBefore.getIsActivated();
+		when(cardRep.update(activatedCard)).thenReturn(activatedCard);
+		activatedCard.setIsActivated(false);
 		accCardService.deactivateAccumulationCardForCustomer(customerWithActivatedCard);
 		AccumulationCard cardAfter = accCardService.getAccumulationCardByCustomer(customerWithActivatedCard);
 		boolean after = cardAfter.getIsActivated();
@@ -239,10 +245,11 @@ public class SimpleAccumulationCardServiceTest {
 				+ "dont changes card state");
 		AccumulationCard cardBefore = accCardService.getAccumulationCardByCustomer(customerWithNotActivatedCard);
 		boolean before = cardBefore.getIsActivated();
-		accCardService.activateAccumulationCardForCustomer(customerWithNotActivatedCard);
+		accCardService.deactivateAccumulationCardForCustomer(customerWithNotActivatedCard);
+		when(cardRep.update(notActivatedCard)).thenReturn(notActivatedCard);
 		AccumulationCard cardAfter = accCardService.getAccumulationCardByCustomer(customerWithNotActivatedCard);
 		boolean after = cardAfter.getIsActivated();
-		assertNotEquals(before, after);
+		assertEquals(before, after);
 	}
 
 	@Test
