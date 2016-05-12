@@ -23,6 +23,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
@@ -30,6 +31,7 @@ import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/repositoryH2TestContext.xml", "classpath:/appTestContext.xml"})
+@Transactional
 public class PizzaServiceImplInMemDBIT {
 
 	@Autowired
@@ -51,7 +53,7 @@ public class PizzaServiceImplInMemDBIT {
 		expectedPizza.setPrice(120d);
 		expectedPizza.setType(PizzaType.MEAT);
 		expectedPizza = pizzaService.create(expectedPizza);
-
+		pizzaService.getPizzaByID(expectedPizza.getId());
 		Pizza actualPizza = jdbcTemplate.query(sqlForPizza, new Object[] { expectedPizza.getId()}, new ResultSetExtractor<Pizza>() {
 
 			@Override
@@ -75,6 +77,7 @@ public class PizzaServiceImplInMemDBIT {
 		PizzaType type = PizzaType.SEA;
 		Integer pizzaId = insertPizza(name, price, type);
 		Pizza actualPizza = pizzaService.getPizzaByID(pizzaId);
+		pizzaService.getPizzaByID(actualPizza.getId());
 		assertNotNull(actualPizza.getId());
 		assertEquals(name, actualPizza.getName());
 		assertEquals(price, actualPizza.getPrice(), 1e-8);

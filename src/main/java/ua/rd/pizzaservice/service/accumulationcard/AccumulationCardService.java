@@ -16,4 +16,6 @@ public interface AccumulationCardService {
 	Boolean activateAccumulationCardForCustomer(Customer customer);
 
 	Boolean deactivateAccumulationCardForCustomer(Customer customer);
+	
+	AccumulationCard read(Integer id);
 }

@@ -20,12 +20,14 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
 import ua.rd.pizzaservice.domain.customer.Customer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/repositoryH2TestContext.xml", "classpath:/appTestContext.xml"})
+@Transactional
 public class SimpleAccumulationCardServiceInMemDBTest {
 
 	@Autowired
@@ -49,6 +51,7 @@ public class SimpleAccumulationCardServiceInMemDBTest {
 		Customer customer = createCustomer();
 		assignCardToCustomer(customer);
 		Boolean assignedToCustomerWithCard = service.assignNewAccumulationCardToCustomer(customer);
+		service.read(1);
 		assertFalse(assignedToCustomerWithCard);
 	}
 	
@@ -57,6 +60,7 @@ public class SimpleAccumulationCardServiceInMemDBTest {
 		Customer customer = createCustomer();
 		assignCardToCustomer(customer);
 		getCardByCustomerViaServiceMethod(customer);
+		
 	}
 
 	@Test
@@ -64,6 +68,7 @@ public class SimpleAccumulationCardServiceInMemDBTest {
 		Customer customer = createCustomer();
 		assignCardToCustomer(customer);
 		AccumulationCard card = service.getAccumulationCardByCustomer(customer);
+		service.read(card.getId());
 		assertFalse(card.getIsActivated());
 		Boolean isActivated = service.activateAccumulationCardForCustomer(customer);
 		assertTrue(isActivated);
@@ -94,6 +99,7 @@ public class SimpleAccumulationCardServiceInMemDBTest {
 		Customer customer = new Customer("Sveta");
 		insertCustomerToDB(customer);
 		Boolean isActivated = service.activateAccumulationCardForCustomer(customer);
+		service.read(1);
 		assertFalse(isActivated);
 	}
 	
@@ -163,12 +169,14 @@ public class SimpleAccumulationCardServiceInMemDBTest {
 
 	private AccumulationCard getCardByCustomerViaServiceMethod(Customer customer) {
 		AccumulationCard card = service.getAccumulationCardByCustomer(customer);
+		service.read(1);
 		assertNotNull(card);
 		return card;
 	}
 
 	private void assignCardToCustomer(Customer customer) {
 		Boolean isAssigned = service.assignNewAccumulationCardToCustomer(customer);
+		service.read(1);
 		assertTrue(isAssigned);
 	}
 
@@ -182,6 +190,7 @@ public class SimpleAccumulationCardServiceInMemDBTest {
 	public void testHasAccumulationCardWithOwnerThatHasNoAccumulationCardReturnsFalse() {
 		Customer customer = createCustomer();
 		Boolean hasAccumulationCard = service.hasAccumulationCard(customer);
+		service.read(1);
 		assertFalse(hasAccumulationCard);
 	}
 	

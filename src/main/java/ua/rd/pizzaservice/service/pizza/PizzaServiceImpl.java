@@ -21,7 +21,11 @@ public class PizzaServiceImpl implements PizzaService {
 
 	@Override
 	public Pizza getPizzaByID(Integer id) {
-		return pizzaRep.getPizzaByID(id);
+		Pizza pizza = pizzaRep.getPizzaByID(id);
+		if (pizza == null) {
+			throw new RuntimeException("No pizza with given id: " + id + ".");
+		}
+		return pizza;
 	}
 
 	@Override

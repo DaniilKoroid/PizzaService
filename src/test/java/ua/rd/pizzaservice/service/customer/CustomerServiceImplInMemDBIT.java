@@ -20,12 +20,14 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/repositoryH2TestContext.xml", "classpath:/appTestContext.xml"})
+@Transactional
 public class CustomerServiceImplInMemDBIT {
 
 	@Autowired
@@ -47,6 +49,7 @@ public class CustomerServiceImplInMemDBIT {
 		Address address = new Address(null, "Ukraine", "Kyiv", null, null, null, null);
 		expectedCustomer.addAddress(address);
 		expectedCustomer = customerService.create(expectedCustomer);
+		customerService.getAllCustomers();
 		
 		Customer actualCustomer = jdbcTemplate.queryForObject(sqlForCustomer, new Object[] { expectedCustomer.getId() },
 				new BeanPropertyRowMapper<Customer>(Customer.class));
@@ -63,6 +66,7 @@ public class CustomerServiceImplInMemDBIT {
 		String name = "Vova";
 		Integer customerId = insertCustomer(name);
 		Customer actualCustomer = customerService.read(customerId);
+		customerService.getAllCustomers();
 		assertNotNull(actualCustomer.getId());
 		assertEquals(name, actualCustomer.getName());
 	}
@@ -74,6 +78,7 @@ public class CustomerServiceImplInMemDBIT {
 		String newName = "Little girl has no name";
 		Integer customerId = insertCustomer(oldName);
 		Customer customer = customerService.read(customerId);
+		customerService.getAllCustomers();
 		assertEquals(oldName, customer.getName());
 		customer.setName(newName);
 		Customer updatedCustomer = customerService.update(customer);
@@ -88,6 +93,7 @@ public class CustomerServiceImplInMemDBIT {
 		String name = "Vova";
 		Integer customerId = insertCustomer(name);
 		Customer customer = customerService.read(customerId);
+		customerService.getAllCustomers();
 		customerService.delete(customer);
 		
 		final String selectSQL = "SELECT * FROM customer WHERE id = ?";

@@ -84,4 +84,9 @@ public class SimpleAccumulationCardService implements AccumulationCardService {
 		return card.getOwner();
 	}
 
+	@Override
+	public AccumulationCard read(Integer id) {
+		return cardRep.read(id);
+	}
+
 }

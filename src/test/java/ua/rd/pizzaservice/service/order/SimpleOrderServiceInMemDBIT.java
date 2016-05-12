@@ -21,6 +21,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
@@ -31,6 +32,7 @@ import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/repositoryH2TestContext.xml", "classpath:/appTestContext.xml"})
+@Transactional
 public class SimpleOrderServiceInMemDBIT {
 
 	private JdbcTemplate jdbcTemplate;
@@ -61,6 +63,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testPlaceNewOrderReturnsNotNullOrder() {
 		Integer[] pizzasID = getInsertedPizzasToOrderIds();
 		Order order = service.placeNewOrder(customer, address, pizzasID);
+		methodToFlushChangesToDb();
 		assertNotNull(order);
 	}
 	
@@ -68,6 +71,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testPlaceNewOrderReturnsOrderWithAppropriatePizzaCount() {
 		Integer[] pizzasID = getInsertedPizzasToOrderIds();
 		Order order = service.placeNewOrder(customer, address, pizzasID);
+		methodToFlushChangesToDb();
 		Map<Pizza, Integer> pizzas = order.getPizzas();
 		for (Entry<Pizza, Integer> entry : pizzas.entrySet()) {
 			Integer pizzaId = entry.getKey().getId();
@@ -81,19 +85,22 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testPlaceNewOrderReturnsOrderWithNewState() {
 		Integer[] pizzasID = getInsertedPizzasToOrderIds();
 		Order order = service.placeNewOrder(customer, address, pizzasID);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.NEW);
 	}
 	
 	@Test(expected = Exception.class)
 	public void testPlaceNewOrderThrowsExceptionWhenPizzasWithGivenIdsDontExist() {
 		Integer[] pizzasID = getDefectedInsertedPizzasToOrderIds();
-		service.placeNewOrder(customer, address, pizzasID);
+		Order order = service.placeNewOrder(customer, address, pizzasID);
+		System.out.println(order);
 	}
 	
 	@Test
 	public void testCancelOrderReturnsTrueOnOrderWithNewState() {
 		Order order = getOrderFromServiceWithNewState();
 		Boolean isCancelled = service.cancelOrder(order);
+		methodToFlushChangesToDb();
 		assertTrue(isCancelled);
 	}
 
@@ -101,6 +108,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testCancelOrderChangedOrderStateToCancelledFromNewState() {
 		Order order = getOrderFromServiceWithNewState();
 		service.cancelOrder(order);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.CANCELLED);
 	}
 	
@@ -108,6 +116,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testCancelOrderReturnsTrueOnOrderWithInProgressState() {
 		Order order = getOrderFromServiceWithInProgressState();
 		Boolean isCancelled = service.cancelOrder(order);
+		methodToFlushChangesToDb();
 		assertTrue(isCancelled);
 	}
 
@@ -115,6 +124,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testCancelOrderChangedOrderStateToCancelledFromInProgressState() {
 		Order order = getOrderFromServiceWithInProgressState();
 		service.cancelOrder(order);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.CANCELLED);
 	}
 	
@@ -122,6 +132,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testCancelOrderReturnsFalseOnOrderWithCancelledState() {
 		Order order = getOrderFromServiceWithCancelledState();
 		Boolean isCancelled = service.cancelOrder(order);
+		methodToFlushChangesToDb();
 		assertFalse(isCancelled);
 	}
 
@@ -129,6 +140,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testCancelOrderChangedOrderStateToCancelledFromCancelledState() {
 		Order order = getOrderFromServiceWithCancelledState();
 		service.cancelOrder(order);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.CANCELLED);
 	}
 	
@@ -136,6 +148,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testCancelOrderReturnsFalseOnOrderWithDoneState() {
 		Order order = getOrderFromServiceWithDoneState();
 		Boolean isCancelled = service.cancelOrder(order);
+		methodToFlushChangesToDb();
 		assertFalse(isCancelled);
 	}
 
@@ -143,6 +156,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testCancelOrderChangedOrderStateToCancelledFromDoneState() {
 		Order order = getOrderFromServiceWithDoneState();
 		service.cancelOrder(order);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.DONE);
 	}
 
@@ -150,6 +164,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testProcessOrderReturnsTrueWithOrderNewState() {
 		Order order = getOrderFromServiceWithNewState();
 		Boolean orderProcessed = service.processOrder(order);
+		methodToFlushChangesToDb();
 		assertTrue(orderProcessed);
 	}
 	
@@ -157,6 +172,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testProcessOrderChangedStateToProcessedFromNewState() {
 		Order order = getOrderFromServiceWithNewState();
 		service.processOrder(order);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.IN_PROGRESS);
 	}
 	
@@ -164,6 +180,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testProcessOrderReturnsFalseWithOrderInProgressState() {
 		Order order = getOrderFromServiceWithInProgressState();
 		Boolean orderProcessed = service.processOrder(order);
+		methodToFlushChangesToDb();
 		assertFalse(orderProcessed);
 	}
 	
@@ -171,6 +188,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testProcessOrderDontChangedStateFromInProgressState() {
 		Order order = getOrderFromServiceWithInProgressState();
 		service.processOrder(order);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.IN_PROGRESS);
 	}
 	
@@ -178,6 +196,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testProcessOrderReturnsFalseWithOrderInDoneState() {
 		Order order = getOrderFromServiceWithDoneState();
 		Boolean orderProcessed = service.processOrder(order);
+		methodToFlushChangesToDb();
 		assertFalse(orderProcessed);
 	}
 	
@@ -185,6 +204,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testProcessOrderDontChangedStateFromDoneState() {
 		Order order = getOrderFromServiceWithDoneState();
 		service.processOrder(order);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.DONE);
 	}
 	
@@ -192,6 +212,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testProcessOrderReturnsFalseWithOrderInCancelledState() {
 		Order order = getOrderFromServiceWithCancelledState();
 		Boolean orderProcessed = service.processOrder(order);
+		methodToFlushChangesToDb();
 		assertFalse(orderProcessed);
 	}
 	
@@ -199,6 +220,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testProcessOrderDontChangedStateFromCancelledState() {
 		Order order = getOrderFromServiceWithCancelledState();
 		service.processOrder(order);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.CANCELLED);
 	}
 	
@@ -206,6 +228,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testDoneOrderReturnsFalseWithOrderInNewState() {
 		Order order = getOrderFromServiceWithNewState();
 		Boolean orderDone = service.doneOrder(order);
+		methodToFlushChangesToDb();
 		assertFalse(orderDone);
 	}
 	
@@ -213,6 +236,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testDoneOrderDontChangedStateFromNewState() {
 		Order order = getOrderFromServiceWithNewState();
 		service.doneOrder(order);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.NEW);
 	}
 	
@@ -220,6 +244,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testDoneOrderReturnsTrueWithOrderInProgressState() {
 		Order order = getOrderFromServiceWithInProgressState();
 		Boolean orderDone = service.doneOrder(order);
+		methodToFlushChangesToDb();
 		assertTrue(orderDone);
 	}
 	
@@ -227,6 +252,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testDoneOrderChangedStateFromInProgressStateToDone() {
 		Order order = getOrderFromServiceWithInProgressState();
 		service.doneOrder(order);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.DONE);
 	}
 	
@@ -234,6 +260,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testDoneOrderReturnsFalseWithOrderDoneState() {
 		Order order = getOrderFromServiceWithDoneState();
 		Boolean orderDone = service.doneOrder(order);
+		methodToFlushChangesToDb();
 		assertFalse(orderDone);
 	}
 	
@@ -241,6 +268,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testDoneOrderDontChangedStateFromDoneState() {
 		Order order = getOrderFromServiceWithDoneState();
 		service.doneOrder(order);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.DONE);
 	}
 	
@@ -248,6 +276,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testDoneOrderReturnsFalseWithOrderCancelledState() {
 		Order order = getOrderFromServiceWithCancelledState();
 		Boolean orderDone = service.doneOrder(order);
+		methodToFlushChangesToDb();
 		assertFalse(orderDone);
 	}
 	
@@ -255,6 +284,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testDoneOrderDontChangedStateFromCancelledState() {
 		Order order = getOrderFromServiceWithCancelledState();
 		service.doneOrder(order);
+		methodToFlushChangesToDb();
 		assertOrderStateEqualsToGivenState(order, OrderState.CANCELLED);
 	}
 	
@@ -262,6 +292,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testCanChangeReturnsTrueWithOrderInNewState() {
 		Order order = getOrderFromServiceWithNewState();
 		Boolean canChange = service.canChange(order);
+		methodToFlushChangesToDb();
 		assertTrue(canChange);
 	}
 	
@@ -269,6 +300,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testCanChangeReturnsFalseWithOrderInProgressState() {
 		Order order = getOrderFromServiceWithInProgressState();
 		Boolean canChange = service.canChange(order);
+		methodToFlushChangesToDb();
 		assertFalse(canChange);
 	}
 	
@@ -276,6 +308,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testCanChangeReturnsFalseWithOrderInDoneState() {
 		Order order = getOrderFromServiceWithDoneState();
 		Boolean canChange = service.canChange(order);
+		methodToFlushChangesToDb();
 		assertFalse(canChange);
 	}
 	
@@ -283,6 +316,7 @@ public class SimpleOrderServiceInMemDBIT {
 	public void testCanChangeReturnsFalseWithOrderInCancelledState() {
 		Order order = getOrderFromServiceWithCancelledState();
 		Boolean canChange = service.canChange(order);
+		methodToFlushChangesToDb();
 		assertFalse(canChange);
 	}
 	
@@ -291,6 +325,7 @@ public class SimpleOrderServiceInMemDBIT {
 		Order order = getOrderFromServiceWithNewState();
 		Integer[] newPizzasId = getNewInsertedPizzasToOrderIds();
 		Boolean orderChanged = service.changeOrder(order, newPizzasId);
+		methodToFlushChangesToDb();
 		assertTrue(orderChanged);
 	}
 	
@@ -316,9 +351,9 @@ public class SimpleOrderServiceInMemDBIT {
 	
 	private Integer[] getDefectedInsertedPizzasToOrderIds() {
 		Integer[] threePizzas = insertThreePizzas();
-		Integer pizza1Id = threePizzas[0] + 1;
-		Integer pizza2Id = threePizzas[1] + 1;
-		Integer pizza3Id = threePizzas[2] + 1;
+		Integer pizza1Id = threePizzas[0] + 100;
+		Integer pizza2Id = threePizzas[1] + 125;
+		Integer pizza3Id = threePizzas[2] + 141;
 		Integer[] pizzasID = new Integer[] {pizza1Id, pizza1Id, pizza2Id, pizza3Id, pizza3Id};
 		return pizzasID;
 	}
@@ -394,6 +429,10 @@ public class SimpleOrderServiceInMemDBIT {
 			return ps;
 		}, keyHolder);
 		return keyHolder.getKey().intValue();
+	}
+	
+	private void methodToFlushChangesToDb() {
+		service.findAllOrders();
 	}
 
 }
