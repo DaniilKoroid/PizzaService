@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.repository.order.InMemOrderRepository;
 import ua.rd.pizzaservice.repository.order.OrderRepository;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
+import ua.rd.pizzaservice.service.customer.CustomerService;
 import ua.rd.pizzaservice.service.discount.DiscountProvider;
 import ua.rd.pizzaservice.service.discount.DiscountService;
 import ua.rd.pizzaservice.service.discount.InMemDiscountProvider;
@@ -45,6 +47,9 @@ public class SimpleOrderServiceTest {
 	@Mock
 	AccumulationCardService accCardService;
 
+	@Mock
+	CustomerService customerService;
+	
 	@Mock
 	Customer customerWithCard;
 
@@ -87,11 +92,12 @@ public class SimpleOrderServiceTest {
 		when(pizzaService.getPizzaByID(2)).thenReturn(pizzaTwo);
 		when(pizzaService.getPizzaByID(3)).thenReturn(pizzaThree);
 		when(pizzaService.getPizzaByID(4)).thenReturn(pizzaFour);
+		when(customerService.proposeAddress(any(Address.class), any(Customer.class))).thenReturn(customer);
 		DiscountProvider discountProvider = new InMemDiscountProvider();
 		((InMemDiscountProvider) discountProvider).determineDiscounts();
 		OrderRepository orderRepository = new InMemOrderRepository();
 		discountService = new SimpleDiscountService(accCardService, discountProvider);
-		orderService = new SimpleOrderService(discountService, accCardService, pizzaService, orderRepository);
+		orderService = new SimpleOrderService(discountService, accCardService, pizzaService, orderRepository, customerService);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);
 		when(accCardService.hasAccumulationCard(customerWithCard)).thenReturn(true);

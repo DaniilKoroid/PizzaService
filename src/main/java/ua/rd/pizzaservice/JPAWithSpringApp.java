@@ -21,9 +21,9 @@ public class JPAWithSpringApp {
 			
 			OrderService orderService = appContext.getBean(OrderService.class);
 			Customer customer = new Customer();
-			customer.setName("Ivan");
+			customer.setName("Bob");
 			Address address = new Address();
-			address.setCountry("Ukraine");
+			address.setCountry("Kongo");
 			customer.addAddress(address);
 			
 			Integer[] pizzasID = new Integer[]{2, 2};

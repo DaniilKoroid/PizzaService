@@ -17,6 +17,7 @@ import ua.rd.pizzaservice.domain.order.OrderState;
 import ua.rd.pizzaservice.domain.pizza.Pizza;
 import ua.rd.pizzaservice.repository.order.OrderRepository;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
+import ua.rd.pizzaservice.service.customer.CustomerService;
 import ua.rd.pizzaservice.service.discount.DiscountService;
 import ua.rd.pizzaservice.service.pizza.PizzaService;
 
@@ -39,20 +40,23 @@ public class SimpleOrderService implements OrderService {
 	
 	@Autowired
 	private OrderRepository orderRepository;
+	
+	@Autowired
+	private CustomerService customerService;
 
 	SimpleOrderService() {
 	}
 
 	public SimpleOrderService(DiscountService discountService, AccumulationCardService accCardService,
-			PizzaService pizzaService, OrderRepository orderRepository) {
+			PizzaService pizzaService, OrderRepository orderRepository, CustomerService customerService) {
 		this.discountService = discountService;
 		this.accCardService = accCardService;
 		this.pizzaService = pizzaService;
 		this.orderRepository = orderRepository;
+		this.customerService = customerService;
 	}
 	
 	private Order createOrder(Customer customer, Map<Pizza, Integer> pizzas, Address deliveryAddress) {
-		//TODO: add adding address to customers addresses
 		Order newOrder = createOrder();
 		newOrder.setState(OrderState.NEW);
 		newOrder.setCustomer(customer);
@@ -60,6 +64,7 @@ public class SimpleOrderService implements OrderService {
 		newOrder.setPizzas(pizzas);
 		newOrder.setCreationDate(LocalDateTime.now());
 		newOrder.setDeliveryDate(LocalDateTime.now().plusMinutes(30));
+		customerService.proposeAddress(deliveryAddress, customer);
 		return newOrder;
 	}
 

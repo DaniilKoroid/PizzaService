@@ -67,11 +67,11 @@ public class Order implements Serializable {
 	@Convert(converter = LocalDateTimeConverter.class)
 	private LocalDateTime deliveryDate;
 	
-	@ManyToOne(targetEntity = Address.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(targetEntity = Address.class, cascade = {CascadeType.MERGE})
 	@JoinColumn(name = "address_id")
 	private Address address;
 	
-	@ManyToOne(targetEntity = Customer.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(targetEntity = Customer.class, cascade = {CascadeType.MERGE})
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 	

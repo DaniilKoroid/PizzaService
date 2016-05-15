@@ -51,10 +51,10 @@ public class SimpleAccumulationCardServiceInMemDBTest {
 		Customer customer = createCustomer();
 		assignCardToCustomer(customer);
 		Boolean assignedToCustomerWithCard = service.assignNewAccumulationCardToCustomer(customer);
-		service.read(1);
+		invokeJPQL();
 		assertFalse(assignedToCustomerWithCard);
 	}
-	
+
 	@Test
 	public void testAssignNewAccumulationCardToCustomerCreatedCardForCustomerWithoutCard() {
 		Customer customer = createCustomer();
@@ -99,7 +99,7 @@ public class SimpleAccumulationCardServiceInMemDBTest {
 		Customer customer = new Customer("Sveta");
 		insertCustomerToDB(customer);
 		Boolean isActivated = service.activateAccumulationCardForCustomer(customer);
-		service.read(1);
+		invokeJPQL();
 		assertFalse(isActivated);
 	}
 	
@@ -169,14 +169,14 @@ public class SimpleAccumulationCardServiceInMemDBTest {
 
 	private AccumulationCard getCardByCustomerViaServiceMethod(Customer customer) {
 		AccumulationCard card = service.getAccumulationCardByCustomer(customer);
-		service.read(1);
+		invokeJPQL();
 		assertNotNull(card);
 		return card;
 	}
 
 	private void assignCardToCustomer(Customer customer) {
 		Boolean isAssigned = service.assignNewAccumulationCardToCustomer(customer);
-		service.read(1);
+		invokeJPQL();
 		assertTrue(isAssigned);
 	}
 
@@ -190,7 +190,7 @@ public class SimpleAccumulationCardServiceInMemDBTest {
 	public void testHasAccumulationCardWithOwnerThatHasNoAccumulationCardReturnsFalse() {
 		Customer customer = createCustomer();
 		Boolean hasAccumulationCard = service.hasAccumulationCard(customer);
-		service.read(1);
+		invokeJPQL();
 		assertFalse(hasAccumulationCard);
 	}
 	
@@ -205,5 +205,10 @@ public class SimpleAccumulationCardServiceInMemDBTest {
 		Integer id = keyHolder.getKey().intValue();
 		return id;
 	}
-	
+
+	private void invokeJPQL() {
+		try {
+			service.read(17);
+		} catch (Exception ex) {}
+	}
 }
