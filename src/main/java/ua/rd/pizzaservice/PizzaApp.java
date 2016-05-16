@@ -22,6 +22,7 @@ public class PizzaApp {
 				new String[] { "appContext.xml" }, repContext);
 
 		
+		
 		String persistenceUnit = "jpa_mysql";
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit);
 		EntityManager em = emf.createEntityManager();
