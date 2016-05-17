@@ -7,33 +7,26 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>repositoryMySQLContext.xml appContext.xml webContext.xml</param-value>
+		<param-value>classpath:/repositoryMySQLContext.xml classpath:/appContext.xml classpath:/webContext.xml</param-value>
 	</context-param>
 
 	<servlet>
-<!-- 		<servlet-name>dispatcher</servlet-name> -->
-<!-- 		<servlet-class>ua.rd.pizzaservice.web.infrastructure.DispatcherServlet</servlet-class> -->
-<!-- 		<load-on-startup>1</load-on-startup> -->
-<!-- 		<init-param> -->
-<!-- 			<param-name>contextConfigLocation</param-name> -->
-<!-- 			<param-value>classpath:/webContext.xml</param-value> -->
-<!-- 		</init-param> -->
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:/webContext.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
+	
 	<servlet-mapping>
-<!-- 		<servlet-name>dispatcher</servlet-name> -->
-<!-- 		<url-pattern>/servlet/*</url-pattern> -->
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/app/*</url-pattern>
 	</servlet-mapping>
 
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>	
 
-	<!-- <servlet> -->
-	<!-- <description></description> -->
-	<!-- <display-name>DispatcherServlet</display-name> -->
-	<!-- <servlet-name>DispatcherServlet</servlet-name> -->
-	<!-- <servlet-class>ua.rd.pizzaservice.web.infrastructure.DispatcherServlet</servlet-class> -->
-	<!-- <load-on-startup>1</load-on-startup> -->
-	<!-- </servlet> -->
-	<!-- <servlet-mapping> -->
-	<!-- <servlet-name>DispatcherServlet</servlet-name> -->
-	<!-- <url-pattern>/DispatcherServlet</url-pattern> -->
-	<!-- </servlet-mapping> -->
 </web-app>
