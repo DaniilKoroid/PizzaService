@@ -55,6 +55,31 @@ public class SimpleOrderService implements OrderService {
 		this.orderRepository = orderRepository;
 		this.customerService = customerService;
 	}
+
+	@Override
+	public Order placeNewOrder(Customer customer, Address deliveryAddress, Integer... pizzasID) {
+		checkOrderedPizzasNumber(pizzasID);
+		checkCustomerExistance(customer);
+		checkAddressExistance(deliveryAddress);
+
+		Map<Pizza, Integer> pizzas = pizzasByArrOfId(pizzasID);
+		Order newOrder = createOrder(customer, pizzas, deliveryAddress);
+
+		orderRepository.saveOrder(newOrder);
+		return newOrder;
+	}
+	
+	@Override
+	public Order placeNewOrder(Customer customer, Address deliveryAddress, Map<Pizza, Integer> pizzas) {
+		checkOrderedPizzasNumber(pizzas);
+		checkCustomerExistance(customer);
+		checkAddressExistance(deliveryAddress);
+		
+		Order newOrder = createOrder(customer, pizzas, deliveryAddress);
+
+		orderRepository.saveOrder(newOrder);
+		return newOrder;
+	}
 	
 	private Order createOrder(Customer customer, Map<Pizza, Integer> pizzas, Address deliveryAddress) {
 		Order newOrder = createOrder();
@@ -96,10 +121,27 @@ public class SimpleOrderService implements OrderService {
 			throw new IllegalArgumentException("Can't place order with " + "not allowed number of pizzas.");
 		}
 	}
+	
+	private void checkOrderedPizzasNumber(Map<Pizza, Integer> pizzas) {
+		int totalCount = 0;
+		for (Integer pizzaCount : pizzas.values()) {
+			totalCount += pizzaCount;
+		}
+		if (totalCount < MIN_PIZZA_IN_ORDER_COUNT || totalCount > MAX_PIZZA_IN_ORDER_COUNT) {
+
+			throw new IllegalArgumentException("Can't place order with " + "not allowed number of pizzas.");
+		}
+	}
 
 	private void checkCustomerExistance(Customer customer) {
 		if (customer == null) {
 			throw new IllegalArgumentException("Customer must exist to place new order");
+		}
+	}
+	
+	private void checkAddressExistance(Address address) {
+		if (address == null) {
+			throw new IllegalArgumentException("Address must exist to place new order");
 		}
 	}
 
@@ -177,18 +219,6 @@ public class SimpleOrderService implements OrderService {
 	public Double getFinalPrice(Order order) {
 		Double finalPrice = getFullPrice(order) - getDiscountAmount(order);
 		return finalPrice;
-	}
-
-	@Override
-	public Order placeNewOrder(Customer customer, Address deliveryAddress, Integer... pizzasID) {
-		checkOrderedPizzasNumber(pizzasID);
-		checkCustomerExistance(customer);
-
-		Map<Pizza, Integer> pizzas = pizzasByArrOfId(pizzasID);
-		Order newOrder = createOrder(customer, pizzas, deliveryAddress);
-
-		orderRepository.saveOrder(newOrder);
-		return newOrder;
 	}
 
 	@Override

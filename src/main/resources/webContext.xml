@@ -13,13 +13,30 @@
 	>
 
 	<mvc:annotation-driven />
+	<mvc:annotation-driven conversion-service="conversionService" />
 
 	<context:component-scan base-package="ua.rd.pizzaservice.web" />
 		
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/views/jsp/" />
-		<property name="suffix" value=".jsp" />
+<!-- 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
+<!-- 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" /> -->
+<!-- 		<property name="prefix" value="/WEB-INF/views/jsp/" /> -->
+<!-- 		<property name="suffix" value=".jsp" /> -->
+<!-- 	</bean> -->
+
+	<bean id="conversionService"
+		class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<bean class="ua.rd.pizzaservice.web.support.AddressConverter" />
+				<bean class="ua.rd.pizzaservice.web.support.CustomerConverter" />
+			</set>
+		</property>
 	</bean>
+
+	<mvc:view-resolvers>
+		<mvc:jsp prefix="/WEB-INF/views/jsp/"
+				 suffix=".jsp"
+				 view-class="org.springframework.web.servlet.view.JstlView" />
+	</mvc:view-resolvers>
 
 </beans>

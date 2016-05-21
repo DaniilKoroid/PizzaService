@@ -64,4 +64,5 @@ public class PizzaCrudController {
 		pizzaService.delete(pizza);
 		return "redirect:/app/pizzas";
 	}
+	
 }

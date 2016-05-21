@@ -1,14 +1,18 @@
 package ua.rd.pizzaservice.service.order;
 
 import java.util.List;
+import java.util.Map;
 
 import ua.rd.pizzaservice.domain.address.Address;
 import ua.rd.pizzaservice.domain.customer.Customer;
 import ua.rd.pizzaservice.domain.order.Order;
+import ua.rd.pizzaservice.domain.pizza.Pizza;
 
 public interface OrderService {
 
 	Order placeNewOrder(Customer customer, Address deliveryAddress, Integer... pizzasID);
+	
+	Order placeNewOrder(Customer customer, Address deliveryAddress, Map<Pizza, Integer> pizzas);
 
 	Boolean canChange(Order order);
 	

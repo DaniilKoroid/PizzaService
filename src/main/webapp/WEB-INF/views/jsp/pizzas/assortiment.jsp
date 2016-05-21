@@ -6,11 +6,15 @@
 	<title>Pizzas assortiment</title>
 </head>
 <body>
+	<h2>Order pizzas link:</h2>
+	<spring:url value="/app/orders" var="pizzaOrderUrl" />
+	<a href="${pizzaOrderUrl}">Order pizzas</a>
+	<br/>
 	<h2>Pizzas assortiment</h2>
 	<br/>
 	<spring:url value="/app/pizzas/create" var="createPizzaUrl" />
 	<a href="${createPizzaUrl}">Create pizza</a>
-	<table border = "3">
+	<table border="1">
 		<thead>
 			<tr>
 				<th>id</th>
