@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.repository.customer;
+package ua.rd.pizzaservice.repository.genericdao.impl;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 import ua.rd.pizzaservice.domain.Customer;
-import ua.rd.pizzaservice.repository.GenericDaoJPAImpl;
+import ua.rd.pizzaservice.repository.CustomerRepository;
 
 @Repository
 public class GenericDaoJPACustomerRepository extends GenericDaoJPAImpl<Customer, Integer> implements CustomerRepository {

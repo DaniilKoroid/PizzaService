@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.repository.pizza;
+package ua.rd.pizzaservice.repository.inmem.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 
 import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.domain.Pizza.PizzaType;
+import ua.rd.pizzaservice.repository.PizzaRepository;
 
 public class InMemPizzaRepository implements PizzaRepository {
 

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;
-import ua.rd.pizzaservice.repository.accumulationcard.AccumulationCardRepository;
+import ua.rd.pizzaservice.repository.AccumulationCardRepository;
 
 @Service
 public class SimpleAccumulationCardService implements AccumulationCardService {

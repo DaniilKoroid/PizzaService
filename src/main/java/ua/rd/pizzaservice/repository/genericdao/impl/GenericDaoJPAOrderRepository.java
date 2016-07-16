@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.repository.order;
+package ua.rd.pizzaservice.repository.genericdao.impl;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import ua.rd.pizzaservice.domain.Order;
-import ua.rd.pizzaservice.repository.GenericDaoJPAImpl;
+import ua.rd.pizzaservice.repository.OrderRepository;
 
 @Repository
 public class GenericDaoJPAOrderRepository extends GenericDaoJPAImpl<Order, Long> implements OrderRepository {

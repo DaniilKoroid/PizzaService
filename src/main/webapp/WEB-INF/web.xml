@@ -7,7 +7,7 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:/repositoryMySQLContext.xml classpath:/appContext.xml classpath:/securityContext.xml</param-value>
+		<param-value>classpath:/repositoryContext.xml classpath:/appContext.xml</param-value>
 	</context-param>
 
 	<servlet>

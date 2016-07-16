@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.repository;
+package ua.rd.pizzaservice.repository.genericdao.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -8,6 +8,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.transaction.annotation.Transactional;
+
+import ua.rd.pizzaservice.repository.genericdao.GenericDao;
 
 @Transactional
 public abstract class GenericDaoJPAImpl<T, PK extends Serializable> implements GenericDao<T, PK> {

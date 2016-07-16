@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ua.rd.pizzaservice.domain.Address;
-import ua.rd.pizzaservice.repository.address.AddressRepository;
+import ua.rd.pizzaservice.repository.AddressRepository;
 
 @Service
 public class AddressServiceImpl implements AddressService {

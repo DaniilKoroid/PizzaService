@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.repository;
+package ua.rd.pizzaservice.repository.genericdao;
 
 import java.io.Serializable;
 import java.util.List;

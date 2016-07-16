@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ua.rd.pizzaservice.domain.Pizza;
-import ua.rd.pizzaservice.repository.pizza.PizzaRepository;
+import ua.rd.pizzaservice.repository.PizzaRepository;
 
 @Service
 public class PizzaServiceImpl implements PizzaService {

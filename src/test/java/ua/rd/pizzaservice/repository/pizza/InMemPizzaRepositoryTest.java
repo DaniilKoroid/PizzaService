@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.domain.Pizza.PizzaType;
+import ua.rd.pizzaservice.repository.PizzaRepository;
+import ua.rd.pizzaservice.repository.inmem.impl.InMemPizzaRepository;
 
 public class InMemPizzaRepositoryTest {
 

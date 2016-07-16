@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.repository.accumulationcard;
+package ua.rd.pizzaservice.repository.genericdao.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;
-import ua.rd.pizzaservice.repository.GenericDaoJPAImpl;
+import ua.rd.pizzaservice.repository.AccumulationCardRepository;
 
 @Repository
 public class GenericDaoJPAAccumulationCardRepository extends GenericDaoJPAImpl<AccumulationCard, Integer>

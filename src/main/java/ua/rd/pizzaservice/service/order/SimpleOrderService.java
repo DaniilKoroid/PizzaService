@@ -15,7 +15,7 @@ import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.OrderState;
 import ua.rd.pizzaservice.domain.Pizza;
-import ua.rd.pizzaservice.repository.order.OrderRepository;
+import ua.rd.pizzaservice.repository.OrderRepository;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 import ua.rd.pizzaservice.service.customer.CustomerService;
 import ua.rd.pizzaservice.service.discount.DiscountService;

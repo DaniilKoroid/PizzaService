@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.domain.Pizza.PizzaType;
+import ua.rd.pizzaservice.repository.PizzaRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/repositoryH2TestContext.xml"})

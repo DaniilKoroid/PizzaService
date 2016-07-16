@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.repository.pizza;
+package ua.rd.pizzaservice.repository;
 
 import java.util.List;
 

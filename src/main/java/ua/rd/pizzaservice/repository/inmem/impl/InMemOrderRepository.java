@@ -1,9 +1,10 @@
-package ua.rd.pizzaservice.repository.order;
+package ua.rd.pizzaservice.repository.inmem.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ua.rd.pizzaservice.domain.Order;
+import ua.rd.pizzaservice.repository.OrderRepository;
 
 public class InMemOrderRepository implements OrderRepository {
 
