@@ -199,9 +199,8 @@ public class OrderServiceImpl implements OrderService {
 	private Boolean processPayment(Order order) {
 		Customer customer = order.getCustomer();
 		if (accCardService.hasAccumulationCard(customer)) {
-			Double priceWithDiscounts = discountService.calculatePriceWithDiscounts(order);
 			AccumulationCard card = accCardService.getAccumulationCardByCustomer(customer);
-			card.use(priceWithDiscounts);
+			accCardService.use(card, order);
 		}
 		return Boolean.TRUE;
 	}

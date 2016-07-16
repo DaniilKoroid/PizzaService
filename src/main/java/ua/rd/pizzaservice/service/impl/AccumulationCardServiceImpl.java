@@ -7,20 +7,24 @@ import org.springframework.stereotype.Service;
 
 import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;
+import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.repository.AccumulationCardRepository;
 import ua.rd.pizzaservice.service.AccumulationCardService;
+import ua.rd.pizzaservice.service.DiscountService;
 
 @Service
 public class AccumulationCardServiceImpl implements AccumulationCardService {
-
-	@Autowired
-	AccumulationCardRepository cardRep;
 	
-    public AccumulationCardServiceImpl() {
-    }
-    
-    public AccumulationCardServiceImpl(AccumulationCardRepository cardRepository) {
-    	cardRep = cardRepository;
+	private static final double MAX_TOTAL_PRICE_DISCOUNTED_PERCENT = 0.3d;
+
+	private final AccumulationCardRepository cardRep;
+	
+	private final DiscountService discountService;
+	
+	@Autowired
+    public AccumulationCardServiceImpl(AccumulationCardRepository cardRep, DiscountService discountService) {
+		this.cardRep = cardRep;
+		this.discountService = discountService;
     }
 
     @Override
@@ -93,6 +97,29 @@ public class AccumulationCardServiceImpl implements AccumulationCardService {
                     + id + " does not exist.");
 		}
 		return card;
+	}
+
+	@Override
+	public Double calculateDiscount(AccumulationCard card, Double orderPriceWithDiscounts) {
+		double discountAmount = 0d;
+		discountAmount = Math.min(calculateCardDiscount(card), calculateMaxDiscountWithGivenTotalPrice(orderPriceWithDiscounts));
+		return discountAmount;
+	}
+
+	@Override
+	public void use(AccumulationCard card, Order order) {
+		Double priceWithDiscounts = discountService.calculatePriceWithDiscounts(order);
+		Double cardDiscount = calculateDiscount(card, priceWithDiscounts);
+		Double newAmount = card.getAmount() + (priceWithDiscounts - cardDiscount);
+		card.setAmount(newAmount);
+	}
+	
+	private double calculateCardDiscount(AccumulationCard card) {
+		return card.getAmount() * card.getDiscountPercentage();
+	}
+	
+	private double calculateMaxDiscountWithGivenTotalPrice(double orderTotalPrice) {
+		return MAX_TOTAL_PRICE_DISCOUNTED_PERCENT * orderTotalPrice;
 	}
 
 }

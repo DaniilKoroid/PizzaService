@@ -19,8 +19,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;
+import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.repository.AccumulationCardRepository;
 import ua.rd.pizzaservice.service.AccumulationCardService;
+import ua.rd.pizzaservice.service.DiscountService;
 import ua.rd.pizzaservice.service.impl.AccumulationCardServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,7 +31,13 @@ public class SimpleAccumulationCardServiceTest {
 	private AccumulationCardService accCardService;
 
 	@Mock
-	AccumulationCardRepository cardRep;
+	private AccumulationCardRepository cardRep;
+	
+	@Mock
+	private DiscountService discountService;
+	
+	@Mock
+	private Order orderForDiscounts;
 	
 	private Customer customerWithActivatedCard;
 	private Customer customerWithNotActivatedCard;
@@ -37,6 +45,18 @@ public class SimpleAccumulationCardServiceTest {
 
 	private AccumulationCard activatedCard;
 	private AccumulationCard notActivatedCard;
+	
+	private AccumulationCard cardForDiscounts;
+	private Customer customerForDiscounts;
+
+	@Before
+	public void setUpDiscounts() {
+		Double baseAmount = 100d;
+		cardForDiscounts = new AccumulationCard();
+		cardForDiscounts.setAmount(baseAmount);
+		customerForDiscounts = new Customer();
+		when(orderForDiscounts.getCustomer()).thenReturn(customerForDiscounts);
+	}
 	
 	@Before
 	public void setUp() throws Exception {
@@ -59,7 +79,7 @@ public class SimpleAccumulationCardServiceTest {
 		when(cardRep.update(notActivatedCard)).thenReturn(notActivatedCard);
 		when(cardRep.update(activatedCard)).thenReturn(activatedCard);
 		when(cardRep.create(any(AccumulationCard.class))).thenReturn(notActivatedCard);
-		accCardService = new AccumulationCardServiceImpl(cardRep);
+		accCardService = new AccumulationCardServiceImpl(cardRep, discountService);
 	}
 
 	@After
@@ -155,7 +175,6 @@ public class SimpleAccumulationCardServiceTest {
 	@Test
 	public void testAssignNewAccumulationCardToCustomerWithoutCardReturnsTrue() {
 		System.out.println("test assignNewAccumulationCardToCustomer without card returns true");
-//		when(cardRep.create(any(AccumulationCard.class))).thenReturn(notActivatedCard);
 		assertTrue(accCardService.assignNewAccumulationCardToCustomer(customerWithoutCard));
 	}
 
@@ -258,5 +277,72 @@ public class SimpleAccumulationCardServiceTest {
 	public void testDeactivateAccumulationCardForCustomerWithoutCardReturnsFalse() {
 		System.out.println("test deactivateAccumulationCardForCustomer without card returns false");
 		assertFalse(accCardService.deactivateAccumulationCardForCustomer(customerWithoutCard));
+	}
+	
+	@Test
+	public void testCalculateDiscountWithCardPercentage() {
+		System.out.println("test calculate discount with card percentage");
+		double orderPriceWithDiscounts = 100d;
+		Double discount = accCardService.calculateDiscount(cardForDiscounts, orderPriceWithDiscounts);
+		double expectedDiscount = 10d;
+		double eps = 1E-5;
+		assertEquals(expectedDiscount, discount, eps);
+	}
+	
+	@Test
+	public void testCalculateDiscountWithTotalPricePercentage() {
+		System.out.println("test calculate discount with total price percentage");
+		double orderPriceWithDiscounts = 30d;
+		Double discount = accCardService.calculateDiscount(cardForDiscounts, orderPriceWithDiscounts);
+		double expectedDiscount = 9d;
+		double eps = 1E-5;
+		assertEquals(expectedDiscount, discount, eps);
+	}
+
+	@Test
+	public void testCalculateDiscountWhenTotalPriceAndCardPercentagesAreEqual() {
+		System.out.println("test calculate discount when total price and " + "card percentages are equal");
+		double cardAmount = 300d;
+		cardForDiscounts.setAmount(cardAmount);
+		double orderPriceWithDiscounts = 100d;
+		Double discount = accCardService.calculateDiscount(cardForDiscounts, orderPriceWithDiscounts);
+		double expectedDiscount = 30d;
+		double eps = 1E-5;
+		assertEquals(expectedDiscount, discount, eps);
+	}
+
+	@Test
+	public void testUseDiscountWithCardPercentage() {
+		System.out.println("test use discount with card percentage");
+		double orderPrice = 100d;
+		when(discountService.calculatePriceWithDiscounts(orderForDiscounts)).thenReturn(orderPrice);
+		double eps = 1E-5;
+		double newCardAmount = cardForDiscounts.getAmount() + orderPrice;
+		accCardService.use(cardForDiscounts, orderForDiscounts);
+		assertEquals(newCardAmount, cardForDiscounts.getAmount(), eps);
+	}
+
+	@Test
+	public void testUseDiscountWithTotalPricePercentage() {
+		System.out.println("test use discount with total price percentage");
+		double totalPrice = 30d;
+		when(discountService.calculatePriceWithDiscounts(orderForDiscounts)).thenReturn(totalPrice);
+		double eps = 1E-5;
+		double newCardAmount = cardForDiscounts.getAmount() + totalPrice;
+		accCardService.use(cardForDiscounts, orderForDiscounts);
+		assertEquals(newCardAmount, cardForDiscounts.getAmount(), eps);
+	}
+
+	@Test
+	public void testUseDiscountWhenTotalPriceAndCardPercentagesAreEqual() {
+		System.out.println("test use discount when total price and " + "card percentages are equal");
+		double cardAmount = 300d;
+		cardForDiscounts.setAmount(cardAmount);
+		double totalPrice = 100d;
+		when(discountService.calculatePriceWithDiscounts(orderForDiscounts)).thenReturn(totalPrice);
+		double eps = 1E-5;
+		double newCardAmount = cardForDiscounts.getAmount() + totalPrice;
+		accCardService.use(cardForDiscounts, orderForDiscounts);
+		assertEquals(newCardAmount, cardForDiscounts.getAmount(), eps);
 	}
 }

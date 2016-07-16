@@ -37,7 +37,6 @@ public class AccumulationCard implements Serializable {
 	private static final long serialVersionUID = -8189597927433999347L;
 
 	private static final double DEFAULT_DISCOUNT_PERCENTAGE = 0.1d;
-	private static final double MAX_TOTAL_PRICE_DISCOUNTED_PERCENT = 0.3d;
 	private static final double DEFAULT_AMOUNT = 0d;
 	private static final boolean DEFAULT_IS_ACTIVATED = false;
 
@@ -104,18 +103,6 @@ public class AccumulationCard implements Serializable {
 
 	public void setDiscountPercentage(Double discountPercentage) {
 		this.discountPercentage = discountPercentage;
-	}
-
-	public Double use(Double totalPrice) {
-		double discountAmount = calculateDiscount(totalPrice);
-		amount += totalPrice;
-		return discountAmount;
-	}
-
-	public Double calculateDiscount(Double totalPrice) {
-		double discountAmount = 0d;
-		discountAmount = Math.min(amount * DEFAULT_DISCOUNT_PERCENTAGE, totalPrice * MAX_TOTAL_PRICE_DISCOUNTED_PERCENT);
-		return discountAmount;
 	}
 
 	@Override
