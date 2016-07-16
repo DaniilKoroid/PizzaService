@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 
 import ua.rd.pizzaservice.domain.Address;
-import ua.rd.pizzaservice.service.address.AddressService;
+import ua.rd.pizzaservice.service.AddressService;
 
 public class AddressConverter implements Converter<String, Address> {
 

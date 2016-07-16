@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.service.discount;
+package ua.rd.pizzaservice.service;
 
 import ua.rd.pizzaservice.domain.Order;
 

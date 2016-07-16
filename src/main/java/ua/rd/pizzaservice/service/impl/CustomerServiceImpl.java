@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.service.customer;
+package ua.rd.pizzaservice.service.impl;
 
 import java.util.List;
 import java.util.Set;
@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 import ua.rd.pizzaservice.domain.Address;
 import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.repository.CustomerRepository;
-import ua.rd.pizzaservice.service.address.AddressService;
+import ua.rd.pizzaservice.service.AddressService;
+import ua.rd.pizzaservice.service.CustomerService;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {

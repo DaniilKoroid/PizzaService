@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.service.discount;
+package ua.rd.pizzaservice.service.impl;
 
 import java.util.List;
 
@@ -9,10 +9,12 @@ import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.discount.Discount;
-import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
+import ua.rd.pizzaservice.service.AccumulationCardService;
+import ua.rd.pizzaservice.service.DiscountService;
+import ua.rd.pizzaservice.service.discount.DiscountProvider;
 
 @Service
-public class SimpleDiscountService implements DiscountService {
+public class DiscountServiceImpl implements DiscountService {
 
 	private static final Double DISCOUNT_AMOUNT_WITHOUT_ACCUMULATION_CARD = 0d;
 
@@ -20,7 +22,7 @@ public class SimpleDiscountService implements DiscountService {
 	private AccumulationCardService accCardService;
 
 	@Autowired
-	public SimpleDiscountService(AccumulationCardService accCardService, DiscountProvider discountProvider) {
+	public DiscountServiceImpl(AccumulationCardService accCardService, DiscountProvider discountProvider) {
 		this.accCardService = accCardService;
 		this.discountProvider = discountProvider;
 	}

@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.domain.Pizza.PizzaType;
+import ua.rd.pizzaservice.service.PizzaService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/repositoryH2TestContext.xml", "classpath:/appTestContext.xml"})

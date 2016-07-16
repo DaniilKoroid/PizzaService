@@ -17,7 +17,9 @@ import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.Pizza;
-import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
+import ua.rd.pizzaservice.service.AccumulationCardService;
+import ua.rd.pizzaservice.service.DiscountService;
+import ua.rd.pizzaservice.service.impl.DiscountServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DiscountServiceImplTest {
@@ -58,7 +60,7 @@ public class DiscountServiceImplTest {
 	public void setUpDiscountService() {
 		DiscountProvider discountProvider = new InMemDiscountProvider();
 		((InMemDiscountProvider) discountProvider).determineDiscounts();
-		discountService = new SimpleDiscountService(accCardService, discountProvider);
+		discountService = new DiscountServiceImpl(accCardService, discountProvider);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);
 		when(accCardService.hasAccumulationCard(customerWithCard)).thenReturn(true);

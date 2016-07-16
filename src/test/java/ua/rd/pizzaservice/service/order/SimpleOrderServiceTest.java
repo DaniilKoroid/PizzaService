@@ -25,13 +25,15 @@ import ua.rd.pizzaservice.domain.OrderState;
 import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.repository.OrderRepository;
 import ua.rd.pizzaservice.repository.inmem.impl.InMemOrderRepository;
-import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
-import ua.rd.pizzaservice.service.customer.CustomerService;
+import ua.rd.pizzaservice.service.AccumulationCardService;
+import ua.rd.pizzaservice.service.CustomerService;
+import ua.rd.pizzaservice.service.DiscountService;
+import ua.rd.pizzaservice.service.OrderService;
 import ua.rd.pizzaservice.service.discount.DiscountProvider;
-import ua.rd.pizzaservice.service.discount.DiscountService;
 import ua.rd.pizzaservice.service.discount.InMemDiscountProvider;
-import ua.rd.pizzaservice.service.discount.SimpleDiscountService;
-import ua.rd.pizzaservice.service.pizza.PizzaServiceImpl;
+import ua.rd.pizzaservice.service.impl.PizzaServiceImpl;
+import ua.rd.pizzaservice.service.impl.DiscountServiceImpl;
+import ua.rd.pizzaservice.service.impl.OrderServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SimpleOrderServiceTest {
@@ -84,7 +86,7 @@ public class SimpleOrderServiceTest {
 	Pizza pizzaFour;
 
 	@Mock
-	SimpleOrderService mockedSimpleOrderService;
+	OrderServiceImpl mockedSimpleOrderService;
 
 	@Before
 	public void setUpVariables() {
@@ -96,8 +98,8 @@ public class SimpleOrderServiceTest {
 		DiscountProvider discountProvider = new InMemDiscountProvider();
 		((InMemDiscountProvider) discountProvider).determineDiscounts();
 		OrderRepository orderRepository = new InMemOrderRepository();
-		discountService = new SimpleDiscountService(accCardService, discountProvider);
-		orderService = new SimpleOrderService(discountService, accCardService, pizzaService, orderRepository, customerService);
+		discountService = new DiscountServiceImpl(accCardService, discountProvider);
+		orderService = new OrderServiceImpl(discountService, accCardService, pizzaService, orderRepository, customerService);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);
 		when(accCardService.hasAccumulationCard(customerWithCard)).thenReturn(true);

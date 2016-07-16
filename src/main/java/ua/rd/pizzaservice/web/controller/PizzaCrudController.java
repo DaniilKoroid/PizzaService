@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.domain.Pizza.PizzaType;
-import ua.rd.pizzaservice.service.pizza.PizzaService;
+import ua.rd.pizzaservice.service.PizzaService;
 
 @Controller
 public class PizzaCrudController {

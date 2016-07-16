@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.service.address;
+package ua.rd.pizzaservice.service.impl;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ua.rd.pizzaservice.domain.Address;
 import ua.rd.pizzaservice.repository.AddressRepository;
+import ua.rd.pizzaservice.service.AddressService;
 
 @Service
 public class AddressServiceImpl implements AddressService {

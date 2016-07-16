@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.service.accumulationcard;
+package ua.rd.pizzaservice.service;
 
 import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;

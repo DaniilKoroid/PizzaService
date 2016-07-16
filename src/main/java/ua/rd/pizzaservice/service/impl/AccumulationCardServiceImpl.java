@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.service.accumulationcard;
+package ua.rd.pizzaservice.service.impl;
 
 import java.util.NoSuchElementException;
 
@@ -8,17 +8,18 @@ import org.springframework.stereotype.Service;
 import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.repository.AccumulationCardRepository;
+import ua.rd.pizzaservice.service.AccumulationCardService;
 
 @Service
-public class SimpleAccumulationCardService implements AccumulationCardService {
+public class AccumulationCardServiceImpl implements AccumulationCardService {
 
 	@Autowired
 	AccumulationCardRepository cardRep;
 	
-    public SimpleAccumulationCardService() {
+    public AccumulationCardServiceImpl() {
     }
     
-    public SimpleAccumulationCardService(AccumulationCardRepository cardRepository) {
+    public AccumulationCardServiceImpl(AccumulationCardRepository cardRepository) {
     	cardRep = cardRepository;
     }
 

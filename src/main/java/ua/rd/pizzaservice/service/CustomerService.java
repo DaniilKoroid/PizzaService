@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.service.customer;
+package ua.rd.pizzaservice.service;
 
 import java.util.List;
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import ua.rd.pizzaservice.domain.Pizza;
-import ua.rd.pizzaservice.service.pizza.PizzaService;
+import ua.rd.pizzaservice.service.PizzaService;
 
 @RestController
 @RequestMapping("/pizza")

@@ -29,6 +29,7 @@ import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.OrderState;
 import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.domain.Pizza.PizzaType;
+import ua.rd.pizzaservice.service.OrderService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/repositoryH2TestContext.xml", "classpath:/appTestContext.xml"})

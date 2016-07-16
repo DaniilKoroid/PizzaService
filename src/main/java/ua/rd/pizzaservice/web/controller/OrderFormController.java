@@ -18,10 +18,10 @@ import ua.rd.pizzaservice.domain.Address;
 import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.Pizza;
-import ua.rd.pizzaservice.service.address.AddressService;
-import ua.rd.pizzaservice.service.customer.CustomerService;
-import ua.rd.pizzaservice.service.order.OrderService;
-import ua.rd.pizzaservice.service.pizza.PizzaService;
+import ua.rd.pizzaservice.service.AddressService;
+import ua.rd.pizzaservice.service.CustomerService;
+import ua.rd.pizzaservice.service.OrderService;
+import ua.rd.pizzaservice.service.PizzaService;
 
 @Controller
 public class OrderFormController {

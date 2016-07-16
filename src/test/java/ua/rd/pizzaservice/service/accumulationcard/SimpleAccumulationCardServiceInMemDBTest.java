@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;
+import ua.rd.pizzaservice.service.AccumulationCardService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/repositoryH2TestContext.xml", "classpath:/appTestContext.xml"})

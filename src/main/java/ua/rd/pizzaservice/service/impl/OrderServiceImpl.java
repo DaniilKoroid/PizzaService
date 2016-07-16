@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.service.order;
+package ua.rd.pizzaservice.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -16,13 +16,14 @@ import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.OrderState;
 import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.repository.OrderRepository;
-import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
-import ua.rd.pizzaservice.service.customer.CustomerService;
-import ua.rd.pizzaservice.service.discount.DiscountService;
-import ua.rd.pizzaservice.service.pizza.PizzaService;
+import ua.rd.pizzaservice.service.AccumulationCardService;
+import ua.rd.pizzaservice.service.CustomerService;
+import ua.rd.pizzaservice.service.DiscountService;
+import ua.rd.pizzaservice.service.OrderService;
+import ua.rd.pizzaservice.service.PizzaService;
 
 @Service
-public class SimpleOrderService implements OrderService {
+public class OrderServiceImpl implements OrderService {
 
 	//TODO: tests for repos methods
 	
@@ -44,10 +45,10 @@ public class SimpleOrderService implements OrderService {
 	@Autowired
 	private CustomerService customerService;
 
-	SimpleOrderService() {
+	OrderServiceImpl() {
 	}
 
-	public SimpleOrderService(DiscountService discountService, AccumulationCardService accCardService,
+	public OrderServiceImpl(DiscountService discountService, AccumulationCardService accCardService,
 			PizzaService pizzaService, OrderRepository orderRepository, CustomerService customerService) {
 		this.discountService = discountService;
 		this.accCardService = accCardService;

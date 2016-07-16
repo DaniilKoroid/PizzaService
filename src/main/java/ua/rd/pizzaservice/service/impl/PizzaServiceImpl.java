@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.service.pizza;
+package ua.rd.pizzaservice.service.impl;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.repository.PizzaRepository;
+import ua.rd.pizzaservice.service.PizzaService;
 
 @Service
 public class PizzaServiceImpl implements PizzaService {

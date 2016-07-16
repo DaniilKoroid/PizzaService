@@ -6,7 +6,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ua.rd.pizzaservice.domain.Address;
 import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.domain.Order;
-import ua.rd.pizzaservice.service.order.OrderService;
+import ua.rd.pizzaservice.service.OrderService;
 
 public class JPAWithSpringApp {
 
