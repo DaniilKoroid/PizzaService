@@ -2,8 +2,8 @@ package ua.rd.pizzaservice.service.customer;
 
 import java.util.List;
 
-import ua.rd.pizzaservice.domain.address.Address;
-import ua.rd.pizzaservice.domain.customer.Customer;
+import ua.rd.pizzaservice.domain.Address;
+import ua.rd.pizzaservice.domain.Customer;
 
 public interface CustomerService {
 

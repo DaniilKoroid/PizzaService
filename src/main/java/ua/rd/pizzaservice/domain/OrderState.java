@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.domain.order;
+package ua.rd.pizzaservice.domain;
 
 public enum OrderState {
 

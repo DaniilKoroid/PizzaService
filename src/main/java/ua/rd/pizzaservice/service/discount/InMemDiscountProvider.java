@@ -7,9 +7,9 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Repository;
 
+import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.discount.FourPizzaDiscount;
-import ua.rd.pizzaservice.domain.order.Order;
 
 @Repository
 public class InMemDiscountProvider implements DiscountProvider {

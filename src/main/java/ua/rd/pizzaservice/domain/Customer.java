@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.domain.customer;
+package ua.rd.pizzaservice.domain;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -20,8 +20,6 @@ import javax.persistence.Table;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import ua.rd.pizzaservice.domain.address.Address;
 
 @Component
 @Scope("prototype")

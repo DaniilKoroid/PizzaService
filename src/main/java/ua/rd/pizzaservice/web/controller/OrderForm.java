@@ -2,8 +2,8 @@ package ua.rd.pizzaservice.web.controller;
 
 import java.util.Map;
 
-import ua.rd.pizzaservice.domain.address.Address;
-import ua.rd.pizzaservice.domain.customer.Customer;
+import ua.rd.pizzaservice.domain.Address;
+import ua.rd.pizzaservice.domain.Customer;
 
 public class OrderForm {
 	

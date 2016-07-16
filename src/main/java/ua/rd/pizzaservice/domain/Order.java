@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.domain.order;
+package ua.rd.pizzaservice.domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -28,9 +28,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import ua.rd.pizzaservice.LocalDateTimeConverter;
-import ua.rd.pizzaservice.domain.address.Address;
-import ua.rd.pizzaservice.domain.customer.Customer;
-import ua.rd.pizzaservice.domain.pizza.Pizza;
 
 @Component
 @Scope("prototype")

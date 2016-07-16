@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ua.rd.pizzaservice.domain.address.Address;
+import ua.rd.pizzaservice.domain.Address;
 import ua.rd.pizzaservice.repository.address.AddressRepository;
 
 @Service

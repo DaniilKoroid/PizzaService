@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.domain.pizza;
+package ua.rd.pizzaservice.domain;
 
 import java.io.Serializable;
 

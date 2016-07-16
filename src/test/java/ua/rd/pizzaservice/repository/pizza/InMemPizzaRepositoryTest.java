@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import ua.rd.pizzaservice.domain.pizza.Pizza;
-import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
+import ua.rd.pizzaservice.domain.Pizza;
+import ua.rd.pizzaservice.domain.Pizza.PizzaType;
 
 public class InMemPizzaRepositoryTest {
 

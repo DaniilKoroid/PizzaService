@@ -3,10 +3,10 @@ package ua.rd.pizzaservice.service.order;
 import java.util.List;
 import java.util.Map;
 
-import ua.rd.pizzaservice.domain.address.Address;
-import ua.rd.pizzaservice.domain.customer.Customer;
-import ua.rd.pizzaservice.domain.order.Order;
-import ua.rd.pizzaservice.domain.pizza.Pizza;
+import ua.rd.pizzaservice.domain.Address;
+import ua.rd.pizzaservice.domain.Customer;
+import ua.rd.pizzaservice.domain.Order;
+import ua.rd.pizzaservice.domain.Pizza;
 
 public interface OrderService {
 

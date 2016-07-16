@@ -7,8 +7,8 @@ import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
-import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
-import ua.rd.pizzaservice.domain.customer.Customer;
+import ua.rd.pizzaservice.domain.AccumulationCard;
+import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.repository.GenericDaoJPAImpl;
 
 @Repository

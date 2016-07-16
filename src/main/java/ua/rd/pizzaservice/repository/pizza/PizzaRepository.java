@@ -2,7 +2,7 @@ package ua.rd.pizzaservice.repository.pizza;
 
 import java.util.List;
 
-import ua.rd.pizzaservice.domain.pizza.Pizza;
+import ua.rd.pizzaservice.domain.Pizza;
 
 public interface PizzaRepository {
 

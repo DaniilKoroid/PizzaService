@@ -2,8 +2,8 @@ package ua.rd.pizzaservice.domain.discount;
 
 import java.util.Map;
 
-import ua.rd.pizzaservice.domain.order.Order;
-import ua.rd.pizzaservice.domain.pizza.Pizza;
+import ua.rd.pizzaservice.domain.Order;
+import ua.rd.pizzaservice.domain.Pizza;
 
 public class FourPizzaDiscount implements Discount {
 

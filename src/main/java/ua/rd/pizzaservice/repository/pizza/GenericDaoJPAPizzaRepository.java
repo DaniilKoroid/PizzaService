@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import ua.rd.pizzaservice.domain.pizza.Pizza;
+import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.repository.GenericDaoJPAImpl;
 
 @Repository

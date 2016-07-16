@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import ua.rd.pizzaservice.domain.pizza.Pizza;
-import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
+import ua.rd.pizzaservice.domain.Pizza;
+import ua.rd.pizzaservice.domain.Pizza.PizzaType;
 
 public class InMemPizzaRepository implements PizzaRepository {
 

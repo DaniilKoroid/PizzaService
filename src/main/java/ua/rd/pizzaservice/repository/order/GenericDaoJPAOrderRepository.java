@@ -6,7 +6,7 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
-import ua.rd.pizzaservice.domain.order.Order;
+import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.repository.GenericDaoJPAImpl;
 
 @Repository

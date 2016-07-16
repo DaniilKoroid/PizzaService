@@ -1,6 +1,6 @@
 package ua.rd.pizzaservice.domain.discount;
 
-import ua.rd.pizzaservice.domain.order.Order;
+import ua.rd.pizzaservice.domain.Order;
 
 public interface Discount {
 

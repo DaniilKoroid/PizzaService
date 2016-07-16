@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import ua.rd.pizzaservice.domain.address.Address;
-import ua.rd.pizzaservice.domain.customer.Customer;
-import ua.rd.pizzaservice.domain.order.Order;
-import ua.rd.pizzaservice.domain.pizza.Pizza;
+import ua.rd.pizzaservice.domain.Address;
+import ua.rd.pizzaservice.domain.Customer;
+import ua.rd.pizzaservice.domain.Order;
+import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.service.address.AddressService;
 import ua.rd.pizzaservice.service.customer.CustomerService;
 import ua.rd.pizzaservice.service.order.OrderService;

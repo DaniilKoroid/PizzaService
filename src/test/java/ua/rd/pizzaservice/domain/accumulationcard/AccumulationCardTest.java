@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import ua.rd.pizzaservice.domain.AccumulationCard;
+
 public class AccumulationCardTest {
 
 	AccumulationCard card;

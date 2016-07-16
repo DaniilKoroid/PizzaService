@@ -17,8 +17,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
-import ua.rd.pizzaservice.domain.customer.Customer;
+import ua.rd.pizzaservice.domain.AccumulationCard;
+import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.repository.accumulationcard.AccumulationCardRepository;
 
 @RunWith(MockitoJUnitRunner.class)

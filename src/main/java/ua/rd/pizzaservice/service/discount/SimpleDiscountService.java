@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
-import ua.rd.pizzaservice.domain.customer.Customer;
+import ua.rd.pizzaservice.domain.AccumulationCard;
+import ua.rd.pizzaservice.domain.Customer;
+import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.discount.Discount;
-import ua.rd.pizzaservice.domain.order.Order;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;
 
 @Service

@@ -17,12 +17,12 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
-import ua.rd.pizzaservice.domain.address.Address;
-import ua.rd.pizzaservice.domain.customer.Customer;
-import ua.rd.pizzaservice.domain.order.Order;
-import ua.rd.pizzaservice.domain.order.OrderState;
-import ua.rd.pizzaservice.domain.pizza.Pizza;
+import ua.rd.pizzaservice.domain.AccumulationCard;
+import ua.rd.pizzaservice.domain.Address;
+import ua.rd.pizzaservice.domain.Customer;
+import ua.rd.pizzaservice.domain.Order;
+import ua.rd.pizzaservice.domain.OrderState;
+import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.repository.order.InMemOrderRepository;
 import ua.rd.pizzaservice.repository.order.OrderRepository;
 import ua.rd.pizzaservice.service.accumulationcard.AccumulationCardService;

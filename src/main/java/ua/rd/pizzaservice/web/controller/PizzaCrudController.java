@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import ua.rd.pizzaservice.domain.pizza.Pizza;
-import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
+import ua.rd.pizzaservice.domain.Pizza;
+import ua.rd.pizzaservice.domain.Pizza.PizzaType;
 import ua.rd.pizzaservice.service.pizza.PizzaService;
 
 @Controller

@@ -3,8 +3,8 @@ package ua.rd.pizzaservice.repository.accumulationcard;
 import java.util.List;
 import java.util.Optional;
 
-import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
-import ua.rd.pizzaservice.domain.customer.Customer;
+import ua.rd.pizzaservice.domain.AccumulationCard;
+import ua.rd.pizzaservice.domain.Customer;
 
 public interface AccumulationCardRepository {
 

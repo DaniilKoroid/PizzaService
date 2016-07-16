@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.domain.accumulationcard;
+package ua.rd.pizzaservice.domain;
 
 import java.io.Serializable;
 
@@ -15,8 +15,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import ua.rd.pizzaservice.domain.customer.Customer;
 
 @Entity
 @Table(name = "accumulation_card")
@@ -38,7 +36,7 @@ public class AccumulationCard implements Serializable {
 
 	private static final long serialVersionUID = -8189597927433999347L;
 
-	private static final double DISCOUNT_PERCENTAGE = 0.1d;
+	private static final double DEFAULT_DISCOUNT_PERCENTAGE = 0.1d;
 	private static final double MAX_TOTAL_PRICE_DISCOUNTED_PERCENT = 0.3d;
 	private static final double DEFAULT_AMOUNT = 0d;
 	private static final boolean DEFAULT_IS_ACTIVATED = false;
@@ -58,10 +56,14 @@ public class AccumulationCard implements Serializable {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "customer_card", joinColumns = @JoinColumn(name = "card_id"), inverseJoinColumns = @JoinColumn(name = "customer_id"))
 	private Customer owner;
+	
+	@Column(name = "discount_percentage")
+	private Double discountPercentage;
 
 	public AccumulationCard() {
 		amount = DEFAULT_AMOUNT;
 		isActivated = DEFAULT_IS_ACTIVATED;
+		discountPercentage = DEFAULT_DISCOUNT_PERCENTAGE;
 	}
 
 	public Integer getId() {
@@ -95,6 +97,14 @@ public class AccumulationCard implements Serializable {
 	public void setOwner(Customer owner) {
 		this.owner = owner;
 	}
+	
+	public Double getDiscountPercentage() {
+		return discountPercentage;
+	}
+
+	public void setDiscountPercentage(Double discountPercentage) {
+		this.discountPercentage = discountPercentage;
+	}
 
 	public Double use(Double totalPrice) {
 		double discountAmount = calculateDiscount(totalPrice);
@@ -104,7 +114,7 @@ public class AccumulationCard implements Serializable {
 
 	public Double calculateDiscount(Double totalPrice) {
 		double discountAmount = 0d;
-		discountAmount = Math.min(amount * DISCOUNT_PERCENTAGE, totalPrice * MAX_TOTAL_PRICE_DISCOUNTED_PERCENT);
+		discountAmount = Math.min(amount * DEFAULT_DISCOUNT_PERCENTAGE, totalPrice * MAX_TOTAL_PRICE_DISCOUNTED_PERCENT);
 		return discountAmount;
 	}
 

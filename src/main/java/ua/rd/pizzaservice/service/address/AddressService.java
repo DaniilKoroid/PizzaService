@@ -2,7 +2,7 @@ package ua.rd.pizzaservice.service.address;
 
 import java.util.List;
 
-import ua.rd.pizzaservice.domain.address.Address;
+import ua.rd.pizzaservice.domain.Address;
 
 public interface AddressService {
 

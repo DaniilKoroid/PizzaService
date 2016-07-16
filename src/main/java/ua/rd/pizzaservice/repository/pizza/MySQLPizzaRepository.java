@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import ua.rd.pizzaservice.domain.pizza.Pizza;
-import ua.rd.pizzaservice.domain.pizza.Pizza.PizzaType;
+import ua.rd.pizzaservice.domain.Pizza;
+import ua.rd.pizzaservice.domain.Pizza.PizzaType;
 
 public class MySQLPizzaRepository implements PizzaRepository {
 

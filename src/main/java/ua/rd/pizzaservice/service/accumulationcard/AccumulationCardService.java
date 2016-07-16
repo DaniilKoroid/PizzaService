@@ -1,7 +1,7 @@
 package ua.rd.pizzaservice.service.accumulationcard;
 
-import ua.rd.pizzaservice.domain.accumulationcard.AccumulationCard;
-import ua.rd.pizzaservice.domain.customer.Customer;
+import ua.rd.pizzaservice.domain.AccumulationCard;
+import ua.rd.pizzaservice.domain.Customer;
 
 public interface AccumulationCardService {
 
