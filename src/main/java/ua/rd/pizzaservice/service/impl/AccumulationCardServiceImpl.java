@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 
 import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;
-import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.repository.AccumulationCardRepository;
 import ua.rd.pizzaservice.service.AccumulationCardService;
-import ua.rd.pizzaservice.service.DiscountService;
 
 @Service
 public class AccumulationCardServiceImpl implements AccumulationCardService {
@@ -19,12 +17,9 @@ public class AccumulationCardServiceImpl implements AccumulationCardService {
 
 	private final AccumulationCardRepository cardRep;
 	
-	private final DiscountService discountService;
-	
 	@Autowired
-    public AccumulationCardServiceImpl(AccumulationCardRepository cardRep, DiscountService discountService) {
+    public AccumulationCardServiceImpl(AccumulationCardRepository cardRep) {
 		this.cardRep = cardRep;
-		this.discountService = discountService;
     }
 
     @Override
@@ -107,8 +102,7 @@ public class AccumulationCardServiceImpl implements AccumulationCardService {
 	}
 
 	@Override
-	public void use(AccumulationCard card, Order order) {
-		Double priceWithDiscounts = discountService.calculatePriceWithDiscounts(order);
+	public void use(AccumulationCard card, Double priceWithDiscounts) {
 		Double cardDiscount = calculateDiscount(card, priceWithDiscounts);
 		Double newAmount = card.getAmount() + (priceWithDiscounts - cardDiscount);
 		card.setAmount(newAmount);

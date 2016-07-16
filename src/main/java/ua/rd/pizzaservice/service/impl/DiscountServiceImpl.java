@@ -30,10 +30,13 @@ public class DiscountServiceImpl implements DiscountService {
 	@Override
 	public Double calculateFinalDiscountAmount(Order order) {
 		Double discountsAmount = calculateDiscountsAmount(order);
+		System.out.println("Discounts amount: " + discountsAmount);
 		Double orderPriceWithDiscounts = order.calculateFullPrice()
 				- discountsAmount;
+		System.out.println("Order price with discounts: " + orderPriceWithDiscounts);
 		Double cardDiscountAmount = calculateAccumulationCardDiscountAmount(order.getCustomer(),
 				orderPriceWithDiscounts);
+		System.out.println("Card discount amount: " + cardDiscountAmount);
 		Double totalDiscountAmount = discountsAmount + cardDiscountAmount;
 		return totalDiscountAmount;
 	}
@@ -49,11 +52,15 @@ public class DiscountServiceImpl implements DiscountService {
 	private Double calculateAccumulationCardDiscountAmount(Customer customer, Double orderPriceWithDiscounts) {
 
 		if (!accCardService.hasAccumulationCard(customer)) {
+			System.out.println("Order has no customer");
 			return DISCOUNT_AMOUNT_WITHOUT_ACCUMULATION_CARD;
 		}
+		System.out.println("Order has customer");
 		AccumulationCard card = accCardService.getAccumulationCardByCustomer(customer);
-		Double cardDiscountAmount = card.calculateDiscount(orderPriceWithDiscounts);
-		return cardDiscountAmount;
+		System.out.println("Card: " + card);
+		Double cardDiscount = accCardService.calculateDiscount(card, orderPriceWithDiscounts);
+		System.out.println("Card discount: " + cardDiscount);
+		return cardDiscount;
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package ua.rd.pizzaservice.service;
 
 import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;
-import ua.rd.pizzaservice.domain.Order;
 
 public interface AccumulationCardService {
 
@@ -22,5 +21,5 @@ public interface AccumulationCardService {
 	
 	Double calculateDiscount(AccumulationCard card, Double orderTotalPrice);
 	
-	void use(AccumulationCard card, Order order);
+	void use(AccumulationCard card, Double priceWithDiscounts);
 }

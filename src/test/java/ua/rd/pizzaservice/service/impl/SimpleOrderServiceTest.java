@@ -531,6 +531,8 @@ public class SimpleOrderServiceTest {
 		System.out.println("test getFinalPrice of order without discounts and with accumulation card");
 		when(undiscountedOrder.getCustomer()).thenReturn(customerWithCard);
 		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice();
+		double cardDiscount = calculateAccumulationCardServiceDiscount(activatedCard, sum);
+		when(accCardService.calculateDiscount(activatedCard, sum)).thenReturn(cardDiscount);
 		double finalPrice = orderService.getFinalPrice(undiscountedOrder);
 		double expectedFinalPrice = sum - 10d;
 		double eps = 1E-5;
@@ -553,8 +555,11 @@ public class SimpleOrderServiceTest {
 		System.out.println("test getFinalPrice of order with discounts and with accumulation card");
 		when(discountedOrder.getCustomer()).thenReturn(customerWithCard);
 		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice() + pizzaFour.getPrice();
+		double discountedOrderPrice = sum - pizzaFour.getPrice() * 0.3d;
+		double cardDiscount = calculateAccumulationCardServiceDiscount(activatedCard, discountedOrderPrice);
+		when(accCardService.calculateDiscount(activatedCard, discountedOrderPrice)).thenReturn(cardDiscount);
 		double finalPrice = orderService.getFinalPrice(discountedOrder);
-		double expectedFinalPrice = sum - 40d;
+		double expectedFinalPrice = discountedOrderPrice - cardDiscount;
 		double eps = 1E-5;
 		assertEquals(expectedFinalPrice, finalPrice, eps);
 	}
@@ -584,5 +589,19 @@ public class SimpleOrderServiceTest {
 			}
 		};
 		return undiscountablePizzas;
+	}
+	
+	private double calculateAccumulationCardServiceDiscount(AccumulationCard card, Double orderPriceWithDiscounts) {
+		double discountAmount = 0d;
+		discountAmount = Math.min(calculateCardDiscount(card), calculateMaxDiscountWithGivenTotalPrice(orderPriceWithDiscounts));
+		return discountAmount;
+	}
+	
+	private double calculateCardDiscount(AccumulationCard card) {
+		return card.getAmount() * card.getDiscountPercentage();
+	}
+	
+	private double calculateMaxDiscountWithGivenTotalPrice(double orderTotalPrice) {
+		return 0.3d * orderTotalPrice;
 	}
 }

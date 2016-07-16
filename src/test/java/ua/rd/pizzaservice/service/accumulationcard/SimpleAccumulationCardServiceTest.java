@@ -79,7 +79,7 @@ public class SimpleAccumulationCardServiceTest {
 		when(cardRep.update(notActivatedCard)).thenReturn(notActivatedCard);
 		when(cardRep.update(activatedCard)).thenReturn(activatedCard);
 		when(cardRep.create(any(AccumulationCard.class))).thenReturn(notActivatedCard);
-		accCardService = new AccumulationCardServiceImpl(cardRep, discountService);
+		accCardService = new AccumulationCardServiceImpl(cardRep);
 	}
 
 	@After
@@ -317,8 +317,8 @@ public class SimpleAccumulationCardServiceTest {
 		double orderPrice = 100d;
 		when(discountService.calculatePriceWithDiscounts(orderForDiscounts)).thenReturn(orderPrice);
 		double eps = 1E-5;
-		double newCardAmount = cardForDiscounts.getAmount() + orderPrice;
-		accCardService.use(cardForDiscounts, orderForDiscounts);
+		double newCardAmount = cardForDiscounts.getAmount() + (orderPrice * (1 - cardForDiscounts.getDiscountPercentage()));
+		accCardService.use(cardForDiscounts, discountService.calculatePriceWithDiscounts(orderForDiscounts));
 		assertEquals(newCardAmount, cardForDiscounts.getAmount(), eps);
 	}
 
@@ -326,10 +326,11 @@ public class SimpleAccumulationCardServiceTest {
 	public void testUseDiscountWithTotalPricePercentage() {
 		System.out.println("test use discount with total price percentage");
 		double totalPrice = 30d;
+		double MAX_TOTAL_PRICE_DISCOUNTED_PERCENT = 0.3d;
 		when(discountService.calculatePriceWithDiscounts(orderForDiscounts)).thenReturn(totalPrice);
 		double eps = 1E-5;
-		double newCardAmount = cardForDiscounts.getAmount() + totalPrice;
-		accCardService.use(cardForDiscounts, orderForDiscounts);
+		double newCardAmount = cardForDiscounts.getAmount() + (totalPrice * (1 - MAX_TOTAL_PRICE_DISCOUNTED_PERCENT));
+		accCardService.use(cardForDiscounts, discountService.calculatePriceWithDiscounts(orderForDiscounts));
 		assertEquals(newCardAmount, cardForDiscounts.getAmount(), eps);
 	}
 
@@ -339,10 +340,11 @@ public class SimpleAccumulationCardServiceTest {
 		double cardAmount = 300d;
 		cardForDiscounts.setAmount(cardAmount);
 		double totalPrice = 100d;
+		double MAX_TOTAL_PRICE_DISCOUNTED_PERCENT = 0.3d;
 		when(discountService.calculatePriceWithDiscounts(orderForDiscounts)).thenReturn(totalPrice);
 		double eps = 1E-5;
-		double newCardAmount = cardForDiscounts.getAmount() + totalPrice;
-		accCardService.use(cardForDiscounts, orderForDiscounts);
+		double newCardAmount = cardForDiscounts.getAmount() + (totalPrice * (1 - MAX_TOTAL_PRICE_DISCOUNTED_PERCENT));
+		accCardService.use(cardForDiscounts, discountService.calculatePriceWithDiscounts(orderForDiscounts));
 		assertEquals(newCardAmount, cardForDiscounts.getAmount(), eps);
 	}
 }

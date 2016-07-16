@@ -200,7 +200,8 @@ public class OrderServiceImpl implements OrderService {
 		Customer customer = order.getCustomer();
 		if (accCardService.hasAccumulationCard(customer)) {
 			AccumulationCard card = accCardService.getAccumulationCardByCustomer(customer);
-			accCardService.use(card, order);
+			Double priceWithDiscounts = discountService.calculatePriceWithDiscounts(order);
+			accCardService.use(card, priceWithDiscounts);
 		}
 		return Boolean.TRUE;
 	}

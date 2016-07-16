@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -17,9 +18,9 @@ import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.Pizza;
-import ua.rd.pizzaservice.service.AccumulationCardService;
 import ua.rd.pizzaservice.service.DiscountProvider;
 import ua.rd.pizzaservice.service.DiscountService;
+import ua.rd.pizzaservice.service.impl.AccumulationCardServiceImpl;
 import ua.rd.pizzaservice.service.impl.DiscountServiceImpl;
 import ua.rd.pizzaservice.service.impl.InMemDiscountProvider;
 
@@ -29,8 +30,8 @@ public class DiscountServiceImplTest {
 	DiscountService discountService;
 
 	@Mock
-	AccumulationCardService accCardService;
-
+	AccumulationCardServiceImpl accCardService;
+	
 	@Mock
 	Order order;
 
@@ -58,6 +59,11 @@ public class DiscountServiceImplTest {
 	@Mock
 	Pizza pizzaFour;
 
+	@BeforeClass
+	public static void setUpAccumulationCardService() {
+		
+	}
+	
 	@Before
 	public void setUpDiscountService() {
 		DiscountProvider discountProvider = new InMemDiscountProvider();
@@ -65,6 +71,7 @@ public class DiscountServiceImplTest {
 		discountService = new DiscountServiceImpl(accCardService, discountProvider);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);
+		activatedCard.setIsActivated(true);
 		when(accCardService.hasAccumulationCard(customerWithCard)).thenReturn(true);
 		when(accCardService.hasAccumulationCard(customerWithoutCard)).thenReturn(false);
 		when(accCardService.getAccumulationCardByCustomer(customerWithCard)).thenReturn(activatedCard);
@@ -153,10 +160,14 @@ public class DiscountServiceImplTest {
 		when(pizzaThree.getPrice()).thenReturn(75d);
 		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice();
 		when(order.calculateFullPrice()).thenReturn(sum);
+		Double amountBefore = activatedCard.getAmount();
+		double cardDiscount = calculateAccumulationCardServiceDiscount(activatedCard, sum);
+		when(accCardService.calculateDiscount(activatedCard, sum)).thenReturn(cardDiscount);
 		double finalDiscountAmount = discountService.calculateFinalDiscountAmount(order);
 		double expectedDiscountAmount = 10d;
 		double eps = 1E-5;
 		assertEquals(expectedDiscountAmount, finalDiscountAmount, eps);
+		activatedCard.setAmount(amountBefore);
 	}
 
 	@Test
@@ -181,6 +192,7 @@ public class DiscountServiceImplTest {
 	public void testCalculateFinalDiscountAmountOnOrderWithDiscountsAndCustomerWithAccumulationCard() {
 		System.out.println(
 				"test calculateFinalDiscountAmount on order with discounts " + "and customer with accumulation card");
+		Double amountBefore = activatedCard.getAmount();
 		when(order.getPizzas()).thenReturn(getDiscountablePizzas());
 		when(order.getCustomer()).thenReturn(customerWithCard);
 		when(pizzaOne.getPrice()).thenReturn(60d);
@@ -189,10 +201,15 @@ public class DiscountServiceImplTest {
 		when(pizzaFour.getPrice()).thenReturn(100d);
 		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice() + pizzaFour.getPrice();
 		when(order.calculateFullPrice()).thenReturn(sum);
+		double fourPizzaDiscountPercentage = 0.3;
+		double sumWithFourPizzaDiscount = sum - (pizzaFour.getPrice() * fourPizzaDiscountPercentage);
+		double cardDiscount = calculateAccumulationCardServiceDiscount(activatedCard, sumWithFourPizzaDiscount);
+		when(accCardService.calculateDiscount(activatedCard, sumWithFourPizzaDiscount)).thenReturn(cardDiscount);
 		double finalDiscountAmount = discountService.calculateFinalDiscountAmount(order);
 		double expectedDiscountAmount = 40d;
 		double eps = 1E-5;
 		assertEquals(expectedDiscountAmount, finalDiscountAmount, eps);
+		activatedCard.setAmount(amountBefore);
 	}
 
 	private Map<Pizza, Integer> getDiscountablePizzas() {
@@ -221,5 +238,19 @@ public class DiscountServiceImplTest {
 		};
 		return undiscountablePizzas;
 	}
-
+	
+	private double calculateAccumulationCardServiceDiscount(AccumulationCard card, Double orderPriceWithDiscounts) {
+		double discountAmount = 0d;
+		discountAmount = Math.min(calculateCardDiscount(card), calculateMaxDiscountWithGivenTotalPrice(orderPriceWithDiscounts));
+		return discountAmount;
+	}
+	
+	private double calculateCardDiscount(AccumulationCard card) {
+		return card.getAmount() * card.getDiscountPercentage();
+	}
+	
+	private double calculateMaxDiscountWithGivenTotalPrice(double orderTotalPrice) {
+		return 0.3d * orderTotalPrice;
+	}
+	
 }
