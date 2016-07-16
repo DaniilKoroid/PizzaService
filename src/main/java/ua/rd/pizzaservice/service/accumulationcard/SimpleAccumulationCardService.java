@@ -86,7 +86,12 @@ public class SimpleAccumulationCardService implements AccumulationCardService {
 
 	@Override
 	public AccumulationCard read(Integer id) {
-		return cardRep.read(id);
+		AccumulationCard card = cardRep.read(id);
+		if (card == null) {
+			throw new NoSuchElementException("Given accumulation card with id "
+                    + id + " does not exist.");
+		}
+		return card;
 	}
 
 }

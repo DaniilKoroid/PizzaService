@@ -1,6 +1,5 @@
 package ua.rd.pizzaservice.web.controller;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +28,6 @@ public class PizzaCrudController {
 	@RequestMapping(value = "/pizzas", method = RequestMethod.GET)
 	public String listPizzas(Model model) {
 		List<Pizza> pizzas = pizzaService.getAllPizzas();
-		Collections.sort(pizzas, (p1, p2) ->{
-			return p1.getId() - p2.getId();
-		});
 		model.addAttribute("pizzas", pizzas);
 		return "/pizzas/assortiment";
 	}

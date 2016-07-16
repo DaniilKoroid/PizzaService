@@ -15,6 +15,8 @@ import ua.rd.pizzaservice.service.order.OrderService;
 public class PizzaApp {
 	public static void main(String[] args) {
 
+		// TODO pagination
+		
 		ConfigurableApplicationContext repContext = new ClassPathXmlApplicationContext("dbRepositoryContext.xml");
 		repContext.getEnvironment().setActiveProfiles("dev", "db_mysql");
 		repContext.refresh();
