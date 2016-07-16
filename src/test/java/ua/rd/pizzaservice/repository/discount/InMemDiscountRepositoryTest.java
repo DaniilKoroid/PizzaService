@@ -17,8 +17,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.domain.discount.Discount;
-import ua.rd.pizzaservice.service.discount.DiscountProvider;
-import ua.rd.pizzaservice.service.discount.InMemDiscountProvider;
+import ua.rd.pizzaservice.service.DiscountProvider;
+import ua.rd.pizzaservice.service.impl.InMemDiscountProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InMemDiscountRepositoryTest {

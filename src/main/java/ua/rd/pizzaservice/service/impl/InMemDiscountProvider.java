@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.service.discount;
+package ua.rd.pizzaservice.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.discount.FourPizzaDiscount;
+import ua.rd.pizzaservice.service.DiscountProvider;
 
 @Repository
 public class InMemDiscountProvider implements DiscountProvider {

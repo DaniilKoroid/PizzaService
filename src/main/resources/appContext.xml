@@ -11,6 +11,6 @@
 
 	<context:annotation-config />
 	<context:component-scan
-		base-package="ua.rd.pizzaservice.domain, ua.rd.pizzaservice.service" />
+		base-package="ua.rd.pizzaservice.domain, ua.rd.pizzaservice.service.impl" />
 
 </beans>

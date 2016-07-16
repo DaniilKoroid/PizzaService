@@ -18,8 +18,10 @@ import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.service.AccumulationCardService;
+import ua.rd.pizzaservice.service.DiscountProvider;
 import ua.rd.pizzaservice.service.DiscountService;
 import ua.rd.pizzaservice.service.impl.DiscountServiceImpl;
+import ua.rd.pizzaservice.service.impl.InMemDiscountProvider;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DiscountServiceImplTest {

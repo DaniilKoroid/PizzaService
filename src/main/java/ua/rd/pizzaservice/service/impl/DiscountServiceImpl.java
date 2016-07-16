@@ -10,8 +10,8 @@ import ua.rd.pizzaservice.domain.Customer;
 import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.service.AccumulationCardService;
+import ua.rd.pizzaservice.service.DiscountProvider;
 import ua.rd.pizzaservice.service.DiscountService;
-import ua.rd.pizzaservice.service.discount.DiscountProvider;
 
 @Service
 public class DiscountServiceImpl implements DiscountService {

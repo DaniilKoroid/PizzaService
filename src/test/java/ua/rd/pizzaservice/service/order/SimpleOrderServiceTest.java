@@ -27,12 +27,12 @@ import ua.rd.pizzaservice.repository.OrderRepository;
 import ua.rd.pizzaservice.repository.inmem.impl.InMemOrderRepository;
 import ua.rd.pizzaservice.service.AccumulationCardService;
 import ua.rd.pizzaservice.service.CustomerService;
+import ua.rd.pizzaservice.service.DiscountProvider;
 import ua.rd.pizzaservice.service.DiscountService;
 import ua.rd.pizzaservice.service.OrderService;
-import ua.rd.pizzaservice.service.discount.DiscountProvider;
-import ua.rd.pizzaservice.service.discount.InMemDiscountProvider;
 import ua.rd.pizzaservice.service.impl.PizzaServiceImpl;
 import ua.rd.pizzaservice.service.impl.DiscountServiceImpl;
+import ua.rd.pizzaservice.service.impl.InMemDiscountProvider;
 import ua.rd.pizzaservice.service.impl.OrderServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
