@@ -30,7 +30,9 @@ public class FourPizzaDiscount implements Discount {
 
 	@Override
 	public Boolean isAppliable(Order order) {
-		checkOrderExistance(order);
+		if (order == null) {
+			return false;
+		}
 		Map<Pizza, Integer> pizzas = order.getPizzas();
 		return isAppliable(pizzas);
 	}

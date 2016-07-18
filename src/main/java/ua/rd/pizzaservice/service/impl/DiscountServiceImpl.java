@@ -34,6 +34,7 @@ public class DiscountServiceImpl implements DiscountService {
 
 	@Override
 	public Double calculateFinalDiscountAmount(Order order) {
+		checkOrderExistance(order);
 		Double discountsAmount = calculateDiscountsAmount(order);
 		System.out.println("Discounts amount: " + discountsAmount);
 		Double orderPriceWithDiscounts = orderPriceCalculatorService.getFullPrice(order)
@@ -70,6 +71,7 @@ public class DiscountServiceImpl implements DiscountService {
 
 	@Override
 	public Double calculateDiscountsAmount(Order order) {
+		checkOrderExistance(order);
 		List<Discount> appliableDiscounts = discountProvider.getAppliableDiscounts(order);
 		Double discountAmount = calculateDiscountAmount(order, appliableDiscounts);
 		return discountAmount;
@@ -77,10 +79,17 @@ public class DiscountServiceImpl implements DiscountService {
 
 	@Override
 	public Double calculatePriceWithDiscounts(Order order) {
+		checkOrderExistance(order);
 		Double orderPrice = orderPriceCalculatorService.getFullPrice(order);
 		Double discountsAmount = calculateDiscountsAmount(order);
 		Double priceWithDiscounts = orderPrice - discountsAmount;
 		return priceWithDiscounts;
+	}
+	
+	private void checkOrderExistance(Order order) {
+		if (order == null) {
+			throw new IllegalArgumentException("Can't process discounts with unexistant order.");
+		}
 	}
 
 }

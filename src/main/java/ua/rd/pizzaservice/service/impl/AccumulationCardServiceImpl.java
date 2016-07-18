@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ua.rd.pizzaservice.domain.AccumulationCard;
 import ua.rd.pizzaservice.domain.Customer;
+import ua.rd.pizzaservice.infrastructure.exceptions.NoSuchEntityException;
 import ua.rd.pizzaservice.repository.AccumulationCardRepository;
 import ua.rd.pizzaservice.service.AccumulationCardService;
 
@@ -87,11 +88,15 @@ public class AccumulationCardServiceImpl implements AccumulationCardService {
 	@Override
 	public AccumulationCard read(Integer id) {
 		AccumulationCard card = cardRep.read(id);
-		if (card == null) {
-			throw new NoSuchElementException("Given accumulation card with id "
-                    + id + " does not exist.");
-		}
+		checkCardExistance(id, card);
 		return card;
+	}
+
+	private void checkCardExistance(Integer id, AccumulationCard card) {
+		if (card == null) {
+			throw new NoSuchEntityException("Given accumulation card with id "
+                    + id + " does not exist.", id.longValue());
+		}
 	}
 
 	@Override
@@ -115,5 +120,4 @@ public class AccumulationCardServiceImpl implements AccumulationCardService {
 	private double calculateMaxDiscountWithGivenTotalPrice(double orderTotalPrice) {
 		return MAX_TOTAL_PRICE_DISCOUNTED_PERCENT * orderTotalPrice;
 	}
-
 }
