@@ -29,6 +29,7 @@ import ua.rd.pizzaservice.service.AccumulationCardService;
 import ua.rd.pizzaservice.service.CustomerService;
 import ua.rd.pizzaservice.service.DiscountProvider;
 import ua.rd.pizzaservice.service.DiscountService;
+import ua.rd.pizzaservice.service.OrderPriceCalculatorService;
 import ua.rd.pizzaservice.service.OrderService;
 import ua.rd.pizzaservice.service.impl.PizzaServiceImpl;
 import ua.rd.pizzaservice.service.impl.DiscountServiceImpl;
@@ -63,6 +64,9 @@ public class SimpleOrderServiceTest {
 
 	@Mock
 	AccumulationCard notActivatedCard;
+	
+	@Mock
+	OrderPriceCalculatorService orderPriceCalculatorService;
 
 	@Mock
 	Order undiscountedOrder;
@@ -98,8 +102,8 @@ public class SimpleOrderServiceTest {
 		DiscountProvider discountProvider = new InMemDiscountProvider();
 		((InMemDiscountProvider) discountProvider).determineDiscounts();
 		OrderRepository orderRepository = new InMemOrderRepository();
-		discountService = new DiscountServiceImpl(accCardService, discountProvider);
-		orderService = new OrderServiceImpl(discountService, accCardService, pizzaService, orderRepository, customerService);
+		discountService = new DiscountServiceImpl(accCardService, discountProvider, orderPriceCalculatorService);
+		orderService = new OrderServiceImpl(discountService, accCardService, pizzaService, orderRepository, customerService, orderPriceCalculatorService);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);
 		when(accCardService.hasAccumulationCard(customerWithCard)).thenReturn(true);
@@ -115,8 +119,8 @@ public class SimpleOrderServiceTest {
 		when(pizzaFour.getPrice()).thenReturn(100d);
 		double discountedSum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice() + pizzaFour.getPrice();
 		double undiscountedSum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice();
-		when(undiscountedOrder.calculateFullPrice()).thenReturn(undiscountedSum);
-		when(discountedOrder.calculateFullPrice()).thenReturn(discountedSum);
+		when(orderPriceCalculatorService.getFullPrice(undiscountedOrder)).thenReturn(undiscountedSum);
+		when(orderPriceCalculatorService.getFullPrice(discountedOrder)).thenReturn(discountedSum);
 		when(undiscountedOrder.getPizzas()).thenReturn(getUndiscountablePizzas());
 		when(discountedOrder.getPizzas()).thenReturn(getDiscountablePizzas());
 		when(mockedSimpleOrderService.createOrder()).thenReturn(new Order());

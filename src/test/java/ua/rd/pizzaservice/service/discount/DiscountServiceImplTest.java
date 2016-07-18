@@ -20,6 +20,7 @@ import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.Pizza;
 import ua.rd.pizzaservice.service.DiscountProvider;
 import ua.rd.pizzaservice.service.DiscountService;
+import ua.rd.pizzaservice.service.OrderPriceCalculatorService;
 import ua.rd.pizzaservice.service.impl.AccumulationCardServiceImpl;
 import ua.rd.pizzaservice.service.impl.DiscountServiceImpl;
 import ua.rd.pizzaservice.service.impl.InMemDiscountProvider;
@@ -31,6 +32,9 @@ public class DiscountServiceImplTest {
 
 	@Mock
 	AccumulationCardServiceImpl accCardService;
+	
+	@Mock
+	OrderPriceCalculatorService orderPriceCalculatorService;
 	
 	@Mock
 	Order order;
@@ -68,7 +72,7 @@ public class DiscountServiceImplTest {
 	public void setUpDiscountService() {
 		DiscountProvider discountProvider = new InMemDiscountProvider();
 		((InMemDiscountProvider) discountProvider).determineDiscounts();
-		discountService = new DiscountServiceImpl(accCardService, discountProvider);
+		discountService = new DiscountServiceImpl(accCardService, discountProvider, orderPriceCalculatorService);
 		double cardAmount = 100d;
 		activatedCard.setAmount(cardAmount);
 		activatedCard.setIsActivated(true);
@@ -109,7 +113,7 @@ public class DiscountServiceImplTest {
 		when(pizzaTwo.getPrice()).thenReturn(70d);
 		when(pizzaThree.getPrice()).thenReturn(75d);
 		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice();
-		when(order.calculateFullPrice()).thenReturn(sum);
+		when(orderPriceCalculatorService.getFullPrice(order)).thenReturn(sum);
 		double priceWithDiscounts = discountService.calculatePriceWithDiscounts(order);
 		double expectedPriceWithDiscounts = 205d;
 		double eps = 1E-5;
@@ -125,7 +129,7 @@ public class DiscountServiceImplTest {
 		when(pizzaThree.getPrice()).thenReturn(75d);
 		when(pizzaFour.getPrice()).thenReturn(100d);
 		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice() + pizzaFour.getPrice();
-		when(order.calculateFullPrice()).thenReturn(sum);
+		when(orderPriceCalculatorService.getFullPrice(order)).thenReturn(sum);
 		double priceWithDiscounts = discountService.calculatePriceWithDiscounts(order);
 		double expectedPriceWithDiscounts = 275d;
 		double eps = 1E-5;
@@ -142,7 +146,7 @@ public class DiscountServiceImplTest {
 		when(pizzaTwo.getPrice()).thenReturn(70d);
 		when(pizzaThree.getPrice()).thenReturn(75d);
 		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice();
-		when(order.calculateFullPrice()).thenReturn(sum);
+		when(orderPriceCalculatorService.getFullPrice(order)).thenReturn(sum);
 		double finalDiscountAmount = discountService.calculateFinalDiscountAmount(order);
 		double expectedDiscountAmount = 0d;
 		double eps = 1E-5;
@@ -159,7 +163,7 @@ public class DiscountServiceImplTest {
 		when(pizzaTwo.getPrice()).thenReturn(70d);
 		when(pizzaThree.getPrice()).thenReturn(75d);
 		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice();
-		when(order.calculateFullPrice()).thenReturn(sum);
+		when(orderPriceCalculatorService.getFullPrice(order)).thenReturn(sum);
 		Double amountBefore = activatedCard.getAmount();
 		double cardDiscount = calculateAccumulationCardServiceDiscount(activatedCard, sum);
 		when(accCardService.calculateDiscount(activatedCard, sum)).thenReturn(cardDiscount);
@@ -181,7 +185,7 @@ public class DiscountServiceImplTest {
 		when(pizzaThree.getPrice()).thenReturn(75d);
 		when(pizzaFour.getPrice()).thenReturn(100d);
 		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice() + pizzaFour.getPrice();
-		when(order.calculateFullPrice()).thenReturn(sum);
+		when(orderPriceCalculatorService.getFullPrice(order)).thenReturn(sum);
 		double finalDiscountAmount = discountService.calculateFinalDiscountAmount(order);
 		double expectedDiscountAmount = 30d;
 		double eps = 1E-5;
@@ -200,7 +204,7 @@ public class DiscountServiceImplTest {
 		when(pizzaThree.getPrice()).thenReturn(75d);
 		when(pizzaFour.getPrice()).thenReturn(100d);
 		double sum = pizzaOne.getPrice() + pizzaTwo.getPrice() + pizzaThree.getPrice() + pizzaFour.getPrice();
-		when(order.calculateFullPrice()).thenReturn(sum);
+		when(orderPriceCalculatorService.getFullPrice(order)).thenReturn(sum);
 		double fourPizzaDiscountPercentage = 0.3;
 		double sumWithFourPizzaDiscount = sum - (pizzaFour.getPrice() * fourPizzaDiscountPercentage);
 		double cardDiscount = calculateAccumulationCardServiceDiscount(activatedCard, sumWithFourPizzaDiscount);

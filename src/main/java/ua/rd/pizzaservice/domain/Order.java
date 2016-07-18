@@ -3,7 +3,6 @@ package ua.rd.pizzaservice.domain;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -154,41 +153,4 @@ public class Order implements Serializable {
 				+ deliveryDate + ", address=" + address + ", customer=" + customer + ", pizzas=" + pizzas + "]";
 	}
 
-	public Boolean canChange() {
-		return state == OrderState.NEW;
-	}
-
-	public Boolean changeOrder(Map<Pizza, Integer> newPizzas) {
-		Boolean canChange = canChange();
-		if (canChange) {
-			pizzas = newPizzas;
-		}
-		return canChange;
-	}
-
-	public Double calculateFullPrice() {
-		double totalPrice = 0d;
-		for (Entry<Pizza, Integer> entrySet : pizzas.entrySet()) {
-			double curPrice = 0d;
-			double price = entrySet.getKey().getPrice();
-			Integer count = entrySet.getValue();
-			curPrice = price * count;
-			totalPrice += curPrice;
-		}
-		return totalPrice;
-	}
-
-	public Boolean cancel() {
-		return state.cancel(this);
-	}
-
-	public Boolean nextState() {
-		return state.nextState(this);
-	}
-
-	public Boolean canProceedToState(OrderState proceedToState) {
-		Boolean canProceedTo = state.canProceedTo(proceedToState);
-		System.out.println("Can proceed from " + state + " to " + proceedToState + " -> " + canProceedTo);
-		return canProceedTo;
-	}
 }

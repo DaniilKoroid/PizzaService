@@ -19,42 +19,41 @@ import ua.rd.pizzaservice.repository.OrderRepository;
 import ua.rd.pizzaservice.service.AccumulationCardService;
 import ua.rd.pizzaservice.service.CustomerService;
 import ua.rd.pizzaservice.service.DiscountService;
+import ua.rd.pizzaservice.service.OrderPriceCalculatorService;
 import ua.rd.pizzaservice.service.OrderService;
 import ua.rd.pizzaservice.service.PizzaService;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-
-	//TODO: tests for repos methods
 	
 	private static final int MIN_PIZZA_IN_ORDER_COUNT = 1;
 	private static final int MAX_PIZZA_IN_ORDER_COUNT = 10;
 
-	@Autowired
 	private DiscountService discountService;
 	
-	@Autowired
 	private AccumulationCardService accCardService;
 	
-	@Autowired
 	private PizzaService pizzaService;
 	
-	@Autowired
 	private OrderRepository orderRepository;
 	
-	@Autowired
 	private CustomerService customerService;
-
-	OrderServiceImpl() {
-	}
-
-	public OrderServiceImpl(DiscountService discountService, AccumulationCardService accCardService,
-			PizzaService pizzaService, OrderRepository orderRepository, CustomerService customerService) {
+	
+	private OrderPriceCalculatorService orderPriceCalculatorService;
+	
+	@Autowired
+	public OrderServiceImpl(DiscountService discountService,
+							AccumulationCardService accCardService,
+							PizzaService pizzaService,
+							OrderRepository orderRepository,
+							CustomerService customerService,
+							OrderPriceCalculatorService orderPriceCalculatorService) {
 		this.discountService = discountService;
 		this.accCardService = accCardService;
 		this.pizzaService = pizzaService;
 		this.orderRepository = orderRepository;
 		this.customerService = customerService;
+		this.orderPriceCalculatorService = orderPriceCalculatorService;
 	}
 
 	@Override
@@ -116,60 +115,28 @@ public class OrderServiceImpl implements OrderService {
 		return pizzas;
 	}
 
-	private void checkOrderedPizzasNumber(Integer... pizzasId) {
-		if (pizzasId.length < MIN_PIZZA_IN_ORDER_COUNT || pizzasId.length > MAX_PIZZA_IN_ORDER_COUNT) {
-
-			throw new IllegalArgumentException("Can't place order with " + "not allowed number of pizzas.");
-		}
-	}
-	
-	private void checkOrderedPizzasNumber(Map<Pizza, Integer> pizzas) {
-		int totalCount = 0;
-		for (Integer pizzaCount : pizzas.values()) {
-			totalCount += pizzaCount;
-		}
-		if (totalCount < MIN_PIZZA_IN_ORDER_COUNT || totalCount > MAX_PIZZA_IN_ORDER_COUNT) {
-
-			throw new IllegalArgumentException("Can't place order with " + "not allowed number of pizzas.");
-		}
-	}
-
-	private void checkCustomerExistance(Customer customer) {
-		if (customer == null) {
-			throw new IllegalArgumentException("Customer must exist to place new order");
-		}
-	}
-	
-	private void checkAddressExistance(Address address) {
-		if (address == null) {
-			throw new IllegalArgumentException("Address must exist to place new order");
-		}
-	}
-
 	@Override
 	public Boolean changeOrder(Order order, Integer... pizzasID) {
 		checkOrderedPizzasNumber(pizzasID);
 		Boolean canChange = canChange(order);
 		if (canChange) {
 			Map<Pizza, Integer> pizzas = pizzasByArrOfId(pizzasID);
-			canChange = order.changeOrder(pizzas);
+			setNewPizzasToOrder(order, pizzas);
 			orderRepository.update(order);
 		}
 		return canChange;
 	}
-
-	@Override
-	public Boolean canChange(Order order) {
-		Boolean canChange = order.canChange();
-		return canChange;
+	
+	private void setNewPizzasToOrder(Order order, Map<Pizza, Integer> newPizzas) {
+		order.setPizzas(newPizzas);
 	}
 
 	@Override
 	public Boolean processOrder(Order order) {
 		Boolean result = Boolean.FALSE;
-		Boolean canProceedToState = order.canProceedToState(OrderState.IN_PROGRESS);
+		Boolean canProceedToState = canOrderProceedToState(order, OrderState.IN_PROGRESS);
 		if (canProceedToState) {
-			result = order.nextState();
+			result = proceedOrderToNextState(order);
 			orderRepository.update(order);
 		}
 		return result;
@@ -177,25 +144,45 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Boolean cancelOrder(Order order) {
-		Boolean isCancelled = order.cancel();
-		if (isCancelled) {
+		Boolean canProceedToCancelled = canOrderProceedToState(order, OrderState.CANCELLED);
+		boolean canceled = false;
+		if (canProceedToCancelled) {
+			canceled = proceedOrderToCancelledState(order);
 			orderRepository.update(order);
 		}
-		return isCancelled;
+		return canceled;
 	}
 
 	@Override
 	public Boolean doneOrder(Order order) {
-		Boolean canProceedToState = order.canProceedToState(OrderState.DONE);
+		Boolean canProceedToState = canOrderProceedToState(order, OrderState.DONE);
 		Boolean result = Boolean.FALSE;
 		if (canProceedToState) {
-			result = order.nextState();
+			result = proceedOrderToNextState(order);
 			processPayment(order);
 			orderRepository.update(order);
 		}
 		return result;
 	}
 
+	@Override
+	public Boolean canChange(Order order) {
+		boolean canOrderBeChanged = order.getState() == OrderState.NEW;
+		return canOrderBeChanged;
+	}
+	
+	private Boolean canOrderProceedToState(Order order, OrderState state) {
+		return order.getState().canProceedTo(state);
+	}
+	
+	private Boolean proceedOrderToNextState(Order order) {
+		return order.getState().nextState(order);
+	}
+	
+	private Boolean proceedOrderToCancelledState(Order order) {
+		return order.getState().cancel(order);
+	}
+	
 	private Boolean processPayment(Order order) {
 		Customer customer = order.getCustomer();
 		if (accCardService.hasAccumulationCard(customer)) {
@@ -208,7 +195,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Double getFullPrice(Order order) {
-		return order.calculateFullPrice();
+		return orderPriceCalculatorService.getFullPrice(order);
 	}
 
 	@Override
@@ -240,5 +227,43 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Long saveOrder(Order newOrder) {
 		return orderRepository.saveOrder(newOrder);
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	private void checkOrderedPizzasNumber(Integer... pizzasId) {
+		if (pizzasId.length < MIN_PIZZA_IN_ORDER_COUNT || pizzasId.length > MAX_PIZZA_IN_ORDER_COUNT) {
+			throw new IllegalArgumentException("Can't place order with " + "not allowed number of pizzas.");
+		}
+	}
+	
+	private void checkOrderedPizzasNumber(Map<Pizza, Integer> pizzas) {
+		int totalCount = 0;
+		for (Integer pizzaCount : pizzas.values()) {
+			totalCount += pizzaCount;
+		}
+		if (totalCount < MIN_PIZZA_IN_ORDER_COUNT || totalCount > MAX_PIZZA_IN_ORDER_COUNT) {
+
+			throw new IllegalArgumentException("Can't place order with " + "not allowed number of pizzas.");
+		}
+	}
+
+	private void checkCustomerExistance(Customer customer) {
+		if (customer == null) {
+			throw new IllegalArgumentException("Customer must exist to place new order");
+		}
+	}
+	
+	private void checkAddressExistance(Address address) {
+		if (address == null) {
+			throw new IllegalArgumentException("Address must exist to place new order");
+		}
 	}
 }

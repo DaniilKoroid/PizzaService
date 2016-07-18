@@ -12,6 +12,7 @@ import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.service.AccumulationCardService;
 import ua.rd.pizzaservice.service.DiscountProvider;
 import ua.rd.pizzaservice.service.DiscountService;
+import ua.rd.pizzaservice.service.OrderPriceCalculatorService;
 
 @Service
 public class DiscountServiceImpl implements DiscountService {
@@ -20,18 +21,22 @@ public class DiscountServiceImpl implements DiscountService {
 
 	private DiscountProvider discountProvider;
 	private AccumulationCardService accCardService;
+	private OrderPriceCalculatorService orderPriceCalculatorService;
 
 	@Autowired
-	public DiscountServiceImpl(AccumulationCardService accCardService, DiscountProvider discountProvider) {
+	public DiscountServiceImpl(	AccumulationCardService accCardService,
+								DiscountProvider discountProvider,
+								OrderPriceCalculatorService orderPriceCalculatorService) {
 		this.accCardService = accCardService;
 		this.discountProvider = discountProvider;
+		this.orderPriceCalculatorService = orderPriceCalculatorService;
 	}
 
 	@Override
 	public Double calculateFinalDiscountAmount(Order order) {
 		Double discountsAmount = calculateDiscountsAmount(order);
 		System.out.println("Discounts amount: " + discountsAmount);
-		Double orderPriceWithDiscounts = order.calculateFullPrice()
+		Double orderPriceWithDiscounts = orderPriceCalculatorService.getFullPrice(order)
 				- discountsAmount;
 		System.out.println("Order price with discounts: " + orderPriceWithDiscounts);
 		Double cardDiscountAmount = calculateAccumulationCardDiscountAmount(order.getCustomer(),
@@ -72,7 +77,7 @@ public class DiscountServiceImpl implements DiscountService {
 
 	@Override
 	public Double calculatePriceWithDiscounts(Order order) {
-		Double orderPrice = order.calculateFullPrice();
+		Double orderPrice = orderPriceCalculatorService.getFullPrice(order);
 		Double discountsAmount = calculateDiscountsAmount(order);
 		Double priceWithDiscounts = orderPrice - discountsAmount;
 		return priceWithDiscounts;
