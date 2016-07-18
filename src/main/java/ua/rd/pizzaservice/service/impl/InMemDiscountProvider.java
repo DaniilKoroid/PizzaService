@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.discount.Discount;
-import ua.rd.pizzaservice.domain.discount.FourPizzaDiscount;
+import ua.rd.pizzaservice.domain.discount.impl.FourPizzaDiscount;
 import ua.rd.pizzaservice.service.DiscountProvider;
 
 @Repository
