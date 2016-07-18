@@ -14,18 +14,23 @@ public class FourPizzaDiscount implements Discount {
 
 	@Override
 	public Double calculateDiscount(Order order) {
+		checkOrderExistance(order);
+		Double discountAmount = DEFAULT_DISCOUNT_AMOUNT_FOR_UNAPPLIABLE;
+		
 		Map<Pizza, Integer> pizzas = order.getPizzas();
-		if (!isAppliable(pizzas)) {
-			return DEFAULT_DISCOUNT_AMOUNT_FOR_UNAPPLIABLE;
+		if (checkPizzasExistance(pizzas)) {
+			if (isAppliable(pizzas)) {
+				Double maxPizzaPrice = getMaxPizzaPrice(pizzas);
+				discountAmount = calculateDiscountAmount(maxPizzaPrice);
+			}
 		}
-		Double maxPizzaPrice = getMaxPizzaPrice(pizzas);
-		Double discountAmount = calculateDiscountAmount(maxPizzaPrice);
 		return discountAmount;
 
 	}
 
 	@Override
 	public Boolean isAppliable(Order order) {
+		checkOrderExistance(order);
 		Map<Pizza, Integer> pizzas = order.getPizzas();
 		return isAppliable(pizzas);
 	}
@@ -37,8 +42,10 @@ public class FourPizzaDiscount implements Discount {
 
 	private int getOrderSize(Map<Pizza, Integer> pizzas) {
 		int size = 0;
-		for (Integer value : pizzas.values()) {
-			size += value;
+		if (checkPizzasExistance(pizzas)) {
+			for (Integer value : pizzas.values()) {
+				size += value;
+			}
 		}
 		return size;
 	}
@@ -55,5 +62,15 @@ public class FourPizzaDiscount implements Discount {
 
 	private Double calculateDiscountAmount(Double maxPizzaPrice) {
 		return DISCOUNT_PERCENTAGE_FOR_MAX_PRICED_PIZZA * maxPizzaPrice;
+	}
+
+	private void checkOrderExistance(Order order) {
+		if (order == null) {
+			throw new IllegalArgumentException("Can't discount unexistant order!");
+		}
+	}
+
+	private boolean checkPizzasExistance(Map<Pizza, Integer> pizzas) {
+		return pizzas != null;
 	}
 }

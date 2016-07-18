@@ -1,4 +1,4 @@
-package ua.rd.pizzaservice.domain.discount;
+package ua.rd.pizzaservice.domain.discount.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -16,6 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import ua.rd.pizzaservice.domain.Order;
 import ua.rd.pizzaservice.domain.Pizza;
+import ua.rd.pizzaservice.domain.discount.Discount;
 import ua.rd.pizzaservice.domain.discount.impl.FourPizzaDiscount;
 
 @RunWith(MockitoJUnitRunner.class)
